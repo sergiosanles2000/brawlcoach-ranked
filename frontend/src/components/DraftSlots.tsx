@@ -49,7 +49,7 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
       {/* 2-Column Split: Allies (Left) vs Rivals (Right) */}
       <div className="grid grid-cols-2 gap-2">
         {/* ALLY TEAM (BLUE) */}
-        <div className="flex flex-col gap-1.5 p-2 rounded-2xl bg-gradient-to-b from-blue-950/40 to-slate-900/60 border border-blue-900/50 shadow-[0_4px_20px_rgba(30,58,138,0.15)]">
+        <div className="flex flex-col gap-1.5 p-2 rounded-2xl bg-slate-900 border border-slate-800">
           <div className="flex items-center justify-between px-1">
             <span className="text-[11px] font-black uppercase tracking-wider text-blue-400 flex items-center gap-1">
               <Shield className="w-3.5 h-3.5 text-blue-400" />
@@ -165,7 +165,7 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
         </div>
 
         {/* ENEMY TEAM (RED) */}
-        <div className="flex flex-col gap-1.5 p-2 rounded-2xl bg-gradient-to-b from-red-950/40 to-slate-900/60 border border-red-900/50 shadow-[0_4px_20px_rgba(153,27,27,0.15)]">
+        <div className="flex flex-col gap-1.5 p-2 rounded-2xl bg-slate-900 border border-slate-800">
           <div className="flex items-center justify-between px-1">
             <span className="text-[11px] font-black uppercase tracking-wider text-red-400 flex items-center gap-1">
               <Sword className="w-3.5 h-3.5 text-red-400" />

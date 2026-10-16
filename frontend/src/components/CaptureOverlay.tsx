@@ -209,22 +209,19 @@ export const CaptureOverlay: React.FC<CaptureOverlayProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 animate-in fade-in">
       <div className="w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Top Header */}
-        <div className="p-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+        <div className="p-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-950">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <Camera className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-200">
+              <Camera className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-black uppercase text-slate-100">
-                  Escaneo Visual de Draft
-                </span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
-                  GEMMA 4 31B IT
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-100">
+                  Escaneo de Pantalla
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 font-mono truncate max-w-[240px]">
-                Google AI Studio • 14.400 escaneos/día gratis
+              <p className="text-[10px] text-slate-400">
+                Detecta mapa, picks y bans automáticamente
               </p>
             </div>
           </div>

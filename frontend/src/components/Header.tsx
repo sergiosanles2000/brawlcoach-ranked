@@ -168,31 +168,16 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Collapsible Settings Drawer */}
         {isConfigOpen && (
           <div className="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 flex flex-col gap-3 animate-in fade-in slide-in-from-top-1">
-            {/* Google Gemma 4 31B IT Settings Section */}
+            {/* Engine Status */}
             <div className="flex flex-col gap-2 pb-2.5 border-b border-slate-800">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                  <Server className="w-3.5 h-3.5 text-emerald-400" />
-                  IA Activa: 🟢 Google Gemma 4 31B IT
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                  <Server className="w-3.5 h-3.5 text-cyan-400" />
+                  Motor de Análisis
                 </span>
-                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30">
-                  14.400 / día
+                <span className="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-mono border border-slate-700">
+                  Gemma 31B
                 </span>
-              </div>
-
-              <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-300 flex flex-col gap-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Modelo Activo:</span>
-                  <span className="font-mono font-bold text-amber-300">gemma-4-31b-it</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Límite Diario:</span>
-                  <span className="font-mono text-emerald-400 font-bold text-[10px]">14.400 peticiones / día (30 RPM)</span>
-                </div>
-                <div className="flex items-center justify-between pt-1 border-t border-slate-800 text-[10px] text-slate-400">
-                  <span>Proveedor:</span>
-                  <span className="font-mono text-slate-500">Google AI Studio API</span>
-                </div>
               </div>
             </div>
 

@@ -56,9 +56,7 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
       {/* ========================================================= */}
       {/* A. TARJETA PRINCIPAL DEL MAPA (DASHBOARD RANKED)          */}
       {/* ========================================================= */}
-      <div className="relative rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-slate-800 p-4 shadow-xl overflow-hidden flex flex-col gap-3">
-        {/* Glow ambient background effect */}
-        <div className="absolute -top-12 -right-12 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative rounded-2xl bg-slate-900 border border-slate-800 p-4 shadow-sm flex flex-col gap-3">
 
         {/* Top bar: Mode Badge, Ranked Pill & Rescan Button */}
         <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -182,21 +180,21 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
       {/* C. TRÍO IDEAL RECOMENDADO CONTRA COMPOSICIÓN ENEMIGA      */}
       {/* ========================================================= */}
       {optimalTeam && optimalTeam.picks.length === 3 && (
-        <div className="p-3.5 rounded-3xl bg-gradient-to-b from-indigo-950/80 via-slate-900 to-slate-950 border border-indigo-500/40 shadow-xl flex flex-col gap-2.5">
+        <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-md flex flex-col gap-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <span className="text-base">🏆</span>
-              <h3 className="text-xs font-black uppercase tracking-wider text-indigo-200">
+              <span className="text-sm">🏆</span>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100">
                 Trío Ideal Recomendado
               </h3>
             </div>
             {onApplyOptimalTeam && (
               <button
                 onClick={() => onApplyOptimalTeam(optimalTeam.picks.map((p) => p.brawlerName))}
-                className="px-2.5 py-1 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-[10px] shadow-md border border-indigo-400/40 active:scale-95 transition-all flex items-center gap-1 cursor-pointer"
+                className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px] active:scale-95 transition-all cursor-pointer"
                 title="Rellenar los 3 slots de tu equipo con este trío"
               >
-                <span>✨ Aplicar al Equipo</span>
+                <span>Aplicar al Equipo</span>
               </button>
             )}
           </div>
@@ -275,12 +273,12 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
                 <div
                   key={brawlerName}
                   onClick={() => onQuickPick?.(brawlerName)}
-                  className={`relative flex flex-col p-2.5 rounded-2xl border transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.99] gap-1.5 ${
+                  className={`relative flex flex-col p-2.5 rounded-xl border transition-all cursor-pointer active:scale-[0.99] gap-1.5 ${
                     isFirst
-                      ? 'bg-gradient-to-r from-slate-900 via-slate-850 to-emerald-950/30 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.15)] ring-1 ring-emerald-500/30'
+                      ? 'bg-slate-900 border-emerald-500/60'
                       : riskLevel === 'HIGH'
-                      ? 'bg-slate-900/80 border-rose-900/40 hover:border-rose-500/50'
-                      : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+                      ? 'bg-slate-900/90 border-rose-900/50 hover:border-rose-700'
+                      : 'bg-slate-900/90 border-slate-800 hover:border-slate-700'
                   }`}
                   title="Toca para seleccionar este brawler en tu equipo"
                 >
