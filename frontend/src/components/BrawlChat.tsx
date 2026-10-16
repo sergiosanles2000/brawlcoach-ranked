@@ -262,7 +262,7 @@ INSTRUCCIONES DE RESPUESTA:
   ];
 
   return (
-    <div className="w-full flex flex-col h-[calc(100dvh-175px)] max-h-[560px] max-w-lg mx-auto bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl animate-in fade-in">
+    <div className="w-full flex flex-col h-[calc(100dvh-185px)] max-h-[500px] max-w-lg mx-auto bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl animate-in fade-in">
       {/* Top Context Banner */}
       <div className="px-3 py-2 bg-slate-950/80 border-b border-slate-800/80 flex items-center justify-between">
         <div className="flex items-center gap-2">

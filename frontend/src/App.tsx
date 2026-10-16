@@ -328,7 +328,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans pb-16">
+    <div className={`min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans ${activeTab === 'chat' ? 'pb-2' : 'pb-16'}`}>
       {/* Animated App Splash Screen */}
       {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
 
@@ -437,7 +437,7 @@ export function App() {
         </>
       ) : activeTab === 'chat' ? (
         /* Tab 2: Coach Chat */
-        <main className="w-full max-w-lg mx-auto px-3 py-2.5">
+        <main className="w-full max-w-lg mx-auto px-2.5 pt-1 pb-1 flex-1 flex flex-col">
           <BrawlChat
             currentMap={selectedMap}
             allyPicks={allyPicks}
