@@ -568,6 +568,11 @@ export function queryBrawlPickStats({
   // Sort: highest total score first.
   scoredCandidates.sort((a, b) => b.totalScore - a.totalScore);
 
+  // Re-index rank sequentially based on final adaptive score order
+  scoredCandidates.forEach((candidate, index) => {
+    candidate.rank = index + 1;
+  });
+
   const topPicks = scoredCandidates.slice(0, 5);
 
   // Generate Optimal 3-Brawler Team Recommendation if enemy has picks

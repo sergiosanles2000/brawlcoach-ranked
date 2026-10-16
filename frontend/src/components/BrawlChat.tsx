@@ -149,6 +149,18 @@ CONTEXTO EN VIVO DEL DRAFT ACTUAL:
 - Top recomendaciones calculadas por el motor de draft:
 ${topPicks}
 
+BASE DE CONOCIMIENTO TÉCNICO DE HABILIDADES (GADGETS Y STAR POWERS DE LOS PICKS CLAVE):
+${
+  recommendations
+    .slice(0, 4)
+    .map((r) => {
+      const g = (r.brawler.gadgets || []).map((x) => `    • Gadget: "${x.name}" - ${x.description}`).join('\n');
+      const s = (r.brawler.starPowers || []).map((x) => `    • Star Power: "${x.name}" - ${x.description}`).join('\n');
+      return `[${r.brawler.displayName}]\n${g || '    • Sin gadgets registrados'}\n${s || '    • Sin star powers registradas'}`;
+    })
+    .join('\n\n')
+}
+
 INSTRUCCIONES DE RESPUESTA:
 - PROHIBIDO mostrar análisis interno, cadenas de pensamiento, auto-correcciones o notas técnicas (ej: no escribas "Analyze the Request", "Thinking Process" ni etiquetas similares).
 - Entrega DIRECTAMENTE el consejo táctico al usuario en español, con estilo de entrenador pro.
