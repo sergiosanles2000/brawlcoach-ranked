@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Camera, Zap, Shield, MessageSquare, User } from 'lucide-react';
+import { Zap, Shield, MessageSquare, User } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import brawlersData from './data/brawlers.json';
 import countersData from './data/counters.json';
@@ -349,9 +349,6 @@ export function App() {
         selectedMap={selectedMap}
         onSelectMap={setSelectedMap}
         playerProfile={playerProfile}
-        isLoadingPlayer={isLoadingPlayer}
-        playerError={playerError}
-        onSyncPlayer={handleSyncPlayer}
         onlyRankedReady={onlyRankedReady}
         onToggleOnlyRankedReady={() => setOnlyRankedReady(!onlyRankedReady)}
         onResetDraft={handleResetDraft}
@@ -364,6 +361,7 @@ export function App() {
         onToggleConfig={() => setIsConfigOpen(!isConfigOpen)}
         onMetaUpdated={handleMetaUpdated}
         onOpenLogs={() => setIsLogsOpen(true)}
+        onNavigateProfile={() => setActiveTab('profile')}
       />
 
       {/* Navigation Tabs (Draft Board vs Coach Chat vs Player Profile) */}
@@ -448,33 +446,12 @@ export function App() {
             {/* Real-time Recommendation List with BrawlPick Statistics */}
             <Recommendations
               brawlPickStats={brawlPickStats}
-              selectedMap={selectedMap}
-              maps={typedMaps}
-              onSelectMap={setSelectedMap}
               onRescan={() => setIsCaptureOpen(true)}
               onQuickPick={handleQuickPick}
               onQuickBan={handleQuickBan}
               onApplyOptimalTeam={handleApplyOptimalTeam}
             />
           </main>
-
-          {/* Floating Action Buttons Container for 1-Thumb Screen Scan & Mod Menu */}
-          <div className="fixed bottom-4 right-4 z-40 flex items-center gap-2">
-            <button
-              onClick={handleToggleFloatingOverlay}
-              className="p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white shadow-lg border border-slate-700 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
-              title="Superposición flotante"
-            >
-              <Zap className="w-5 h-5 text-amber-400" />
-            </button>
-            <button
-              onClick={() => setIsCaptureOpen(true)}
-              className="p-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg border border-emerald-500 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
-              title="Escanear Pantalla"
-            >
-              <Camera className="w-5 h-5" />
-            </button>
-          </div>
         </>
       ) : activeTab === 'chat' ? (
         /* Tab 2: Coach Chat */

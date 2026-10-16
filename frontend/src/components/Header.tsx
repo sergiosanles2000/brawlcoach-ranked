@@ -3,12 +3,9 @@ import {
   Trophy,
   RotateCcw,
   Sparkles,
-  Search,
   CheckCircle2,
-  AlertTriangle,
   SlidersHorizontal,
   MapPin,
-  Camera,
   Server,
   RefreshCw,
   Terminal,
@@ -21,13 +18,10 @@ interface HeaderProps {
   selectedMap: GameMap;
   onSelectMap: (map: GameMap) => void;
   playerProfile: PlayerProfile | null;
-  isLoadingPlayer: boolean;
-  playerError: string | null;
-  onSyncPlayer: (tag: string) => void;
   onlyRankedReady: boolean;
   onToggleOnlyRankedReady: () => void;
   onResetDraft: () => void;
-  onOpenCapture: () => void;
+  onOpenCapture?: () => void;
   lmEndpoint?: string;
   onChangeLmEndpoint?: (endpoint: string) => void;
   lmModel?: string;
@@ -36,6 +30,7 @@ interface HeaderProps {
   onToggleConfig: () => void;
   onMetaUpdated?: (brawlers: Brawler[], counters: CountersMap) => void;
   onOpenLogs?: () => void;
+  onNavigateProfile?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -43,19 +38,15 @@ export const Header: React.FC<HeaderProps> = ({
   selectedMap,
   onSelectMap,
   playerProfile,
-  isLoadingPlayer,
-  playerError,
-  onSyncPlayer,
   onlyRankedReady,
   onToggleOnlyRankedReady,
   onResetDraft,
-  onOpenCapture,
   isConfigOpen,
   onToggleConfig,
   onMetaUpdated,
   onOpenLogs,
+  onNavigateProfile,
 }) => {
-  const [tagInput, setTagInput] = useState('');
   const [isUpdatingMeta, setIsUpdatingMeta] = useState(false);
   const [metaMessage, setMetaMessage] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(() => getLastUpdatedMeta());
@@ -77,94 +68,73 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const handleSyncSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (tagInput.trim()) {
-      onSyncPlayer(tagInput);
-    }
-  };
-
   return (
-    <header className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-30 px-3 py-2">
+    <header className="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 sticky top-0 z-30 px-3 pb-2 pt-[max(0.75rem,env(safe-area-inset-top,0.75rem))]">
       <div className="max-w-4xl mx-auto flex flex-col gap-2">
-        {/* Top bar with Branding, Reset, Capture button and Quick Settings */}
+        {/* Top bar with Branding and essential actions */}
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
-              <Trophy className="w-4 h-4 text-amber-400 font-bold" />
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0">
+              <Trophy className="w-3.5 h-3.5 text-amber-400 font-bold" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold tracking-tight text-white">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-bold tracking-tight text-white">
                   BrawlCoach
                 </span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold border border-slate-700">
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-medium border border-slate-700">
                   Ranked
                 </span>
               </div>
-              <p className="text-[10.5px] text-slate-400">
-                85 mapas competitivos • Base BrawlPick
-              </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            {/* Quick Screen Capture Overlay Button */}
-            <button
-              onClick={onOpenCapture}
-              className="text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-100 transition-colors border border-slate-700 cursor-pointer"
-              title="Escanear pantalla de draft"
-            >
-              <Camera className="w-3.5 h-3.5 text-slate-300" />
-              <span>Escanear</span>
-            </button>
-
+          <div className="flex items-center gap-1">
             {/* Filter Toggle */}
             <button
               onClick={onToggleOnlyRankedReady}
-              className={`text-xs px-2.5 py-1.5 rounded-lg font-medium flex items-center gap-1.5 transition-colors border ${
+              className={`text-[11px] px-2 py-1 rounded-lg font-medium flex items-center gap-1 transition-colors border cursor-pointer ${
                 onlyRankedReady
                   ? 'bg-emerald-950/70 border-emerald-500/60 text-emerald-300'
                   : 'bg-slate-800/80 border-slate-700 text-slate-400 hover:text-slate-200'
               }`}
               title="Filtrar por brawlers propios a nivel 9 o superior"
             >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="hidden sm:inline">Solo Viables</span>
-              <span className="text-[10px] font-bold">P9+</span>
+              <Sparkles className="w-3 h-3 text-emerald-400" />
+              <span>P9+</span>
+            </button>
+
+            {/* Reset Draft */}
+            <button
+              onClick={onResetDraft}
+              className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-red-950/40 hover:border-red-500/40 border border-slate-700 text-slate-300 hover:text-red-400 transition-colors cursor-pointer"
+              title="Reiniciar Draft"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
             </button>
 
             {/* Live Logs Console Button */}
             {onOpenLogs && (
               <button
                 onClick={onOpenLogs}
-                className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-cyan-400 transition-colors"
+                className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-cyan-400 transition-colors cursor-pointer"
                 title="Consola de Logs en Vivo"
               >
-                <Terminal className="w-4 h-4" />
+                <Terminal className="w-3.5 h-3.5" />
               </button>
             )}
 
             {/* Settings Toggle */}
             <button
               onClick={onToggleConfig}
-              className={`p-1.5 rounded-lg border transition-colors ${
+              className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
                 isConfigOpen
                   ? 'bg-blue-600 border-blue-500 text-white'
                   : 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-300'
               }`}
-              title="Configurar Perfil y Modelo de IA"
+              title="Configuración y Meta"
             >
-              <SlidersHorizontal className="w-4 h-4" />
-            </button>
-
-            {/* Reset Draft */}
-            <button
-              onClick={onResetDraft}
-              className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-red-950/40 hover:border-red-500/40 border border-slate-700 text-slate-300 hover:text-red-400 transition-colors"
-              title="Reiniciar Draft"
-            >
-              <RotateCcw className="w-4 h-4" />
+              <SlidersHorizontal className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
@@ -226,45 +196,28 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Brawl Stars Player Tag Section */}
-            <div className="flex flex-col gap-1.5">
-              <span className="text-xs font-black uppercase tracking-wider text-blue-300 flex items-center gap-1.5">
-                <Trophy className="w-3.5 h-3.5 text-blue-400" />
-                Sincronización de Cuenta (#TAG)
-              </span>
+            {/* Brawl Stars Player Profile Status */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase tracking-wider text-blue-300 flex items-center gap-1.5">
+                  <Trophy className="w-3.5 h-3.5 text-blue-400" />
+                  Perfil de Jugador
+                </span>
+                {onNavigateProfile && (
+                  <button
+                    onClick={() => {
+                      onToggleConfig();
+                      onNavigateProfile();
+                    }}
+                    className="text-[10.5px] text-blue-400 hover:text-blue-300 underline font-medium cursor-pointer"
+                  >
+                    Cambiar Tag ➔
+                  </button>
+                )}
+              </div>
 
-              <form onSubmit={handleSyncSubmit} className="flex gap-1.5">
-                <div className="relative flex-1">
-                  <span className="absolute inset-y-0 left-2.5 flex items-center text-slate-500 text-xs font-mono font-bold">
-                    #
-                  </span>
-                  <input
-                    type="text"
-                    placeholder="Tu Player Tag (ej: 2Y9UQL)"
-                    value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value.toUpperCase())}
-                    className="w-full pl-6 pr-3 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-400 uppercase"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isLoadingPlayer}
-                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 active:scale-95 disabled:opacity-50 text-white rounded-lg text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"
-                >
-                  {isLoadingPlayer ? (
-                    <span className="animate-spin text-xs">⏳</span>
-                  ) : (
-                    <>
-                      <Search className="w-3.5 h-3.5" />
-                      <span>Sincronizar</span>
-                    </>
-                  )}
-                </button>
-              </form>
-
-              {/* Player Info Summary Chip */}
-              {playerProfile && (
-                <div className="flex items-center justify-between text-[11px] px-2.5 py-1.5 bg-slate-900/90 rounded-lg border border-slate-800">
+              {playerProfile ? (
+                <div className="flex items-center justify-between text-[11px] px-2.5 py-2 bg-slate-900 rounded-xl border border-slate-800">
                   <div className="flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                     <span className="font-bold text-slate-200">{playerProfile.name}</span>
@@ -272,23 +225,22 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                   <div className="text-slate-400">
                     <span className="text-amber-400 font-bold">🏆 {playerProfile.trophies?.toLocaleString()}</span>
-                    <span className="ml-2 font-semibold">
-                      {playerProfile.brawlers?.filter((b) => b.power >= 9).length || 0} P9+
-                    </span>
                   </div>
                 </div>
-              )}
-
-              {playerProfile?.warning && (
-                <div className="flex items-start gap-1.5 text-[10px] text-amber-400 bg-amber-950/30 p-2 rounded-lg border border-amber-800/40">
-                  <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                  <span>{playerProfile.warning}</span>
-                </div>
-              )}
-
-              {playerError && (
-                <div className="text-[11px] text-red-400 bg-red-950/30 p-2 rounded-lg border border-red-800/40">
-                  {playerError}
+              ) : (
+                <div className="text-[11px] text-slate-400 bg-slate-900 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span>Sin vincular</span>
+                  {onNavigateProfile && (
+                    <button
+                      onClick={() => {
+                        onToggleConfig();
+                        onNavigateProfile();
+                      }}
+                      className="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold"
+                    >
+                      Vincular ahora
+                    </button>
+                  )}
                 </div>
               )}
             </div>

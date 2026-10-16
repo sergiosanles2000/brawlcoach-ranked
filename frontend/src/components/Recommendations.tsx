@@ -4,19 +4,13 @@ import {
   Flame,
   ShieldAlert,
   Camera,
-  MapPin,
   AlertTriangle,
   Info,
-  ChevronDown,
 } from 'lucide-react';
-import type { GameMap } from '../types/brawl';
 import type { BrawlPickAnalysisResult } from '../services/brawlpickService';
 
 interface RecommendationsProps {
   brawlPickStats: BrawlPickAnalysisResult;
-  selectedMap: GameMap;
-  maps: GameMap[];
-  onSelectMap: (map: GameMap) => void;
   onRescan: () => void;
   onQuickPick?: (brawlerName: string) => void;
   onQuickBan?: (brawlerName: string) => void;
@@ -26,9 +20,6 @@ interface RecommendationsProps {
 
 export const Recommendations: React.FC<RecommendationsProps> = ({
   brawlPickStats,
-  selectedMap,
-  maps,
-  onSelectMap,
   onRescan,
   onQuickPick,
   onQuickBan,
@@ -132,32 +123,6 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
             )}
             <span>•</span>
             <span className="text-[11px] text-slate-500">Actualizado: {updatedAt}</span>
-          </div>
-        </div>
-
-        {/* Map Selector Dropdown (Manual Fallback / Switcher) */}
-        <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2">
-          <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-2.5 flex items-center pointer-events-none text-slate-500">
-              <MapPin className="w-3.5 h-3.5" />
-            </div>
-            <select
-              value={selectedMap.id}
-              onChange={(e) => {
-                const found = maps.find((m) => m.id === e.target.value);
-                if (found) onSelectMap(found);
-              }}
-              className="w-full pl-8 pr-8 py-1.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs font-medium text-slate-300 focus:outline-none focus:border-amber-400 transition-colors appearance-none cursor-pointer"
-            >
-              {maps.map((map) => (
-                <option key={map.id} value={map.id} className="bg-slate-900 text-slate-200">
-                  [{map.mode.toUpperCase()}] {map.name}
-                </option>
-              ))}
-            </select>
-            <div className="absolute inset-y-0 right-2.5 flex items-center pointer-events-none text-slate-500 text-xs">
-              <ChevronDown className="w-3.5 h-3.5" />
-            </div>
           </div>
         </div>
       </div>
