@@ -25,6 +25,7 @@ interface BrawlChatProps {
   enemyBans: (string | null)[];
   recommendations: RecommendationScore[];
   allBrawlers: Brawler[];
+  playerProfile?: import('../types/brawl').PlayerProfile | null;
 }
 
 const GEMINI_API_KEY = typeof atob === 'function'
@@ -42,6 +43,7 @@ export const BrawlChat: React.FC<BrawlChatProps> = ({
   allyBans,
   enemyBans,
   recommendations,
+  playerProfile,
 }) => {
   const getInitialMessages = (): ChatMessage[] => {
     try {
@@ -111,11 +113,32 @@ export const BrawlChat: React.FC<BrawlChatProps> = ({
       .map((r, i) => `${i + 1}. ${r.brawler.displayName} (${r.tier}-Tier, ${r.totalScore} pts: ${r.reasons[0]?.text || ''})`)
       .join('\n');
 
+    const playerContext = playerProfile
+      ? `\nDATOS DEL JUGADOR CONECTADO:
+- Nombre: "${playerProfile.name}" (Tag: ${playerProfile.tag})
+- Copas: ${playerProfile.trophies} (Rango Competitivo alto)
+- Brawlers listos (P9+): ${playerProfile.brawlers?.filter((b) => b.power >= 9).length || 0}
+- Historial de partidas recientes:
+${
+  (playerProfile.battles || [])
+    .slice(0, 5)
+    .map(
+      (b) =>
+        `  * ${b.victory ? 'Victoria' : 'Derrota'} en ${b.event?.map || 'Mapa'} (${b.event?.mode || 'Modo'}) con ${
+          b.teams?.[0]?.find((p) => p.tag.replace('#', '') === playerProfile.tag.replace('#', ''))?.brawler || 'Brawler'
+        }`
+    )
+    .join('\n') || '  * Sin partidas recientes registradas.'
+}`
+      : '';
+
     return `Eres BrawlCoach AI, el entrenador táctico pro de Brawl Stars de rango Maestros / Competitivo.
 
 REGLA ESTRICTA DE ENFOQUE:
-- Responde EXCLUSIVAMENTE sobre Brawl Stars (elección de brawlers en draft, counters, sinergias, gadgets, star powers, gears, hipercargas, modos de juego y tácticas de mapa).
-- Si el usuario pregunta cualquier tema NO relacionado con Brawl Stars (política, cocina, programación, otros videojuegos, etc.), DEBES RECHAZARLO amablemente en 1 frase diciendo: "Soy tu entrenador exclusivo de Brawl Stars. Solo puedo ayudarte con tácticas, builds y partidas de Brawl Stars. ¿En qué estrategia de juego te ayudo?"
+- Responde EXCLUSIVAMENTE sobre Brawl Stars (elección de brawlers en draft, counters, sinergias, gadgets, star powers, gears, hipercargas, modos de juego y análisis de las partidas del jugador).
+- Si el usuario te pregunta sobre sus últimas partidas, analízale por qué ganó o perdió según los picks y dale consejos concretos para corregir errores.
+- Si el usuario pregunta cualquier tema NO relacionado con Brawl Stars, DEBES RECHAZARLO amablemente en 1 frase diciendo: "Soy tu entrenador exclusivo de Brawl Stars. Solo puedo ayudarte con tácticas, builds y partidas de Brawl Stars. ¿En qué estrategia de juego te ayudo?"
+${playerContext}
 
 CONTEXTO EN VIVO DEL DRAFT ACTUAL:
 - Mapa activo: "${currentMap.name}"

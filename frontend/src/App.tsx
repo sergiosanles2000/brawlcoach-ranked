@@ -446,6 +446,7 @@ export function App() {
             enemyBans={enemyBans}
             recommendations={recommendations}
             allBrawlers={brawlers}
+            playerProfile={playerProfile}
           />
         </main>
       ) : (

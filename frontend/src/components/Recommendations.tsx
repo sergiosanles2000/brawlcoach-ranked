@@ -370,62 +370,59 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
                   {/* Tactical tags row: Counters, Synergies, Warnings */}
                   {(countersAgainstEnemies?.length > 0 ||
                     synergiesWithAllies?.length > 0 ||
-                    counteredByEnemies?.length > 0 ||
-                    tacticalReason) && (
-                    <div className="pt-1.5 border-t border-slate-800/80 flex flex-col gap-1 text-[10px]">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        {countersAgainstEnemies?.map((enemy) => (
-                          <span
-                            key={enemy}
-                            className="px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 font-bold border border-emerald-500/30 flex items-center gap-1"
-                          >
-                            <span>🎯</span> Counter de {enemy}
-                          </span>
-                        ))}
-                        {counteredByEnemies?.map((enemy) => (
-                          <span
-                            key={enemy}
-                            className="px-1.5 py-0.5 rounded-md bg-rose-500/15 text-rose-300 font-bold border border-rose-500/30 flex items-center gap-1"
-                          >
-                            <span>⚠️</span> Débil ante {enemy}
-                          </span>
-                        ))}
-                        {synergiesWithAllies?.map((ally) => (
-                          <span
-                            key={ally}
-                            className="px-1.5 py-0.5 rounded-md bg-blue-500/15 text-blue-300 font-bold border border-blue-500/30 flex items-center gap-1"
-                          >
-                            <span>🤝</span> Sinergia con {ally}
-                          </span>
-                        ))}
-                      </div>
+                    counteredByEnemies?.length > 0) && (
+                    <div className="pt-1.5 border-t border-slate-800/80 flex items-center gap-1.5 flex-wrap text-[10px]">
+                      {countersAgainstEnemies?.map((enemy) => (
+                        <span
+                          key={enemy}
+                          className="px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 font-bold border border-emerald-500/30 flex items-center gap-1"
+                        >
+                          <span>🎯</span> Counter de {enemy}
+                        </span>
+                      ))}
+                      {counteredByEnemies?.map((enemy) => (
+                        <span
+                          key={enemy}
+                          className="px-1.5 py-0.5 rounded-md bg-rose-500/15 text-rose-300 font-bold border border-rose-500/30 flex items-center gap-1"
+                        >
+                          <span>⚠️</span> Débil ante {enemy}
+                        </span>
+                      ))}
+                      {synergiesWithAllies?.map((ally) => (
+                        <span
+                          key={ally}
+                          className="px-1.5 py-0.5 rounded-md bg-blue-500/15 text-blue-300 font-bold border border-blue-500/30 flex items-center gap-1"
+                        >
+                          <span>🤝</span> Sinergia con {ally}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
-                      {/* Recommended Build Pill (Gadget & StarPower) */}
-                      {((brawlerObj?.gadgets && brawlerObj.gadgets.length > 0) ||
-                        (brawlerObj?.starPowers && brawlerObj.starPowers.length > 0)) && (
-                        <div className="flex items-center gap-1.5 pt-1 text-[9.5px]">
-                          <span className="text-amber-400 font-bold flex items-center gap-0.5">
-                            <span>⚙️</span> Build:
-                          </span>
-                          {brawlerObj?.gadgets?.[0] && (
-                            <span className="px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/30 text-amber-200 truncate max-w-[140px]" title={brawlerObj.gadgets[0].name}>
-                              🟢 {brawlerObj.gadgets[0].name}
-                            </span>
-                          )}
-                          {brawlerObj?.starPowers?.[0] && (
-                            <span className="px-1.5 py-0.2 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-200 truncate max-w-[140px]" title={brawlerObj.starPowers[0].name}>
-                              ⭐ {brawlerObj.starPowers[0].name}
-                            </span>
-                          )}
-                        </div>
+                  {/* Always-visible Recommended Build Row (Gadget & StarPower) */}
+                  {((brawlerObj?.gadgets && brawlerObj.gadgets.length > 0) ||
+                    (brawlerObj?.starPowers && brawlerObj.starPowers.length > 0)) && (
+                    <div className="pt-1.5 border-t border-slate-800/60 flex items-center gap-1.5 flex-wrap text-[9.5px]">
+                      <span className="text-amber-400 font-bold flex items-center gap-1">
+                        <span>⚙️</span> Build:
+                      </span>
+                      {brawlerObj?.gadgets?.[0] && (
+                        <span className="px-1.5 py-0.5 rounded bg-emerald-950/70 border border-emerald-600/40 text-emerald-300 font-medium truncate max-w-[150px]" title={brawlerObj.gadgets[0].name}>
+                          🟢 {brawlerObj.gadgets[0].name}
+                        </span>
                       )}
-
-                      {tacticalReason && (
-                        <p className="text-[10px] text-slate-400 italic leading-tight">
-                          {tacticalReason}
-                        </p>
+                      {brawlerObj?.starPowers?.[0] && (
+                        <span className="px-1.5 py-0.5 rounded bg-amber-950/70 border border-amber-600/40 text-amber-300 font-medium truncate max-w-[150px]" title={brawlerObj.starPowers[0].name}>
+                          ⭐ {brawlerObj.starPowers[0].name}
+                        </span>
                       )}
                     </div>
+                  )}
+
+                  {tacticalReason && (
+                    <p className="text-[10px] text-slate-400 italic leading-tight pt-0.5">
+                      {tacticalReason}
+                    </p>
                   )}
                 </div>
               );

@@ -301,7 +301,17 @@ export function getStoredBrawlers(defaultBrawlers: Brawler[]): Brawler[] {
     const raw = localStorage.getItem(STORAGE_META_BRAWLERS);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // If cached brawlers don't have gadgets yet, populate them from defaultBrawlers
+        if (!parsed[0].gadgets || parsed[0].gadgets.length === 0) {
+          const map = new Map(defaultBrawlers.map((b) => [b.name.toUpperCase(), b]));
+          return parsed.map((b) => {
+            const def = map.get(b.name.toUpperCase());
+            return def ? { ...b, gadgets: def.gadgets, starPowers: def.starPowers } : b;
+          });
+        }
+        return parsed;
+      }
     }
   } catch {}
   return defaultBrawlers;
