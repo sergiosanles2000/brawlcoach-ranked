@@ -74,16 +74,16 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Top bar with Branding and essential actions */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0">
-              <Trophy className="w-3.5 h-3.5 text-amber-400 font-bold" />
+            <div className="w-7 h-7 rounded-lg overflow-hidden border border-slate-700/80 flex items-center justify-center shrink-0 bg-slate-900">
+              <img src="/app-icon.png" alt="Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold tracking-tight text-white">
-                  BrawlCoach
+                <span className="text-xs font-black tracking-tight text-white uppercase">
+                  Brawl Draft
                 </span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-medium border border-slate-700">
-                  Ranked
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-950/80 text-cyan-300 font-bold border border-cyan-800/60">
+                  AI
                 </span>
               </div>
             </div>

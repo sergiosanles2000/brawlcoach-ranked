@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">BrawlCoach</string>
-    <string name="title_activity_main">BrawlCoach</string>
+    <string name="app_name">Brawl Draft AI</string>
+    <string name="title_activity_main">Brawl Draft AI</string>
     <string name="package_name">com.brawlcoach.app</string>
     <string name="custom_url_scheme">com.brawlcoach.app</string>
 </resources>
