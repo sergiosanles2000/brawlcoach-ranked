@@ -35,6 +35,26 @@ export async function fetchPlayerProfile(tag: string): Promise<PlayerProfile> {
           gadgets: (b.gadgets || []).map((g: any) => ({ id: g.id, name: g.name })),
         }));
 
+        const battles = (raw.battles || []).map((bt: any) => ({
+          timestamp: bt.timestamp,
+          ranked: bt.ranked,
+          victory: bt.victory,
+          result: bt.result,
+          event: bt.event ? {
+            id: bt.event.id,
+            mode: bt.event.mode,
+            map: bt.event.map,
+          } : undefined,
+          teams: (bt.teams || []).map((tm: any[]) =>
+            (tm || []).map((p: any) => ({
+              tag: p.tag,
+              name: p.name,
+              brawler: p.brawler,
+              brawlerTrophies: p.brawlerTrophies,
+            }))
+          ),
+        }));
+
         const profile: PlayerProfile = {
           isMock: false,
           tag: `#${cleanTag}`,
@@ -43,6 +63,7 @@ export async function fetchPlayerProfile(tag: string): Promise<PlayerProfile> {
           highestTrophies: raw.highestTrophies || raw.trophies || 0,
           expLevel: raw.expLevel || 100,
           brawlers,
+          battles,
         };
 
         return profile;

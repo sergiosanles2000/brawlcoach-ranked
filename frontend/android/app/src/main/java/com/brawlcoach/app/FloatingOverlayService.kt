@@ -146,8 +146,8 @@ class FloatingOverlayService : Service() {
         )
 
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("⚡ BrawlCoach Mod Menu Activo")
-            .setContentText("Superposición flotante lista sobre Brawl Stars")
+            .setContentTitle("BrawlDraft - Asistente Flotante")
+            .setContentText("Superposición táctica lista sobre Brawl Stars")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -228,16 +228,15 @@ class FloatingOverlayService : Service() {
 
         val bg = GradientDrawable().apply {
             shape = GradientDrawable.OVAL
-            colors = intArrayOf(Color.parseColor("#4f46e5"), Color.parseColor("#06b6d4"))
-            gradientType = GradientDrawable.SWEEP_GRADIENT
-            setStroke((2.5f * density).toInt(), Color.parseColor("#facc15"))
+            setColor(Color.parseColor("#0f172a"))
+            setStroke((2f * density).toInt(), Color.parseColor("#38bdf8"))
         }
         frame.background = bg
-        frame.elevation = 16f * density
+        frame.elevation = 12f * density
 
         val tv = TextView(this).apply {
-            text = "⚡"
-            textSize = 22f
+            text = "💀"
+            textSize = 20f
             gravity = Gravity.CENTER
             setTextColor(Color.WHITE)
         }
@@ -314,8 +313,8 @@ class FloatingOverlayService : Service() {
         }
 
         val tvTitle = TextView(this).apply {
-            text = "⚡ BRAWLCOACH MOD MENU"
-            textSize = 12.5f
+            text = "BRAWLDRAFT ASSISTANT"
+            textSize = 12f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#38bdf8"))
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)

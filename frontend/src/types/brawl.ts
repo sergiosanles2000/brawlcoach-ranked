@@ -7,6 +7,13 @@ export type BrawlerClass =
   | 'Artillery'
   | 'Support';
 
+export interface BrawlerAbility {
+  id: number;
+  name: string;
+  imageUrl?: string;
+  description?: string;
+}
+
 export interface Brawler {
   id: number;
   name: string;
@@ -16,6 +23,8 @@ export interface Brawler {
   attackRange: string;
   hasHypercharge: boolean;
   iconUrl: string;
+  gadgets?: BrawlerAbility[];
+  starPowers?: BrawlerAbility[];
 }
 
 export interface CounterInfo {
@@ -74,6 +83,26 @@ export interface PlayerBrawler {
   gadgets?: PlayerGadget[];
 }
 
+export interface BattlePlayer {
+  tag: string;
+  name: string;
+  brawler: string;
+  brawlerTrophies?: number;
+}
+
+export interface BattleRecord {
+  timestamp: string;
+  ranked?: boolean;
+  victory?: boolean;
+  result?: string;
+  event?: {
+    id?: number;
+    mode?: string;
+    map?: string;
+  };
+  teams?: BattlePlayer[][];
+}
+
 export interface PlayerProfile {
   tag: string;
   name: string;
@@ -81,6 +110,7 @@ export interface PlayerProfile {
   highestTrophies?: number;
   expLevel?: number;
   brawlers: PlayerBrawler[];
+  battles?: BattleRecord[];
   isMock?: boolean;
   warning?: string;
   fromCache?: boolean;

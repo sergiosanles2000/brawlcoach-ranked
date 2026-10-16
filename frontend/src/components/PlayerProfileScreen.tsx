@@ -140,8 +140,73 @@ export function PlayerProfileScreen({
             </div>
           </div>
 
+          {/* Battle Log & History Analysis */}
+          {playerProfile.battles && playerProfile.battles.length > 0 && (
+            <div className="pt-2 border-t border-slate-800">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                  <span>⚔️</span>
+                  <span>Últimas Partidas ({playerProfile.battles.length})</span>
+                </h4>
+                <span className="text-[10px] text-slate-400 font-mono">
+                  Historial en vivo
+                </span>
+              </div>
+
+              <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1 scrollbar-thin">
+                {playerProfile.battles.slice(0, 10).map((bt, idx) => {
+                  const isVictory = bt.victory || bt.result === 'Victory';
+                  const mode = bt.event?.mode || 'Partida';
+                  const mapName = bt.event?.map || 'Modo Competitivo';
+
+                  // Find user brawler in battle
+                  let myBrawler = 'Brawler';
+                  if (bt.teams) {
+                    for (const team of bt.teams) {
+                      const me = team.find((p) => p.tag?.replace('#', '') === playerProfile.tag.replace('#', ''));
+                      if (me) {
+                        myBrawler = me.brawler;
+                        break;
+                      }
+                    }
+                  }
+
+                  return (
+                    <div
+                      key={idx}
+                      className={`p-2 rounded-xl border flex items-center justify-between text-xs ${
+                        isVictory
+                          ? 'bg-emerald-950/20 border-emerald-500/30 text-emerald-200'
+                          : 'bg-rose-950/20 border-rose-500/30 text-rose-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`text-[9.5px] font-black px-1.5 py-0.5 rounded uppercase ${
+                            isVictory ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
+                          }`}
+                        >
+                          {isVictory ? 'VICTORIA' : 'DERROTA'}
+                        </span>
+                        <div>
+                          <div className="font-bold text-slate-200 text-[11px] capitalize">
+                            {myBrawler} • <span className="text-slate-400">{mapName}</span>
+                          </div>
+                          <div className="text-[9.5px] text-slate-500 capitalize">{mode}</div>
+                        </div>
+                      </div>
+                      <span className="text-[9px] font-mono text-slate-500">
+                        {new Date(bt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Brawler Inventory List */}
-          <div>
+          <div className="pt-2 border-t border-slate-800">
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-xs font-bold text-slate-300">
                 Inventario de Brawlers ({displayedBrawlers.length})

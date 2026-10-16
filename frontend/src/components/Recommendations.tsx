@@ -400,6 +400,26 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
                         ))}
                       </div>
 
+                      {/* Recommended Build Pill (Gadget & StarPower) */}
+                      {((brawlerObj?.gadgets && brawlerObj.gadgets.length > 0) ||
+                        (brawlerObj?.starPowers && brawlerObj.starPowers.length > 0)) && (
+                        <div className="flex items-center gap-1.5 pt-1 text-[9.5px]">
+                          <span className="text-amber-400 font-bold flex items-center gap-0.5">
+                            <span>⚙️</span> Build:
+                          </span>
+                          {brawlerObj?.gadgets?.[0] && (
+                            <span className="px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/30 text-amber-200 truncate max-w-[140px]" title={brawlerObj.gadgets[0].name}>
+                              🟢 {brawlerObj.gadgets[0].name}
+                            </span>
+                          )}
+                          {brawlerObj?.starPowers?.[0] && (
+                            <span className="px-1.5 py-0.2 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-200 truncate max-w-[140px]" title={brawlerObj.starPowers[0].name}>
+                              ⭐ {brawlerObj.starPowers[0].name}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
                       {tacticalReason && (
                         <p className="text-[10px] text-slate-400 italic leading-tight">
                           {tacticalReason}

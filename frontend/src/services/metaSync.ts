@@ -205,6 +205,18 @@ export async function syncMetaFromApi(): Promise<{
         b.imageUrl2 ||
         b.imageUrl ||
         `https://cdn.brawlify.com/brawlers/borderless/${b.id}.png`,
+      gadgets: (b.gadgets || []).map((g: any) => ({
+        id: g.id,
+        name: g.name,
+        imageUrl: g.imageUrl || `https://cdn.brawlify.com/gadgets/borderless/${g.id}.png`,
+        description: g.description,
+      })),
+      starPowers: (b.starPowers || []).map((s: any) => ({
+        id: s.id,
+        name: s.name,
+        imageUrl: s.imageUrl || `https://cdn.brawlify.com/star-powers/borderless/${s.id}.png`,
+        description: s.description,
+      })),
     };
   });
 
