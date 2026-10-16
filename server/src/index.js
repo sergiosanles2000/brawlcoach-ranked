@@ -220,6 +220,12 @@ app.get('/api/vision/status', (req, res) => {
   });
 });
 
+// Serve compiled APK without polluting frontend/public bundle
+app.get('/download/apk', (req, res) => {
+  const apkPath = path.resolve(__dirname, '../../frontend/dist/brawlcoach-modmenu.apk');
+  res.download(apkPath, 'brawlcoach-modmenu.apk');
+});
+
 app.listen(PORT, () => {
   console.log(`🎮 Brawl Stars Draft Assistant Server running on http://localhost:${PORT}`);
 });
