@@ -80,10 +80,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-xs font-black tracking-tight text-white uppercase">
-                  Brawl Draft
-                </span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-950/80 text-cyan-300 font-bold border border-cyan-800/60">
-                  AI
+                  BrawlDraft
                 </span>
               </div>
             </div>

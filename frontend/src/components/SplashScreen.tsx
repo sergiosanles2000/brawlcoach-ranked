@@ -43,10 +43,10 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 
         <div className="text-center space-y-1">
           <h1 className="text-2xl font-black tracking-tight text-white uppercase">
-            BRAWL DRAFT AI
+            BRAWLDRAFT
           </h1>
           <p className="text-xs text-slate-400 font-medium">
-            Draft & Counter Pick Inteligente
+            Draft & Counter Pick Asistente
           </p>
         </div>
 
