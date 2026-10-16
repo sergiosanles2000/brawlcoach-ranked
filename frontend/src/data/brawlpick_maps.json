@@ -1,0 +1,848 @@
+{
+  "updatedAt": "2026-10-16",
+  "source": "BrawlPick",
+  "totalMaps": 85,
+  "rankedMapsCount": 25,
+  "maps": [
+    {
+      "mapName": "Double Swoosh",
+      "aliases": ["Doble Dilema", "Double Swoosh"],
+      "mode": "Gem Grab",
+      "totalBattles": 13418,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Bolt", "winRate": 63.3, "games": 766, "rank": 1, "reliability": "Alta (150+ partidas)" },
+        { "brawlerName": "Bo", "winRate": 56.8, "games": 3167, "rank": 2, "reliability": "Muy Alta (3,000+ partidas)" },
+        { "brawlerName": "Amber", "winRate": 56.6, "games": 1838, "rank": 3, "reliability": "Muy Alta (1,800+ partidas)" },
+        { "brawlerName": "Tara", "winRate": 55.4, "games": 1420, "rank": 4, "reliability": "Alta (1,400+ partidas)" },
+        { "brawlerName": "Gene", "winRate": 54.2, "games": 1150, "rank": 5, "reliability": "Alta (1,100+ partidas)" }
+      ]
+    },
+    {
+      "mapName": "Gem Fort",
+      "aliases": ["Fuerte de Gemas", "Gem Fort"],
+      "mode": "Gem Grab",
+      "totalBattles": 6715,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Ash", "winRate": 56.0, "games": 1643, "rank": 1, "reliability": "Muy Alta (1,600+ partidas)" },
+        { "brawlerName": "Bolt", "winRate": 59.6, "games": 225, "rank": 2, "reliability": "Media (225 partidas)" },
+        { "brawlerName": "Tara", "winRate": 56.7, "games": 728, "rank": 3, "reliability": "Alta (700+ partidas)" },
+        { "brawlerName": "Poco", "winRate": 55.1, "games": 890, "rank": 4, "reliability": "Alta (890 partidas)" },
+        { "brawlerName": "Sandy", "winRate": 54.8, "games": 640, "rank": 5, "reliability": "Alta (640 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Hard Rock Mine",
+      "aliases": ["Mina Rocosa", "Hard Rock Mine"],
+      "mode": "Gem Grab",
+      "totalBattles": 10680,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Shade", "winRate": 61.4, "games": 1831, "rank": 1, "reliability": "Muy Alta (1,800+ partidas)" },
+        { "brawlerName": "Damian", "winRate": 62.3, "games": 191, "rank": 2, "reliability": "Media (191 partidas)" },
+        { "brawlerName": "Bo", "winRate": 55.8, "games": 2602, "rank": 3, "reliability": "Muy Alta (2,600+ partidas)" },
+        { "brawlerName": "Carl", "winRate": 55.2, "games": 1120, "rank": 4, "reliability": "Alta (1,100+ partidas)" },
+        { "brawlerName": "Amber", "winRate": 54.9, "games": 1340, "rank": 5, "reliability": "Alta (1,300+ partidas)" }
+      ]
+    },
+    {
+      "mapName": "Undermine",
+      "aliases": ["Cueva Subterránea", "Undermine"],
+      "mode": "Gem Grab",
+      "totalBattles": 11924,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 64.2, "games": 332, "rank": 1, "reliability": "Media (332 partidas)" },
+        { "brawlerName": "Najia", "winRate": 63.4, "games": 164, "rank": 2, "reliability": "Media (164 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 58.4, "games": 977, "rank": 3, "reliability": "Alta (977 partidas)" },
+        { "brawlerName": "Bo", "winRate": 56.1, "games": 1850, "rank": 4, "reliability": "Muy Alta (1,850+ partidas)" },
+        { "brawlerName": "Gene", "winRate": 55.3, "games": 1210, "rank": 5, "reliability": "Alta (1,200+ partidas)" }
+      ]
+    },
+    {
+      "mapName": "Center Stage",
+      "aliases": ["Estadio Central", "Center Stage"],
+      "mode": "Brawl Ball",
+      "totalBattles": 6807,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Jacky", "winRate": 63.6, "games": 184, "rank": 1, "reliability": "Media (184 partidas)" },
+        { "brawlerName": "Doug", "winRate": 60.9, "games": 312, "rank": 2, "reliability": "Media (312 partidas)" },
+        { "brawlerName": "Damian", "winRate": 61.0, "games": 187, "rank": 3, "reliability": "Media (187 partidas)" },
+        { "brawlerName": "Buster", "winRate": 58.2, "games": 820, "rank": 4, "reliability": "Alta (820 partidas)" },
+        { "brawlerName": "Frank", "winRate": 57.5, "games": 1450, "rank": 5, "reliability": "Alta (1,450 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Pinball Dreams",
+      "aliases": ["Sueños de Pinball", "Pinball Dreams"],
+      "mode": "Brawl Ball",
+      "totalBattles": 34513,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 73.8, "games": 2065, "rank": 1, "reliability": "Muy Alta (2,000+ partidas)" },
+        { "brawlerName": "Ollie", "winRate": 65.9, "games": 607, "rank": 2, "reliability": "Alta (607 partidas)" },
+        { "brawlerName": "Shade", "winRate": 62.4, "games": 8805, "rank": 3, "reliability": "Excelente (8,800+ partidas)" },
+        { "brawlerName": "Rico", "winRate": 59.1, "games": 5420, "rank": 4, "reliability": "Excelente (5,400+ partidas)" },
+        { "brawlerName": "Max", "winRate": 58.3, "games": 3110, "rank": 5, "reliability": "Muy Alta (3,100+ partidas)" }
+      ]
+    },
+    {
+      "mapName": "Sneaky Fields",
+      "aliases": ["Campos Furtivos", "Sneaky Fields"],
+      "mode": "Brawl Ball",
+      "totalBattles": 16404,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 65.3, "games": 1124, "rank": 1, "reliability": "Alta (1,124 partidas)" },
+        { "brawlerName": "Bolt", "winRate": 68.2, "games": 192, "rank": 2, "reliability": "Media (192 partidas)" },
+        { "brawlerName": "Ollie", "winRate": 67.5, "games": 163, "rank": 3, "reliability": "Media (163 partidas)" },
+        { "brawlerName": "Bo", "winRate": 57.2, "games": 2840, "rank": 4, "reliability": "Muy Alta (2,800+ partidas)" },
+        { "brawlerName": "Buster", "winRate": 56.4, "games": 1490, "rank": 5, "reliability": "Alta (1,490 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Spiraling Out",
+      "aliases": ["En Espiral", "Spiraling Out"],
+      "mode": "Brawl Ball",
+      "totalBattles": 13124,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 76.7, "games": 1296, "rank": 1, "reliability": "Alta (1,296 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 71.6, "games": 557, "rank": 2, "reliability": "Alta (557 partidas)" },
+        { "brawlerName": "Bolt", "winRate": 72.6, "games": 230, "rank": 3, "reliability": "Media (230 partidas)" },
+        { "brawlerName": "Max", "winRate": 61.2, "games": 1940, "rank": 4, "reliability": "Alta (1,940 partidas)" },
+        { "brawlerName": "Sandy", "winRate": 59.8, "games": 1620, "rank": 5, "reliability": "Alta (1,620 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Triple Dribble",
+      "aliases": ["Triple Regate", "Triple Dribble"],
+      "mode": "Brawl Ball",
+      "totalBattles": 32389,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 75.9, "games": 1400, "rank": 1, "reliability": "Muy Alta (1,400+ partidas)" },
+        { "brawlerName": "Juju", "winRate": 67.2, "games": 539, "rank": 2, "reliability": "Alta (539 partidas)" },
+        { "brawlerName": "Trunk", "winRate": 65.5, "games": 861, "rank": 3, "reliability": "Alta (861 partidas)" },
+        { "brawlerName": "Frank", "winRate": 59.4, "games": 4200, "rank": 4, "reliability": "Excelente (4,200+ partidas)" },
+        { "brawlerName": "Buster", "winRate": 58.7, "games": 3100, "rank": 5, "reliability": "Muy Alta (3,100+ partidas)" }
+      ]
+    },
+    {
+      "mapName": "Bridge Too Far",
+      "aliases": ["Aguas turbulentas", "Un puente demasiado lejos", "Bridge Too Far"],
+      "mode": "Heist",
+      "totalBattles": 7071,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Nori", "winRate": 61.5, "games": 1297, "rank": 1, "reliability": "Alta (1,297 partidas)" },
+        { "brawlerName": "Shade", "winRate": 58.8, "games": 959, "rank": 2, "reliability": "Alta (959 partidas)" },
+        { "brawlerName": "Jessie", "winRate": 57.1, "games": 1460, "rank": 3, "reliability": "Alta (1,460 partidas)" },
+        { "brawlerName": "Colt", "winRate": 56.4, "games": 2100, "rank": 4, "reliability": "Muy Alta (2,100+ partidas)" },
+        { "brawlerName": "Chuck", "winRate": 55.9, "games": 1820, "rank": 5, "reliability": "Alta (1,820 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Hot Potato",
+      "aliases": ["Patata Caliente", "Hot Potato"],
+      "mode": "Heist",
+      "totalBattles": 7204,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Jessie", "winRate": 59.8, "games": 1670, "rank": 1, "reliability": "Muy Alta (1,670 partidas)" },
+        { "brawlerName": "Nita", "winRate": 59.2, "games": 1259, "rank": 2, "reliability": "Alta (1,259 partidas)" },
+        { "brawlerName": "Shade", "winRate": 57.5, "games": 1032, "rank": 3, "reliability": "Alta (1,032 partidas)" },
+        { "brawlerName": "Bull", "winRate": 56.8, "games": 1850, "rank": 4, "reliability": "Alta (1,850 partidas)" },
+        { "brawlerName": "Chuck", "winRate": 56.1, "games": 1420, "rank": 5, "reliability": "Alta (1,420 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Kaboom Canyon",
+      "aliases": ["Cañón Explosivo", "Kaboom Canyon"],
+      "mode": "Heist",
+      "totalBattles": 9104,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Nori", "winRate": 60.8, "games": 1844, "rank": 1, "reliability": "Muy Alta (1,844 partidas)" },
+        { "brawlerName": "Cosmo", "winRate": 59.6, "games": 606, "rank": 2, "reliability": "Alta (606 partidas)" },
+        { "brawlerName": "Mico", "winRate": 57.6, "games": 1491, "rank": 3, "reliability": "Alta (1,491 partidas)" },
+        { "brawlerName": "Colt", "winRate": 56.5, "games": 2340, "rank": 4, "reliability": "Muy Alta (2,340 partidas)" },
+        { "brawlerName": "Colette", "winRate": 55.8, "games": 1780, "rank": 5, "reliability": "Alta (1,780 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Safe Zone",
+      "aliases": ["Zona Segura", "Safe Zone"],
+      "mode": "Heist",
+      "totalBattles": 6954,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Shade", "winRate": 61.6, "games": 1057, "rank": 1, "reliability": "Alta (1,057 partidas)" },
+        { "brawlerName": "Nori", "winRate": 60.3, "games": 1529, "rank": 2, "reliability": "Alta (1,529 partidas)" },
+        { "brawlerName": "Jessie", "winRate": 58.7, "games": 1600, "rank": 3, "reliability": "Alta (1,600 partidas)" },
+        { "brawlerName": "Colt", "winRate": 57.2, "games": 2150, "rank": 4, "reliability": "Muy Alta (2,150 partidas)" },
+        { "brawlerName": "Piper", "winRate": 56.1, "games": 1920, "rank": 5, "reliability": "Alta (1,920 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Dueling Beetles",
+      "aliases": ["Escarabajos en Duelo", "Dueling Beetles"],
+      "mode": "Hot Zone",
+      "totalBattles": 7214,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Bibi", "winRate": 59.1, "games": 753, "rank": 1, "reliability": "Alta (753 partidas)" },
+        { "brawlerName": "Bo", "winRate": 57.6, "games": 2146, "rank": 2, "reliability": "Muy Alta (2,146 partidas)" },
+        { "brawlerName": "Amber", "winRate": 57.8, "games": 1210, "rank": 3, "reliability": "Alta (1,210 partidas)" },
+        { "brawlerName": "Lou", "winRate": 56.4, "games": 1540, "rank": 4, "reliability": "Alta (1,540 partidas)" },
+        { "brawlerName": "Jessie", "winRate": 55.7, "games": 1390, "rank": 5, "reliability": "Alta (1,390 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Open Business",
+      "aliases": ["Negocio Abierto", "Open Business"],
+      "mode": "Hot Zone",
+      "totalBattles": 7051,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Amber", "winRate": 59.3, "games": 1160, "rank": 1, "reliability": "Alta (1,160 partidas)" },
+        { "brawlerName": "Bibi", "winRate": 58.3, "games": 537, "rank": 2, "reliability": "Alta (537 partidas)" },
+        { "brawlerName": "Gus", "winRate": 55.4, "games": 1492, "rank": 3, "reliability": "Alta (1,492 partidas)" },
+        { "brawlerName": "Bo", "winRate": 55.1, "games": 1980, "rank": 4, "reliability": "Alta (1,980 partidas)" },
+        { "brawlerName": "Jessie", "winRate": 54.6, "games": 1210, "rank": 5, "reliability": "Alta (1,210 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Parallel Plays",
+      "aliases": ["Jugadas Paralelas", "Parallel Plays"],
+      "mode": "Hot Zone",
+      "totalBattles": 11494,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Trunk", "winRate": 63.1, "games": 1037, "rank": 1, "reliability": "Alta (1,037 partidas)" },
+        { "brawlerName": "Juju", "winRate": 61.0, "games": 1820, "rank": 2, "reliability": "Muy Alta (1,820 partidas)" },
+        { "brawlerName": "R-T", "winRate": 61.1, "games": 833, "rank": 3, "reliability": "Alta (833 partidas)" },
+        { "brawlerName": "Cordelius", "winRate": 57.8, "games": 1430, "rank": 4, "reliability": "Alta (1,430 partidas)" },
+        { "brawlerName": "Amber", "winRate": 56.9, "games": 1910, "rank": 5, "reliability": "Alta (1,910 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Ring of Fire",
+      "aliases": ["Anillo de Fuego", "Ring of Fire"],
+      "mode": "Hot Zone",
+      "totalBattles": 6929,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Wendy", "winRate": 61.5, "games": 904, "rank": 1, "reliability": "Alta (904 partidas)" },
+        { "brawlerName": "Bo", "winRate": 58.1, "games": 2513, "rank": 2, "reliability": "Muy Alta (2,513 partidas)" },
+        { "brawlerName": "Amber", "winRate": 57.6, "games": 1103, "rank": 3, "reliability": "Alta (1,103 partidas)" },
+        { "brawlerName": "Lou", "winRate": 56.8, "games": 1420, "rank": 4, "reliability": "Alta (1,420 partidas)" },
+        { "brawlerName": "Otis", "winRate": 55.4, "games": 890, "rank": 5, "reliability": "Alta (890 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Belle's Rock",
+      "aliases": ["Roca de Belle", "Belle's Rock"],
+      "mode": "Knockout",
+      "totalBattles": 19665,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 71.4, "games": 793, "rank": 1, "reliability": "Alta (793 partidas)" },
+        { "brawlerName": "Juju", "winRate": 66.0, "games": 262, "rank": 2, "reliability": "Media (262 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 61.1, "games": 1676, "rank": 3, "reliability": "Muy Alta (1,676 partidas)" },
+        { "brawlerName": "Piper", "winRate": 57.9, "games": 3840, "rank": 4, "reliability": "Excelente (3,840 partidas)" },
+        { "brawlerName": "Nani", "winRate": 57.2, "games": 2910, "rank": 5, "reliability": "Muy Alta (2,910 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Flaring Phoenix",
+      "aliases": ["Fénix Resplandeciente", "Flaring Phoenix"],
+      "mode": "Knockout",
+      "totalBattles": 8551,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Brock", "winRate": 55.9, "games": 4407, "rank": 1, "reliability": "Excelente (4,400+ partidas)" },
+        { "brawlerName": "Shade", "winRate": 55.7, "games": 1457, "rank": 2, "reliability": "Alta (1,457 partidas)" },
+        { "brawlerName": "Edgar", "winRate": 54.2, "games": 2515, "rank": 3, "reliability": "Muy Alta (2,515 partidas)" },
+        { "brawlerName": "Piper", "winRate": 54.0, "games": 2100, "rank": 4, "reliability": "Alta (2,100 partidas)" },
+        { "brawlerName": "Angelo", "winRate": 53.8, "games": 1650, "rank": 5, "reliability": "Alta (1,650 partidas)" }
+      ]
+    },
+    {
+      "mapName": "New Horizons",
+      "aliases": ["Nuevos Horizontes", "New Horizons"],
+      "mode": "Knockout",
+      "totalBattles": 7040,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Mico", "winRate": 60.1, "games": 311, "rank": 1, "reliability": "Media (311 partidas)" },
+        { "brawlerName": "Brock", "winRate": 55.2, "games": 3524, "rank": 2, "reliability": "Muy Alta (3,524 partidas)" },
+        { "brawlerName": "Shade", "winRate": 55.4, "games": 859, "rank": 3, "reliability": "Alta (859 partidas)" },
+        { "brawlerName": "Piper", "winRate": 54.7, "games": 2210, "rank": 4, "reliability": "Alta (2,210 partidas)" },
+        { "brawlerName": "Belle", "winRate": 54.1, "games": 1890, "rank": 5, "reliability": "Alta (1,890 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Out in the Open",
+      "aliases": ["A Campo Abierto", "Out in the Open"],
+      "mode": "Knockout",
+      "totalBattles": 11659,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 62.9, "games": 283, "rank": 1, "reliability": "Media (283 partidas)" },
+        { "brawlerName": "Pearl", "winRate": 59.3, "games": 1570, "rank": 2, "reliability": "Alta (1,570 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 59.0, "games": 1412, "rank": 3, "reliability": "Alta (1,412 partidas)" },
+        { "brawlerName": "Piper", "winRate": 57.4, "games": 3410, "rank": 4, "reliability": "Excelente (3,410 partidas)" },
+        { "brawlerName": "Nani", "winRate": 56.8, "games": 2680, "rank": 5, "reliability": "Muy Alta (2,680 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Dry Season",
+      "aliases": ["Estación Seca", "Dry Season"],
+      "mode": "Bounty",
+      "totalBattles": 9924,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Gus", "winRate": 56.9, "games": 2555, "rank": 1, "reliability": "Muy Alta (2,555 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 56.4, "games": 1342, "rank": 2, "reliability": "Alta (1,342 partidas)" },
+        { "brawlerName": "Brock", "winRate": 54.5, "games": 5271, "rank": 3, "reliability": "Excelente (5,271 partidas)" },
+        { "brawlerName": "Piper", "winRate": 54.1, "games": 3120, "rank": 4, "reliability": "Muy Alta (3,120 partidas)" },
+        { "brawlerName": "Nani", "winRate": 53.8, "games": 2400, "rank": 5, "reliability": "Alta (2,400 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Hideout",
+      "aliases": ["El Escondite", "Hideout"],
+      "mode": "Bounty",
+      "totalBattles": 12855,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 66.2, "games": 698, "rank": 1, "reliability": "Alta (698 partidas)" },
+        { "brawlerName": "R-T", "winRate": 65.7, "games": 204, "rank": 2, "reliability": "Media (204 partidas)" },
+        { "brawlerName": "Bolt", "winRate": 60.9, "games": 517, "rank": 3, "reliability": "Alta (517 partidas)" },
+        { "brawlerName": "Piper", "winRate": 56.5, "games": 3140, "rank": 4, "reliability": "Muy Alta (3,140 partidas)" },
+        { "brawlerName": "Brock", "winRate": 55.4, "games": 4200, "rank": 5, "reliability": "Excelente (4,200 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Layer Cake",
+      "aliases": ["Pastel de Capas", "Layer Cake"],
+      "mode": "Bounty",
+      "totalBattles": 10482,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Doug", "winRate": 63.7, "games": 292, "rank": 1, "reliability": "Media (292 partidas)" },
+        { "brawlerName": "Shade", "winRate": 58.2, "games": 2711, "rank": 2, "reliability": "Muy Alta (2,711 partidas)" },
+        { "brawlerName": "Gus", "winRate": 55.7, "games": 2216, "rank": 3, "reliability": "Muy Alta (2,216 partidas)" },
+        { "brawlerName": "Tick", "winRate": 55.1, "games": 3410, "rank": 4, "reliability": "Muy Alta (3,410 partidas)" },
+        { "brawlerName": "Piper", "winRate": 54.4, "games": 2980, "rank": 5, "reliability": "Alta (2,980 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Shooting Star",
+      "aliases": ["Estrella Fugaz", "Shooting Star"],
+      "mode": "Bounty",
+      "totalBattles": 13811,
+      "isRanked": true,
+      "picks": [
+        { "brawlerName": "Wendy", "winRate": 59.3, "games": 1554, "rank": 1, "reliability": "Alta (1,554 partidas)" },
+        { "brawlerName": "Bolt", "winRate": 60.6, "games": 649, "rank": 2, "reliability": "Alta (649 partidas)" },
+        { "brawlerName": "Gus", "winRate": 57.1, "games": 3558, "rank": 3, "reliability": "Excelente (3,558 partidas)" },
+        { "brawlerName": "Nani", "winRate": 56.4, "games": 4120, "rank": 4, "reliability": "Excelente (4,120 partidas)" },
+        { "brawlerName": "Piper", "winRate": 55.8, "games": 5300, "rank": 5, "reliability": "Excelente (5,300 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Deathcap Trap",
+      "aliases": ["Deathcap Trap"],
+      "mode": "Gem Grab",
+      "totalBattles": 2902,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 71.8, "games": 284, "rank": 1, "reliability": "Media (284 partidas)" },
+        { "brawlerName": "Starr Nova", "winRate": 66.1, "games": 183, "rank": 2, "reliability": "Media (183 partidas)" },
+        { "brawlerName": "Gus", "winRate": 60.5, "games": 408, "rank": 3, "reliability": "Media (408 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Let Me Dance",
+      "aliases": ["Let Me Dance"],
+      "mode": "Gem Grab",
+      "totalBattles": 1876,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Nori", "winRate": 69.3, "games": 166, "rank": 1, "reliability": "Media (166 partidas)" },
+        { "brawlerName": "Amber", "winRate": 58.7, "games": 184, "rank": 2, "reliability": "Media (184 partidas)" },
+        { "brawlerName": "Shade", "winRate": 58.7, "games": 179, "rank": 3, "reliability": "Media (179 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Stardust Storm",
+      "aliases": ["Stardust Storm"],
+      "mode": "Gem Grab",
+      "totalBattles": 2773,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Wendy", "winRate": 62.5, "games": 621, "rank": 1, "reliability": "Alta (621 partidas)" },
+        { "brawlerName": "Amber", "winRate": 64.5, "games": 256, "rank": 2, "reliability": "Media (256 partidas)" },
+        { "brawlerName": "Gus", "winRate": 63.0, "games": 430, "rank": 3, "reliability": "Media (430 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Backyard Bowl",
+      "aliases": ["Estadio Furtivo", "Backyard Bowl"],
+      "mode": "Brawl Ball",
+      "totalBattles": 10165,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 78.6, "games": 1115, "rank": 1, "reliability": "Alta (1,115 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 73.2, "games": 529, "rank": 2, "reliability": "Alta (529 partidas)" },
+        { "brawlerName": "Bolt", "winRate": 73.9, "games": 333, "rank": 3, "reliability": "Media (333 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Beach Ball",
+      "aliases": ["Pelota de Playa", "Beach Ball"],
+      "mode": "Brawl Ball",
+      "totalBattles": 31574,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 73.1, "games": 2163, "rank": 1, "reliability": "Muy Alta (2,163 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 66.9, "games": 948, "rank": 2, "reliability": "Alta (948 partidas)" },
+        { "brawlerName": "Amber", "winRate": 65.7, "games": 2266, "rank": 3, "reliability": "Muy Alta (2,266 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Bustling Business",
+      "aliases": ["Bustling Business"],
+      "mode": "Brawl Ball",
+      "totalBattles": 1369,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Shade", "winRate": 57.4, "games": 209, "rank": 1, "reliability": "Media (209 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Grass Knot",
+      "aliases": ["Nudo de Hierba", "Grass Knot"],
+      "mode": "Brawl Ball",
+      "totalBattles": 7812,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Wendy", "winRate": 69.3, "games": 469, "rank": 1, "reliability": "Media (469 partidas)" },
+        { "brawlerName": "Amber", "winRate": 64.8, "games": 833, "rank": 2, "reliability": "Alta (833 partidas)" },
+        { "brawlerName": "Gus", "winRate": 64.3, "games": 1055, "rank": 3, "reliability": "Alta (1,055 partidas)" }
+      ]
+    },
+    {
+      "mapName": "In Demand",
+      "aliases": ["In Demand"],
+      "mode": "Brawl Ball",
+      "totalBattles": 3136,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Wendy", "winRate": 79.1, "games": 206, "rank": 1, "reliability": "Media (206 partidas)" },
+        { "brawlerName": "Amber", "winRate": 70.0, "games": 273, "rank": 2, "reliability": "Media (273 partidas)" },
+        { "brawlerName": "Nori", "winRate": 67.7, "games": 319, "rank": 3, "reliability": "Media (319 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Match 1123581321",
+      "aliases": ["Match 1123581321"],
+      "mode": "Brawl Ball",
+      "totalBattles": 4735,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Starr Nova", "winRate": 71.3, "games": 265, "rank": 1, "reliability": "Media (265 partidas)" },
+        { "brawlerName": "Amber", "winRate": 67.6, "games": 531, "rank": 2, "reliability": "Alta (531 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 68.8, "games": 208, "rank": 3, "reliability": "Media (208 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Pinhole Punt",
+      "aliases": ["Tiro de Esquina", "Pinhole Punt"],
+      "mode": "Brawl Ball",
+      "totalBattles": 4296,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Shade", "winRate": 67.2, "games": 519, "rank": 1, "reliability": "Alta (519 partidas)" },
+        { "brawlerName": "Amber", "winRate": 66.1, "games": 457, "rank": 2, "reliability": "Media (457 partidas)" },
+        { "brawlerName": "Gus", "winRate": 60.6, "games": 645, "rank": 3, "reliability": "Alta (645 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Pump It Up",
+      "aliases": ["Pump It Up"],
+      "mode": "Brawl Ball",
+      "totalBattles": 28495,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 75.4, "games": 2260, "rank": 1, "reliability": "Muy Alta (2,260 partidas)" },
+        { "brawlerName": "Damian", "winRate": 70.3, "games": 878, "rank": 2, "reliability": "Alta (878 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 68.5, "games": 1986, "rank": 3, "reliability": "Muy Alta (1,986 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Sunny Soccer",
+      "aliases": ["Fútbol Soleado", "Sunny Soccer"],
+      "mode": "Brawl Ball",
+      "totalBattles": 1273,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Shade", "winRate": 63.0, "games": 238, "rank": 1, "reliability": "Media (238 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Super Beach",
+      "aliases": ["Superplaya", "Super Beach"],
+      "mode": "Brawl Ball",
+      "totalBattles": 8992,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Shade", "winRate": 65.6, "games": 2122, "rank": 1, "reliability": "Muy Alta (2,122 partidas)" },
+        { "brawlerName": "Damian", "winRate": 64.7, "games": 354, "rank": 2, "reliability": "Media (354 partidas)" },
+        { "brawlerName": "Amber", "winRate": 63.0, "games": 622, "rank": 3, "reliability": "Alta (622 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Hot Tubs",
+      "aliases": ["Hot Tubs"],
+      "mode": "Heist",
+      "totalBattles": 850,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Nori", "winRate": 68.5, "games": 197, "rank": 1, "reliability": "Media (197 partidas)" },
+        { "brawlerName": "Chuck", "winRate": 62.1, "games": 161, "rank": 2, "reliability": "Media (161 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Jedna",
+      "aliases": ["Jedna"],
+      "mode": "Heist",
+      "totalBattles": 3968,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Gigi", "winRate": 67.7, "games": 232, "rank": 1, "reliability": "Media (232 partidas)" },
+        { "brawlerName": "Nori", "winRate": 64.1, "games": 977, "rank": 2, "reliability": "Alta (977 partidas)" },
+        { "brawlerName": "Shade", "winRate": 62.3, "games": 650, "rank": 3, "reliability": "Alta (650 partidas)" }
+      ]
+    },
+    {
+      "mapName": "In the Liminal",
+      "aliases": ["In the Liminal"],
+      "mode": "Hot Zone",
+      "totalBattles": 7445,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Amber", "winRate": 58.4, "games": 1335, "rank": 1, "reliability": "Alta (1,335 partidas)" },
+        { "brawlerName": "Bo", "winRate": 57.6, "games": 2623, "rank": 2, "reliability": "Muy Alta (2,623 partidas)" },
+        { "brawlerName": "Starr Nova", "winRate": 60.7, "games": 300, "rank": 3, "reliability": "Media (300 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Quick Travel",
+      "aliases": ["Viaje Rápido", "Quick Travel"],
+      "mode": "Hot Zone",
+      "totalBattles": 6718,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Doug", "winRate": 59.7, "games": 657, "rank": 1, "reliability": "Alta (657 partidas)" },
+        { "brawlerName": "Bull", "winRate": 57.2, "games": 1304, "rank": 2, "reliability": "Alta (1,304 partidas)" },
+        { "brawlerName": "Ash", "winRate": 55.6, "games": 1894, "rank": 3, "reliability": "Alta (1,894 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Tread Carefully",
+      "aliases": ["Con Cuidado", "Tread Carefully"],
+      "mode": "Hot Zone",
+      "totalBattles": 1570,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Amber", "winRate": 61.0, "games": 246, "rank": 1, "reliability": "Media (246 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Under Pressure",
+      "aliases": ["Bajo Presión", "Under Pressure"],
+      "mode": "Hot Zone",
+      "totalBattles": 956,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Jessie", "winRate": 58.9, "games": 158, "rank": 1, "reliability": "Media (158 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Double Decker",
+      "aliases": ["Doble Piso", "Double Decker"],
+      "mode": "Knockout",
+      "totalBattles": 11614,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 75.3, "games": 1440, "rank": 1, "reliability": "Muy Alta (1,440 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 68.6, "games": 1237, "rank": 2, "reliability": "Alta (1,237 partidas)" },
+        { "brawlerName": "Jae-Yong", "winRate": 68.7, "games": 198, "rank": 3, "reliability": "Media (198 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Goldarm Gulch",
+      "aliases": ["Barranco de Brazo Dorado", "Goldarm Gulch"],
+      "mode": "Knockout",
+      "totalBattles": 6772,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 71.8, "games": 433, "rank": 1, "reliability": "Media (433 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 68.2, "games": 535, "rank": 2, "reliability": "Alta (535 partidas)" },
+        { "brawlerName": "Eve", "winRate": 69.2, "games": 169, "rank": 3, "reliability": "Media (169 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Konnakol",
+      "aliases": ["Konnakol"],
+      "mode": "Knockout",
+      "totalBattles": 2755,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 76.5, "games": 506, "rank": 1, "reliability": "Alta (506 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 75.0, "games": 276, "rank": 2, "reliability": "Media (276 partidas)" },
+        { "brawlerName": "Gus", "winRate": 60.5, "games": 717, "rank": 3, "reliability": "Alta (717 partidas)" }
+      ]
+    },
+    {
+      "mapName": "New Perspective",
+      "aliases": ["Nueva Perspectiva", "New Perspective"],
+      "mode": "Knockout",
+      "totalBattles": 4939,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 79.3, "games": 811, "rank": 1, "reliability": "Alta (811 partidas)" },
+        { "brawlerName": "Gus", "winRate": 63.4, "games": 1017, "rank": 2, "reliability": "Alta (1,017 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 65.7, "games": 251, "rank": 3, "reliability": "Media (251 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Please Remain Standing",
+      "aliases": ["Permanezcan de Pie", "Please Remain Standing"],
+      "mode": "Knockout",
+      "totalBattles": 7511,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 71.1, "games": 667, "rank": 1, "reliability": "Alta (667 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 68.3, "games": 878, "rank": 2, "reliability": "Alta (878 partidas)" },
+        { "brawlerName": "Bolt", "winRate": 70.6, "games": 235, "rank": 3, "reliability": "Media (235 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Think Ahead",
+      "aliases": ["Piensa Adelante", "Think Ahead"],
+      "mode": "Knockout",
+      "totalBattles": 9572,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 73.9, "games": 1144, "rank": 1, "reliability": "Alta (1,144 partidas)" },
+        { "brawlerName": "Wendy", "winRate": 69.2, "games": 621, "rank": 2, "reliability": "Alta (621 partidas)" },
+        { "brawlerName": "Juju", "winRate": 68.4, "games": 158, "rank": 3, "reliability": "Media (158 partidas)" }
+      ]
+    },
+    {
+      "mapName": "No Excuses",
+      "aliases": ["Sin Excusas", "No Excuses"],
+      "mode": "Bounty",
+      "totalBattles": 1142,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Gus", "winRate": 62.2, "games": 196, "rank": 1, "reliability": "Media (196 partidas)" },
+        { "brawlerName": "Nani", "winRate": 59.0, "games": 249, "rank": 2, "reliability": "Media (249 partidas)" },
+        { "brawlerName": "Belle", "winRate": 59.5, "games": 173, "rank": 3, "reliability": "Media (173 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Tasty Berry",
+      "aliases": ["Baya Sabrosa", "Tasty Berry"],
+      "mode": "Bounty",
+      "totalBattles": 729,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Gus", "winRate": 63.8, "games": 210, "rank": 1, "reliability": "Media (210 partidas)" },
+        { "brawlerName": "Mandy", "winRate": 58.0, "games": 169, "rank": 2, "reliability": "Media (169 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Time Flies",
+      "aliases": ["El Tiempo Vuela", "Time Flies"],
+      "mode": "Wipeout",
+      "totalBattles": 1042,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Gus", "winRate": 60.2, "games": 211, "rank": 1, "reliability": "Media (211 partidas)" }
+      ]
+    },
+    {
+      "mapName": "WALKING ON HOT SAND",
+      "aliases": ["Walking on Hot Sand", "Caminando Sobre Arena Caliente"],
+      "mode": "Wipeout",
+      "totalBattles": 816,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Gus", "winRate": 67.1, "games": 301, "rank": 1, "reliability": "Media (301 partidas)" },
+        { "brawlerName": "Rico", "winRate": 64.4, "games": 163, "rank": 2, "reliability": "Media (163 partidas)" },
+        { "brawlerName": "Brock", "winRate": 61.3, "games": 186, "rank": 3, "reliability": "Media (186 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Ball Hog",
+      "aliases": ["Ball Hog"],
+      "mode": "Basket Brawl",
+      "totalBattles": 2428,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 71.4, "games": 252, "rank": 1, "reliability": "Media (252 partidas)" },
+        { "brawlerName": "Gus", "winRate": 69.2, "games": 347, "rank": 2, "reliability": "Media (347 partidas)" },
+        { "brawlerName": "Nori", "winRate": 64.7, "games": 241, "rank": 3, "reliability": "Media (241 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Triple-Double",
+      "aliases": ["Triple-Double"],
+      "mode": "Basket Brawl",
+      "totalBattles": 2239,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Gus", "winRate": 65.3, "games": 225, "rank": 1, "reliability": "Media (225 partidas)" },
+        { "brawlerName": "Damian", "winRate": 60.8, "games": 176, "rank": 2, "reliability": "Media (176 partidas)" },
+        { "brawlerName": "El Primo", "winRate": 56.0, "games": 659, "rank": 3, "reliability": "Alta (659 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Brawler's Rift",
+      "aliases": ["Brawler's Rift"],
+      "mode": "Brawl Arena",
+      "totalBattles": 1047,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Piper", "winRate": 61.8, "games": 170, "rank": 1, "reliability": "Media (170 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Crimson Divide",
+      "aliases": ["División Carmesí", "Crimson Divide"],
+      "mode": "Brawl Arena",
+      "totalBattles": 2399,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Piper", "winRate": 58.7, "games": 438, "rank": 1, "reliability": "Media (438 partidas)" },
+        { "brawlerName": "El Primo", "winRate": 57.8, "games": 488, "rank": 2, "reliability": "Media (488 partidas)" },
+        { "brawlerName": "Amber", "winRate": 57.0, "games": 584, "rank": 3, "reliability": "Alta (584 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Knockout Grounds",
+      "aliases": ["Knockout Grounds"],
+      "mode": "Brawl Arena",
+      "totalBattles": 596,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "8-Bit", "winRate": 61.0, "games": 182, "rank": 1, "reliability": "Media (182 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Mirage Arena",
+      "aliases": ["Arena Espejismo", "Mirage Arena"],
+      "mode": "Brawl Arena",
+      "totalBattles": 2291,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Surge", "winRate": 61.0, "games": 218, "rank": 1, "reliability": "Media (218 partidas)" },
+        { "brawlerName": "Bull", "winRate": 59.0, "games": 283, "rank": 2, "reliability": "Media (283 partidas)" },
+        { "brawlerName": "Rico", "winRate": 57.4, "games": 319, "rank": 3, "reliability": "Media (319 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Silver Highlands",
+      "aliases": ["Tierras Altas de Plata", "Silver Highlands"],
+      "mode": "Brawl Arena",
+      "totalBattles": 692,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "8-Bit", "winRate": 59.1, "games": 159, "rank": 1, "reliability": "Media (159 partidas)" }
+      ]
+    },
+    {
+      "mapName": "The Smackdome",
+      "aliases": ["The Smackdome"],
+      "mode": "Brawl Arena",
+      "totalBattles": 956,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Amber", "winRate": 62.6, "games": 179, "rank": 1, "reliability": "Media (179 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Triple Threat",
+      "aliases": ["Triple Amenaza", "Triple Threat"],
+      "mode": "Brawl Arena",
+      "totalBattles": 1116,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Amber", "winRate": 65.5, "games": 252, "rank": 1, "reliability": "Media (252 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Arabesque",
+      "aliases": ["Arabesque"],
+      "mode": "Brawl Hockey",
+      "totalBattles": 1344,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Gus", "winRate": 68.9, "games": 228, "rank": 1, "reliability": "Media (228 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Cabin Fever",
+      "aliases": ["Fiebre de Cabaña", "Cabin Fever"],
+      "mode": "Brawl Hockey",
+      "totalBattles": 5374,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Cosmo", "winRate": 73.7, "games": 425, "rank": 1, "reliability": "Media (425 partidas)" },
+        { "brawlerName": "Amber", "winRate": 67.8, "games": 401, "rank": 2, "reliability": "Media (401 partidas)" },
+        { "brawlerName": "Gus", "winRate": 66.4, "games": 521, "rank": 3, "reliability": "Alta (521 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Net Presence",
+      "aliases": ["Net Presence"],
+      "mode": "Brawl Hockey",
+      "totalBattles": 2308,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Gus", "winRate": 68.5, "games": 238, "rank": 1, "reliability": "Media (238 partidas)" },
+        { "brawlerName": "Shade", "winRate": 61.0, "games": 336, "rank": 2, "reliability": "Media (336 partidas)" },
+        { "brawlerName": "Nori", "winRate": 61.5, "games": 200, "rank": 3, "reliability": "Media (200 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Nullscapes",
+      "aliases": ["Nullscapes"],
+      "mode": "Brawl Hockey",
+      "totalBattles": 1646,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Shade", "winRate": 60.7, "games": 183, "rank": 1, "reliability": "Media (183 partidas)" }
+      ]
+    },
+    {
+      "mapName": "Raging Ocean",
+      "aliases": ["Océano Furioso", "Raging Ocean"],
+      "mode": "Brawl Hockey",
+      "totalBattles": 4944,
+      "isRanked": false,
+      "picks": [
+        { "brawlerName": "Gus", "winRate": 64.5, "games": 425, "rank": 1, "reliability": "Media (425 partidas)" },
+        { "brawlerName": "Doug", "winRate": 66.5, "games": 194, "rank": 2, "reliability": "Media (194 partidas)" },
+        { "brawlerName": "Shade", "winRate": 64.0, "games": 466, "rank": 3, "reliability": "Alta (466 partidas)" }
+      ]
+    }
+  ]
+}

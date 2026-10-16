@@ -1,0 +1,230 @@
+[
+  {
+    "id": "bb-center-stage",
+    "mode": "Brawl Ball",
+    "modeKey": "brawlBall",
+    "name": "Center Stage",
+    "environment": "Mixed",
+    "tiers": {
+      "S": ["Frank", "Buster", "Melodie", "Max", "Gale", "Draco", "Kenji"],
+      "A": ["Clancy", "Surge", "Shelly", "Poco", "Sandy", "Colette", "Otis"],
+      "B": ["Bea", "Emz", "Bull", "El Primo", "Fang", "Charlie"]
+    }
+  },
+  {
+    "id": "bb-pinball-dreams",
+    "mode": "Brawl Ball",
+    "modeKey": "brawlBall",
+    "name": "Pinball Dreams",
+    "environment": "Wall-Heavy",
+    "tiers": {
+      "S": ["Surge", "Buster", "Frank", "Gale", "Clancy", "Max"],
+      "A": ["Colt", "Sandy", "Melodie", "Colette", "Poco", "Draco"],
+      "B": ["Shelly", "Bull", "Fang", "Otis", "Dynamike"]
+    }
+  },
+  {
+    "id": "bb-sneaky-fields",
+    "mode": "Brawl Ball",
+    "modeKey": "brawlBall",
+    "name": "Sneaky Fields",
+    "environment": "Bushy",
+    "tiers": {
+      "S": ["Rosa", "Buster", "Tara", "Shelly", "Frank", "Gale"],
+      "A": ["Bo", "Sandy", "Buzz", "Clancy", "Poco", "Lily"],
+      "B": ["Bull", "El Primo", "Surge", "Otis", "Emz"]
+    }
+  },
+  {
+    "id": "gg-hard-rock-mine",
+    "mode": "Gem Grab",
+    "modeKey": "gemGrab",
+    "name": "Hard Rock Mine",
+    "environment": "Mixed",
+    "tiers": {
+      "S": ["Gene", "Sandy", "Belle", "Larry & Lawrie", "Max", "Buster"],
+      "A": ["Piper", "Angelo", "Tara", "Gale", "Byron", "Lou", "Charlie"],
+      "B": ["Colt", "Brock", "Colette", "Otis", "Bo", "Lily"]
+    }
+  },
+  {
+    "id": "gg-double-swoosh",
+    "mode": "Gem Grab",
+    "modeKey": "gemGrab",
+    "name": "Double Swoosh",
+    "environment": "Bushy",
+    "tiers": {
+      "S": ["Rosa", "Tara", "Buster", "Poco", "Bo", "Sandy"],
+      "A": ["Gene", "Shelly", "Frank", "Gale", "Clancy", "Lily"],
+      "B": ["Leon", "Buzz", "Max", "Emz", "Surge"]
+    }
+  },
+  {
+    "id": "gg-undermine",
+    "mode": "Gem Grab",
+    "modeKey": "gemGrab",
+    "name": "Undermine",
+    "environment": "Open",
+    "tiers": {
+      "S": ["Gene", "Belle", "Angelo", "Piper", "Byron", "Sandy"],
+      "A": ["Buster", "Larry & Lawrie", "Max", "Gale", "Charlie"],
+      "B": ["Colt", "Brock", "Lou", "Bea", "Leon"]
+    }
+  },
+  {
+    "id": "ko-flaring-phoenix",
+    "mode": "Knockout",
+    "modeKey": "knockout",
+    "name": "Flaring Phoenix",
+    "environment": "Open",
+    "tiers": {
+      "S": ["Piper", "Angelo", "Belle", "Leon", "Byron", "Mico"],
+      "A": ["Brock", "Tick", "Larry & Lawrie", "Gale", "Buster", "Lily"],
+      "B": ["Gene", "Colt", "Bea", "Max", "Charlie"]
+    }
+  },
+  {
+    "id": "ko-goldarm-gulch",
+    "mode": "Knockout",
+    "modeKey": "knockout",
+    "name": "Goldarm Gulch",
+    "environment": "Mixed",
+    "tiers": {
+      "S": ["Piper", "Belle", "Angelo", "Byron", "Larry & Lawrie", "Gale"],
+      "A": ["Brock", "Leon", "Tick", "Buster", "Gene", "Colt"],
+      "B": ["Max", "Lily", "Bea", "Sandy", "Charlie"]
+    }
+  },
+  {
+    "id": "ko-new-horizons",
+    "mode": "Knockout",
+    "modeKey": "knockout",
+    "name": "New Horizons",
+    "environment": "Open",
+    "tiers": {
+      "S": ["Angelo", "Piper", "Belle", "Tick", "Leon", "Byron"],
+      "A": ["Brock", "Larry & Lawrie", "Gale", "Max", "Mico"],
+      "B": ["Colt", "Gene", "Bea", "Lily"]
+    }
+  },
+  {
+    "id": "bty-shooting-star",
+    "mode": "Bounty",
+    "modeKey": "bounty",
+    "name": "Shooting Star",
+    "environment": "Open",
+    "tiers": {
+      "S": ["Piper", "Angelo", "Belle", "Tick", "Byron", "Leon"],
+      "A": ["Brock", "Larry & Lawrie", "Colt", "Gale", "Mico"],
+      "B": ["Gene", "Bea", "Max", "Lily"]
+    }
+  },
+  {
+    "id": "bty-canal-grande",
+    "mode": "Bounty",
+    "modeKey": "bounty",
+    "name": "Canal Grande",
+    "environment": "Bushy / Water",
+    "tiers": {
+      "S": ["Angelo", "Tick", "Piper", "Lily", "Bo", "Gene"],
+      "A": ["Belle", "Leon", "Rosa", "Buster", "Larry & Lawrie", "Gale"],
+      "B": ["Tara", "Sandy", "Brock", "Max"]
+    }
+  },
+  {
+    "id": "hz-ring-of-fire",
+    "mode": "Hot Zone",
+    "modeKey": "hotZone",
+    "name": "Ring of Fire",
+    "environment": "Open Zone",
+    "tiers": {
+      "S": ["Lou", "Amber", "Belle", "Gale", "Emz", "Larry & Lawrie"],
+      "A": ["Piper", "Angelo", "Sandy", "Buster", "Gene", "Byron"],
+      "B": ["Otis", "Clancy", "Colt", "Colette"]
+    }
+  },
+  {
+    "id": "hz-dueling-beetles",
+    "mode": "Hot Zone",
+    "modeKey": "hotZone",
+    "name": "Dueling Beetles",
+    "environment": "Choke Points",
+    "tiers": {
+      "S": ["Lou", "Larry & Lawrie", "Dynamike", "Barley", "Otis", "Gale"],
+      "A": ["Sandy", "Buster", "Emz", "Frank", "Tick", "Clancy"],
+      "B": ["Rosa", "Bull", "Bo", "Charlie"]
+    }
+  },
+  {
+    "id": "hz-parallel-plays",
+    "mode": "Hot Zone",
+    "modeKey": "hotZone",
+    "name": "Parallel Plays",
+    "environment": "Split Zones",
+    "tiers": {
+      "S": ["Larry & Lawrie", "Gale", "Buster", "Sandy", "Lou", "Clancy"],
+      "A": ["Frank", "Otis", "Emz", "Melodie", "Draco", "Dynamike"],
+      "B": ["Shelly", "Surge", "Max", "Barley"]
+    }
+  },
+  {
+    "id": "hst-hot-potato",
+    "mode": "Heist",
+    "modeKey": "heist",
+    "name": "Hot Potato",
+    "environment": "Choke Points",
+    "tiers": {
+      "S": ["Bull", "Chuck", "Melodie", "Clancy", "Colette", "Darryl", "Colt"],
+      "A": ["Barley", "Frank", "Rosa", "Buster", "Shelly", "Dynamike", "Rico"],
+      "B": ["Brock", "Surge", "Gale", "Draco", "Spike"]
+    }
+  },
+  {
+    "id": "hst-kaboom-canyon",
+    "mode": "Heist",
+    "modeKey": "heist",
+    "name": "Kaboom Canyon",
+    "environment": "Destructible Walls",
+    "tiers": {
+      "S": ["Colt", "Melodie", "Brock", "Chuck", "Clancy", "Colette", "Angelo"],
+      "A": ["Piper", "Belle", "Buster", "Max", "Bull", "Rico"],
+      "B": ["Larry & Lawrie", "Surge", "Dynamike", "Leon"]
+    }
+  },
+  {
+    "id": "hst-safe-zone",
+    "mode": "Heist",
+    "modeKey": "heist",
+    "name": "Safe Zone",
+    "environment": "Open Lane",
+    "tiers": {
+      "S": ["Colt", "Melodie", "Clancy", "Colette", "Piper", "Angelo"],
+      "A": ["Belle", "Brock", "Buster", "Max", "Bull"],
+      "B": ["Larry & Lawrie", "Surge", "Charlie", "Leon"]
+    }
+  },
+  {
+    "id": "hst-pit-stop",
+    "mode": "Heist",
+    "modeKey": "heist",
+    "name": "Pit Stop",
+    "environment": "Enclosed Base",
+    "tiers": {
+      "S": ["Bull", "El Primo", "Melodie", "Clancy", "Colette", "Dynamike"],
+      "A": ["Barley", "Frank", "Rosa", "Buster", "Shelly"],
+      "B": ["Colt", "Surge", "Gale", "Draco"]
+    }
+  },
+  {
+    "id": "hst-aguas-turbulentas",
+    "mode": "Heist",
+    "modeKey": "heist",
+    "name": "Aguas turbulentas",
+    "environment": "Turbulent Waters",
+    "tiers": {
+      "S": ["Colt", "Melodie", "Clancy", "Colette", "Piper", "Angelo", "Brock", "Eve"],
+      "A": ["Belle", "Buster", "Max", "Bull", "Rico", "Spike"],
+      "B": ["Larry & Lawrie", "Surge", "Charlie", "Leon", "Tick"]
+    }
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "short_name": "BrawlDraft",
+  "name": "BrawlDraft AI - Ranked Draft Coach",
+  "description": "Asistente táctico de draft en tiempo real para Brawl Stars Ranked",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

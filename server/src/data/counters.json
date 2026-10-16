@@ -1,0 +1,217 @@
+{
+  "Shelly": {
+    "counters": ["Mortis", "Edgar", "Buzz", "Bull", "El Primo", "Fang", "Kenji", "Mico"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Bea", "Tick", "Larry & Lawrie"],
+    "synergies": ["Max", "Gene", "Sandy"]
+  },
+  "Colt": {
+    "counters": ["Frank", "8-Bit", "Bull", "El Primo", "Pam"],
+    "counteredBy": ["Piper", "Nani", "Belle", "Leon", "Mortis", "Edgar"],
+    "synergies": ["Max", "Buster", "Belle"]
+  },
+  "Bull": {
+    "counters": ["Mortis", "Frank", "Rosa", "Poco", "Byron"],
+    "counteredBy": ["Colette", "Surge", "Gale", "Shelly", "Otis", "Bea", "Clancy", "Emz"],
+    "synergies": ["Poco", "Byron", "Max", "Buster"]
+  },
+  "Brock": {
+    "counters": ["Dynamike", "Barley", "Emz", "8-Bit", "Bo"],
+    "counteredBy": ["Leon", "Edgar", "Mortis", "Piper", "Angelo", "Mico"],
+    "synergies": ["Belle", "Gene", "Buster"]
+  },
+  "El Primo": {
+    "counters": ["Frank", "Rosa", "Mortis", "Buster"],
+    "counteredBy": ["Colette", "Gale", "Surge", "Shelly", "Bea", "Clancy", "Otis"],
+    "synergies": ["Poco", "Byron", "Sandy"]
+  },
+  "Barley": {
+    "counters": ["Frank", "Rosa", "8-Bit", "Pam", "Bull"],
+    "counteredBy": ["Edgar", "Mortis", "Mico", "Leon", "Lily", "Fang"],
+    "synergies": ["Buster", "Rosa", "Frank"]
+  },
+  "Poco": {
+    "counters": ["Gene", "Sandy", "Leon"],
+    "counteredBy": ["Frank", "Colette", "Piper", "Belle", "Edgar"],
+    "synergies": ["Frank", "Buster", "Draco", "Bull", "Rosa", "El Primo"]
+  },
+  "Nita": {
+    "counters": ["Mortis", "Buster", "Sandy", "Gene"],
+    "counteredBy": ["Piper", "Belle", "Colt", "Brock", "Angelo"],
+    "synergies": ["Sandy", "Gene", "Tara"]
+  },
+  "Dynamike": {
+    "counters": ["Frank", "Rosa", "Bull", "8-Bit", "Bo"],
+    "counteredBy": ["Mortis", "Edgar", "Mico", "Leon", "Lily", "Fang", "Kenji"],
+    "synergies": ["Buster", "Poco", "Frank"]
+  },
+  "Bo": {
+    "counters": ["Sandy", "Leon", "Mortis"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Brock", "Bea"],
+    "synergies": ["Sandy", "Tara", "Lou"]
+  },
+  "Piper": {
+    "counters": ["Brock", "Bea", "Colt", "Bo", "Emz", "Dynamike"],
+    "counteredBy": ["Leon", "Nani", "Edgar", "Mortis", "Lily", "Mico"],
+    "synergies": ["Gene", "Buster", "Belle", "Max"]
+  },
+  "Tara": {
+    "counters": ["Mortis", "Frank", "Rosa", "El Primo", "Buzz"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Tick", "Larry & Lawrie"],
+    "synergies": ["Gene", "Bo", "Sandy", "Max"]
+  },
+  "Frank": {
+    "counters": ["Mortis", "Sandy", "Poco", "Barley"],
+    "counteredBy": ["Colette", "Gale", "Surge", "Shelly", "Otis", "Bea", "Clancy", "Lou"],
+    "synergies": ["Poco", "Byron", "Max", "Buster"]
+  },
+  "Gene": {
+    "counters": ["Leon", "Crow", "Mortis"],
+    "counteredBy": ["Tara", "Nita", "Charlie", "Buster"],
+    "synergies": ["Piper", "Belle", "Angelo", "Shelly", "Tara"]
+  },
+  "Tick": {
+    "counters": ["Frank", "Rosa", "Bull", "8-Bit", "Bo"],
+    "counteredBy": ["Mortis", "Edgar", "Mico", "Leon", "Lily", "Fang"],
+    "synergies": ["Buster", "Gale", "Otis"]
+  },
+  "Leon": {
+    "counters": ["Piper", "Belle", "Dynamike", "Barley", "Brock", "Tick"],
+    "counteredBy": ["Gene", "Tara", "Gale", "Shelly", "Otis", "Crow"],
+    "synergies": ["Max", "Sandy", "Crow"]
+  },
+  "Rosa": {
+    "counters": ["Mortis", "Sandy", "Poco"],
+    "counteredBy": ["Colette", "Gale", "Surge", "Shelly", "Bea", "Clancy", "Otis", "Lou"],
+    "synergies": ["Poco", "Byron", "Max", "Buster"]
+  },
+  "Sandy": {
+    "counters": ["Piper", "Belle", "Brock", "Bea"],
+    "counteredBy": ["Frank", "Rosa", "Bull", "Gale", "Tara"],
+    "synergies": ["Max", "Leon", "Tara", "Bo", "Gene"]
+  },
+  "Bea": {
+    "counters": ["Bull", "El Primo", "Frank", "Rosa", "Buster", "Draco"],
+    "counteredBy": ["Piper", "Belle", "Mortis", "Leon", "Lily", "Edgar"],
+    "synergies": ["Buster", "Gene", "Max"]
+  },
+  "Emz": {
+    "counters": ["Bull", "El Primo", "Frank", "Rosa", "Buster"],
+    "counteredBy": ["Piper", "Belle", "Brock", "Angelo", "Mortis"],
+    "synergies": ["Gene", "Tara", "Lou"]
+  },
+  "Max": {
+    "counters": ["Dynamike", "Barley", "Tick", "Brock"],
+    "counteredBy": ["Piper", "Belle", "Gale", "Crow", "Otis"],
+    "synergies": ["Frank", "Bull", "Leon", "Sandy", "Shelly", "Draco"]
+  },
+  "Gale": {
+    "counters": ["Edgar", "Mortis", "Buzz", "Bull", "El Primo", "Frank", "Fang", "Kenji", "Mico"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Brock", "Tick"],
+    "synergies": ["Belle", "Piper", "Angelo", "Tick"]
+  },
+  "Surge": {
+    "counters": ["Edgar", "Mortis", "Buzz", "Bull", "El Primo", "Fang", "Kenji"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Tick", "Larry & Lawrie"],
+    "synergies": ["Max", "Gene", "Byron"]
+  },
+  "Colette": {
+    "counters": ["Frank", "Bull", "El Primo", "Rosa", "Buster", "Meg", "Draco"],
+    "counteredBy": ["Piper", "Belle", "Edgar", "Mortis", "Leon", "Lily"],
+    "synergies": ["Gene", "Piper", "Max"]
+  },
+  "Lou": {
+    "counters": ["Frank", "Bull", "El Primo", "Rosa", "Draco", "Kenji"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Tick", "Larry & Lawrie"],
+    "synergies": ["Sandy", "Emz", "Tara", "Bo"]
+  },
+  "Byron": {
+    "counters": ["Mortis", "Sandy", "Gene"],
+    "counteredBy": ["Piper", "Belle", "Edgar", "Leon", "Lily", "Mico"],
+    "synergies": ["Buster", "Frank", "Bull", "Draco", "Rosa"]
+  },
+  "Edgar": {
+    "counters": ["Dynamike", "Barley", "Tick", "Piper", "Belle", "Brock"],
+    "counteredBy": ["Shelly", "Gale", "Surge", "Bull", "Otis", "Charlie", "Clancy", "Kenji"],
+    "synergies": ["Max", "Byron", "Sandy"]
+  },
+  "Belle": {
+    "counters": ["Frank", "Rosa", "Bull", "8-Bit", "Bo", "Colt"],
+    "counteredBy": ["Leon", "Nani", "Edgar", "Mortis", "Lily", "Mico"],
+    "synergies": ["Gene", "Buster", "Piper", "Max"]
+  },
+  "Buzz": {
+    "counters": ["Piper", "Belle", "Dynamike", "Barley", "Tick", "Brock"],
+    "counteredBy": ["Shelly", "Gale", "Surge", "Otis", "Charlie", "Bull"],
+    "synergies": ["Max", "Byron", "Sandy"]
+  },
+  "Meg": {
+    "counters": ["Mortis", "Leon", "Sandy"],
+    "counteredBy": ["Colette", "Gale", "Bea", "Surge", "Clancy", "Otis"],
+    "synergies": ["Byron", "Poco", "Max"]
+  },
+  "Fang": {
+    "counters": ["Piper", "Belle", "Dynamike", "Barley", "Tick", "Brock"],
+    "counteredBy": ["Shelly", "Gale", "Surge", "Otis", "Bull", "El Primo"],
+    "synergies": ["Max", "Sandy", "Gene"]
+  },
+  "Otis": {
+    "counters": ["Edgar", "Mortis", "Buzz", "Frank", "Fang", "Draco", "Kenji", "Bull"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Tick", "Larry & Lawrie"],
+    "synergies": ["Gene", "Tick", "Max"]
+  },
+  "Buster": {
+    "counters": ["Piper", "Belle", "Brock", "Bea", "Colt", "Angelo"],
+    "counteredBy": ["Colette", "Gale", "Surge", "El Primo", "Bull", "Clancy"],
+    "synergies": ["Poco", "Byron", "Bea", "Piper", "Angelo", "Tick"]
+  },
+  "Cordelius": {
+    "counters": ["Frank", "Draco", "Buster", "Fang", "Buzz", "Kenji", "Clancy"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Bea", "Tick"],
+    "synergies": ["Max", "Gene", "Sandy"]
+  },
+  "Charlie": {
+    "counters": ["Edgar", "Buzz", "Mortis", "Frank", "Draco", "Kenji"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Tick", "Larry & Lawrie"],
+    "synergies": ["Gene", "Belle", "Piper"]
+  },
+  "Mico": {
+    "counters": ["Dynamike", "Barley", "Tick", "Piper", "Belle", "Brock"],
+    "counteredBy": ["Shelly", "Bull", "Gale", "Otis", "Surge"],
+    "synergies": ["Max", "Sandy", "Byron"]
+  },
+  "Larry & Lawrie": {
+    "counters": ["Frank", "Rosa", "Bull", "Bo", "Sandy", "8-Bit"],
+    "counteredBy": ["Mortis", "Edgar", "Mico", "Leon", "Lily", "Kenji"],
+    "synergies": ["Buster", "Gale", "Otis"]
+  },
+  "Melodie": {
+    "counters": ["Piper", "Belle", "Brock", "Dynamike", "Tick"],
+    "counteredBy": ["Gale", "Shelly", "Surge", "Otis", "Charlie"],
+    "synergies": ["Max", "Buster", "Sandy"]
+  },
+  "Angelo": {
+    "counters": ["Brock", "Bea", "Colt", "Bo", "Dynamike", "Barley"],
+    "counteredBy": ["Leon", "Edgar", "Mortis", "Lily", "Mico"],
+    "synergies": ["Buster", "Gene", "Max", "Belle"]
+  },
+  "Draco": {
+    "counters": ["Mortis", "Sandy", "Leon"],
+    "counteredBy": ["Colette", "Gale", "Surge", "Clancy", "Bea", "Otis", "Lou"],
+    "synergies": ["Poco", "Byron", "Max", "Buster"]
+  },
+  "Lily": {
+    "counters": ["Piper", "Belle", "Dynamike", "Barley", "Tick", "Angelo"],
+    "counteredBy": ["Shelly", "Bull", "Gale", "Otis", "Surge", "Charlie"],
+    "synergies": ["Max", "Sandy", "Tara"]
+  },
+  "Clancy": {
+    "counters": ["Frank", "Bull", "El Primo", "Rosa", "Buster", "Draco", "Meg"],
+    "counteredBy": ["Piper", "Belle", "Angelo", "Tick", "Larry & Lawrie", "Leon"],
+    "synergies": ["Max", "Buster", "Gene"]
+  },
+  "Kenji": {
+    "counters": ["Dynamike", "Barley", "Tick", "Piper", "Belle", "Brock"],
+    "counteredBy": ["Shelly", "Gale", "Surge", "Otis", "Charlie", "Clancy"],
+    "synergies": ["Max", "Sandy", "Byron"]
+  }
+}

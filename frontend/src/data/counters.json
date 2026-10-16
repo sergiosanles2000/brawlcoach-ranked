@@ -1,0 +1,3323 @@
+{
+  "Vince": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Cosmo": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Wendy": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Nori": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Bolt": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Starr Nova": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Damian": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Najia": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Sirius": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Glowy": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Gigi": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Pierce": {
+    "counters": [
+      "Juju",
+      "Larry & Lawrie",
+      "Grom",
+      "Sprout",
+      "Tick",
+      "Dynamike",
+      "Barley",
+      "Vince"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Finx",
+      "Meeple",
+      "Charlie",
+      "Bolt"
+    ]
+  },
+  "Ziggy": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Mina": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Trunk": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Alli": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Kaze": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Jae-Yong": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Finx": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Lumi": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Ollie": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Meeple": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Buzz Lightyear": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Juju": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Cosmo"
+    ]
+  },
+  "Shade": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Kenji": {
+    "counters": [
+      "Dynamike",
+      "Barley",
+      "Tick",
+      "Piper",
+      "Brock",
+      "Bea",
+      "Belle",
+      "Grom",
+      "Sprout"
+    ],
+    "counteredBy": [
+      "Shelly",
+      "Bull",
+      "Gale",
+      "Surge",
+      "Otis",
+      "Frank",
+      "Chester"
+    ],
+    "synergies": [
+      "Poco",
+      "Byron",
+      "Max",
+      "Gene"
+    ]
+  },
+  "Moe": {
+    "counters": [
+      "Frank",
+      "Rosa",
+      "8-Bit",
+      "Pam",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Piper",
+      "Belle",
+      "Angelo",
+      "Edgar",
+      "Mortis"
+    ],
+    "synergies": [
+      "Gene",
+      "Sandy",
+      "Buster",
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Wendy"
+    ]
+  },
+  "Clancy": {
+    "counters": [
+      "Frank",
+      "Bull",
+      "El Primo",
+      "Rosa",
+      "Buster",
+      "Draco",
+      "Ash",
+      "Hank",
+      "Jacky",
+      "Darryl"
+    ],
+    "counteredBy": [
+      "Piper",
+      "Belle",
+      "Angelo",
+      "Nani",
+      "Brock",
+      "Tick",
+      "Sprout"
+    ],
+    "synergies": [
+      "Max",
+      "Buster",
+      "Poco",
+      "Gene"
+    ]
+  },
+  "Berry": {
+    "counters": [
+      "Frank",
+      "Rosa",
+      "8-Bit",
+      "Bull",
+      "Pam"
+    ],
+    "counteredBy": [
+      "Mortis",
+      "Edgar",
+      "Mico",
+      "Lily",
+      "Kenji",
+      "Leon"
+    ],
+    "synergies": [
+      "Frank",
+      "Buster",
+      "Draco",
+      "Bull"
+    ]
+  },
+  "Lily": {
+    "counters": [
+      "Piper",
+      "Belle",
+      "Angelo",
+      "Brock",
+      "Dynamike",
+      "Tick",
+      "Barley",
+      "Mandy"
+    ],
+    "counteredBy": [
+      "Shelly",
+      "Bull",
+      "Buster",
+      "Rosa",
+      "Gale",
+      "Surge",
+      "Frank"
+    ],
+    "synergies": [
+      "Max",
+      "Gene",
+      "Tara",
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Cosmo"
+    ]
+  },
+  "Draco": {
+    "counters": [
+      "Mortis",
+      "Poco",
+      "Gene",
+      "Sandy",
+      "Nita"
+    ],
+    "counteredBy": [
+      "Colette",
+      "Surge",
+      "Gale",
+      "Clancy",
+      "Otis",
+      "Shelly",
+      "Bea"
+    ],
+    "synergies": [
+      "Poco",
+      "Byron",
+      "Kit",
+      "Max"
+    ]
+  },
+  "Angelo": {
+    "counters": [
+      "Juju",
+      "Larry & Lawrie",
+      "Grom",
+      "Sprout",
+      "Tick",
+      "Dynamike",
+      "Barley",
+      "Vince"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Finx",
+      "Meeple",
+      "Charlie",
+      "Bolt"
+    ]
+  },
+  "Melodie": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Larry & Lawrie": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Cosmo"
+    ]
+  },
+  "Kit": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Mico": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Charlie": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Chuck": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Pearl": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Doug": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Cordelius": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Hank": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Maisie": {
+    "counters": [
+      "Juju",
+      "Larry & Lawrie",
+      "Grom",
+      "Sprout",
+      "Tick",
+      "Dynamike",
+      "Barley",
+      "Vince"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Finx",
+      "Meeple",
+      "Charlie",
+      "Bolt"
+    ]
+  },
+  "Willow": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "R-T": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Mandy": {
+    "counters": [
+      "Juju",
+      "Larry & Lawrie",
+      "Grom",
+      "Sprout",
+      "Tick",
+      "Dynamike",
+      "Barley",
+      "Vince"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Finx",
+      "Meeple",
+      "Charlie",
+      "Bolt"
+    ]
+  },
+  "Gray": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Chester": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Buster": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Gus": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Sam": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Otis": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Bonnie": {
+    "counters": [
+      "Juju",
+      "Larry & Lawrie",
+      "Grom",
+      "Sprout",
+      "Tick",
+      "Dynamike",
+      "Barley",
+      "Vince"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Finx",
+      "Meeple",
+      "Charlie",
+      "Bolt"
+    ]
+  },
+  "Janet": {
+    "counters": [
+      "Juju",
+      "Larry & Lawrie",
+      "Grom",
+      "Sprout",
+      "Tick",
+      "Dynamike",
+      "Barley",
+      "Vince"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Finx",
+      "Meeple",
+      "Charlie",
+      "Bolt"
+    ]
+  },
+  "Eve": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Fang": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Lola": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Meg": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Ash": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Griff": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Buzz": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Grom": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Cosmo"
+    ]
+  },
+  "Squeak": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Belle": {
+    "counters": [
+      "Juju",
+      "Larry & Lawrie",
+      "Grom",
+      "Sprout",
+      "Tick",
+      "Dynamike",
+      "Barley",
+      "Vince"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Finx",
+      "Meeple",
+      "Charlie",
+      "Bolt"
+    ]
+  },
+  "Stu": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Ruffs": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Edgar": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Byron": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Lou": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Amber": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Colette": {
+    "counters": [
+      "Frank",
+      "Bull",
+      "El Primo",
+      "Rosa",
+      "Buster",
+      "Draco",
+      "Hank",
+      "Ash",
+      "8-Bit",
+      "Pam",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Piper",
+      "Belle",
+      "Angelo",
+      "Leon",
+      "Edgar",
+      "Mortis",
+      "Lily",
+      "Mandy"
+    ],
+    "synergies": [
+      "Gene",
+      "Sandy",
+      "Buster",
+      "Piper"
+    ]
+  },
+  "Surge": {
+    "counters": [
+      "Edgar",
+      "Mortis",
+      "Buzz",
+      "Bull",
+      "El Primo",
+      "Frank",
+      "Fang",
+      "Mico",
+      "Darryl",
+      "Kenji"
+    ],
+    "counteredBy": [
+      "Piper",
+      "Belle",
+      "Angelo",
+      "Brock",
+      "Tick",
+      "Bea",
+      "Mandy"
+    ],
+    "synergies": [
+      "Max",
+      "Gene",
+      "Buster",
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Wendy"
+    ]
+  },
+  "Sprout": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Cosmo"
+    ]
+  },
+  "Nani": {
+    "counters": [
+      "Juju",
+      "Larry & Lawrie",
+      "Grom",
+      "Sprout",
+      "Tick",
+      "Dynamike",
+      "Barley",
+      "Vince"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Finx",
+      "Meeple",
+      "Charlie",
+      "Bolt"
+    ]
+  },
+  "Gale": {
+    "counters": [
+      "Edgar",
+      "Mortis",
+      "Buzz",
+      "Bull",
+      "El Primo",
+      "Frank",
+      "Fang",
+      "Mico",
+      "Kenji",
+      "Draco",
+      "Darryl",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Piper",
+      "Belle",
+      "Angelo",
+      "Brock",
+      "Nani",
+      "Mandy"
+    ],
+    "synergies": [
+      "Colette",
+      "Piper",
+      "Sandy",
+      "Belle"
+    ]
+  },
+  "Jacky": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Max": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Mr. P": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Emz": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Bea": {
+    "counters": [
+      "Juju",
+      "Larry & Lawrie",
+      "Grom",
+      "Sprout",
+      "Tick",
+      "Dynamike",
+      "Barley",
+      "Vince"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Finx",
+      "Meeple",
+      "Charlie",
+      "Bolt"
+    ]
+  },
+  "Sandy": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "8-Bit": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Bibi": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Carl": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Rosa": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Leon": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Tick": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Cosmo"
+    ]
+  },
+  "Gene": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Frank": {
+    "counters": [
+      "Poco",
+      "Sandy",
+      "Gene",
+      "Pam",
+      "Nita",
+      "Ash"
+    ],
+    "counteredBy": [
+      "Colette",
+      "Surge",
+      "Gale",
+      "Shelly",
+      "Clancy",
+      "Otis",
+      "Bea",
+      "Griff",
+      "Emz",
+      "Lou",
+      "Chester"
+    ],
+    "synergies": [
+      "Poco",
+      "Byron",
+      "Max",
+      "Kit"
+    ]
+  },
+  "Penny": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Darryl": {
+    "counters": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "counteredBy": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Clancy",
+      "Pearl",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Tara": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Pam": {
+    "counters": [],
+    "counteredBy": [
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli",
+      "Kaze",
+      "Shade",
+      "Kenji",
+      "Lily"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Vince"
+    ]
+  },
+  "Piper": {
+    "counters": [
+      "Brock",
+      "Bea",
+      "Colt",
+      "Bo",
+      "Emz",
+      "Dynamike",
+      "Penny",
+      "Pam"
+    ],
+    "counteredBy": [
+      "Leon",
+      "Nani",
+      "Edgar",
+      "Mortis",
+      "Lily",
+      "Mico",
+      "Kenji",
+      "Cordelius"
+    ],
+    "synergies": [
+      "Gene",
+      "Buster",
+      "Belle",
+      "Max",
+      "Byron"
+    ]
+  },
+  "Bo": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Poco": {
+    "counters": [
+      "Gene",
+      "Sandy",
+      "Leon"
+    ],
+    "counteredBy": [
+      "Frank",
+      "Colette",
+      "Piper",
+      "Belle",
+      "Edgar"
+    ],
+    "synergies": [
+      "Frank",
+      "Buster",
+      "Draco",
+      "Bull",
+      "Rosa",
+      "El Primo"
+    ]
+  },
+  "Crow": {
+    "counters": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "counteredBy": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Cosmo"
+    ],
+    "synergies": [
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Berry",
+      "Kit",
+      "Doug",
+      "Cosmo"
+    ]
+  },
+  "Mortis": {
+    "counters": [
+      "Dynamike",
+      "Barley",
+      "Tick",
+      "Sprout",
+      "Grom",
+      "Larry & Lawrie",
+      "Piper",
+      "Brock",
+      "Bea",
+      "Belle",
+      "Byron"
+    ],
+    "counteredBy": [
+      "Shelly",
+      "Bull",
+      "El Primo",
+      "Frank",
+      "Rosa",
+      "Buster",
+      "Surge",
+      "Gale",
+      "Clancy",
+      "Otis",
+      "Jacky"
+    ],
+    "synergies": [
+      "Max",
+      "Gene",
+      "Sandy",
+      "Poco"
+    ]
+  },
+  "El Primo": {
+    "counters": [
+      "Frank",
+      "Rosa",
+      "Mortis",
+      "Buster",
+      "Nori",
+      "Starr Nova",
+      "Gigi",
+      "Alli"
+    ],
+    "counteredBy": [
+      "Colette",
+      "Gale",
+      "Surge",
+      "Shelly",
+      "Bea",
+      "Clancy",
+      "Otis",
+      "Griff"
+    ],
+    "synergies": [
+      "Poco",
+      "Byron",
+      "Sandy",
+      "Wendy",
+      "Glowy",
+      "Jae-Yong",
+      "Cosmo"
+    ]
+  },
+  "Dynamike": {
+    "counters": [
+      "Frank",
+      "Rosa",
+      "Bull",
+      "8-Bit",
+      "Bo"
+    ],
+    "counteredBy": [
+      "Mortis",
+      "Edgar",
+      "Mico",
+      "Leon",
+      "Lily",
+      "Fang",
+      "Kenji",
+      "Cordelius"
+    ],
+    "synergies": [
+      "Buster",
+      "Poco",
+      "Frank",
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Cosmo"
+    ]
+  },
+  "Nita": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Jessie": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg",
+      "Nori"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Juju"
+    ],
+    "synergies": [
+      "Vince",
+      "Najia",
+      "Mina",
+      "Lumi",
+      "Buzz Lightyear",
+      "Moe",
+      "Nori"
+    ]
+  },
+  "Barley": {
+    "counters": [
+      "Frank",
+      "Rosa",
+      "8-Bit",
+      "Pam",
+      "Bull"
+    ],
+    "counteredBy": [
+      "Edgar",
+      "Mortis",
+      "Mico",
+      "Leon",
+      "Lily",
+      "Fang",
+      "Kenji"
+    ],
+    "synergies": [
+      "Buster",
+      "Rosa",
+      "Frank",
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Cosmo"
+    ]
+  },
+  "Spike": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Rico": {
+    "counters": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Buster",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Pierce",
+      "Angelo",
+      "Maisie",
+      "Mandy",
+      "Bonnie",
+      "Janet",
+      "Belle",
+      "Nani",
+      "Nori"
+    ],
+    "synergies": [
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Ollie",
+      "Draco",
+      "Hank",
+      "Wendy"
+    ]
+  },
+  "Brock": {
+    "counters": [
+      "Dynamike",
+      "Barley",
+      "Emz",
+      "8-Bit",
+      "Bo",
+      "Tick"
+    ],
+    "counteredBy": [
+      "Leon",
+      "Edgar",
+      "Mortis",
+      "Piper",
+      "Angelo",
+      "Mico",
+      "Lily"
+    ],
+    "synergies": [
+      "Belle",
+      "Gene",
+      "Buster",
+      "Cosmo",
+      "Sirius",
+      "Ziggy",
+      "Bolt"
+    ]
+  },
+  "Bull": {
+    "counters": [
+      "Mortis",
+      "Frank",
+      "Rosa",
+      "Poco",
+      "Byron"
+    ],
+    "counteredBy": [
+      "Colette",
+      "Surge",
+      "Gale",
+      "Shelly",
+      "Otis",
+      "Bea",
+      "Clancy",
+      "Emz"
+    ],
+    "synergies": [
+      "Poco",
+      "Byron",
+      "Max",
+      "Buster"
+    ]
+  },
+  "Colt": {
+    "counters": [
+      "Frank",
+      "8-Bit",
+      "Bull",
+      "El Primo",
+      "Pam",
+      "Meg"
+    ],
+    "counteredBy": [
+      "Piper",
+      "Nani",
+      "Belle",
+      "Leon",
+      "Mortis",
+      "Edgar"
+    ],
+    "synergies": [
+      "Max",
+      "Buster",
+      "Belle",
+      "Bolt",
+      "Damian",
+      "Trunk",
+      "Wendy"
+    ]
+  },
+  "Shelly": {
+    "counters": [
+      "Mortis",
+      "Edgar",
+      "Buzz",
+      "Bull",
+      "El Primo",
+      "Fang",
+      "Kenji",
+      "Mico",
+      "Draco",
+      "Darryl"
+    ],
+    "counteredBy": [
+      "Piper",
+      "Belle",
+      "Angelo",
+      "Bea",
+      "Tick",
+      "Larry & Lawrie",
+      "Nani"
+    ],
+    "synergies": [
+      "Max",
+      "Gene",
+      "Sandy",
+      "Tara"
+    ]
+  }
+}
