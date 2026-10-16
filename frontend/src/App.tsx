@@ -13,7 +13,6 @@ import type {
 } from './types/brawl';
 
 import { Header } from './components/Header';
-import { TurnTimer } from './components/TurnTimer';
 import { DraftSlots, type ActiveSlotType } from './components/DraftSlots';
 import { Recommendations } from './components/Recommendations';
 import { BrawlerPickerModal } from './components/BrawlerPickerModal';
@@ -328,16 +327,6 @@ export function App() {
     }
   };
 
-  // Auto-determine current turn description
-  const totalPicks = allyPicks.filter(Boolean).length + enemyPicks.filter(Boolean).length;
-  const isAllyTurn = totalPicks % 2 === 0;
-  const turnDescription =
-    totalPicks >= 6
-      ? 'Draft Completo'
-      : isAllyTurn
-      ? `Turno Aliado (Pick ${allyPicks.filter(Boolean).length + 1})`
-      : `Turno Rival (Pick ${enemyPicks.filter(Boolean).length + 1})`;
-
   return (
     <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans pb-16">
       {/* Animated App Splash Screen */}
@@ -423,13 +412,6 @@ export function App() {
                 Burbuja Activa
               </span>
             </button>
-
-            {/* Turn Timer & Indicator */}
-            <TurnTimer
-              initialSeconds={20}
-              activeTurnDescription={turnDescription}
-              isAllyTurn={isAllyTurn}
-            />
 
             {/* 6-Slot Draft Board (Picks and Bans) */}
             <DraftSlots
