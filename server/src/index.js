@@ -226,6 +226,162 @@ app.get('/download/apk', (req, res) => {
   res.download(apkPath, 'brawlcoach-modmenu.apk');
 });
 
+// ==========================================
+// SOCIAL & FRIENDS SYSTEM (BY GAMERTAG)
+// ==========================================
+// In-memory social state (persists while server is up)
+// friendships: { "TAG1:TAG2": { status: "pending" | "accepted", sender: "TAG1", receiver: "TAG2", timestamp } }
+const friendships = new Map();
+// messages: { "TAG1:TAG2": [ { id, senderTag, text, timestamp } ] }
+const directMessages = new Map();
+
+function getPairKey(tag1, tag2) {
+  const clean1 = tag1.replace(/^#/, '').toUpperCase();
+  const clean2 = tag2.replace(/^#/, '').toUpperCase();
+  return [clean1, clean2].sort().join(':');
+}
+
+// 1. Get friend list and pending requests for a tag
+app.get('/api/friends/:tag', (req, res) => {
+  const myTag = req.params.tag.replace(/^#/, '').toUpperCase();
+  const friends = [];
+  const pendingIncoming = [];
+  const pendingOutgoing = [];
+
+  for (const [key, relation] of friendships.entries()) {
+    const [t1, t2] = key.split(':');
+    if (t1 === myTag || t2 === myTag) {
+      const otherTag = t1 === myTag ? t2 : t1;
+      if (relation.status === 'accepted') {
+        // Last message snippet
+        const pairKey = getPairKey(myTag, otherTag);
+        const msgs = directMessages.get(pairKey) || [];
+        const lastMsg = msgs[msgs.length - 1] || null;
+        friends.push({
+          tag: `#${otherTag}`,
+          name: relation.names?.[otherTag] || otherTag,
+          lastMessage: lastMsg,
+          acceptedAt: relation.timestamp,
+        });
+      } else if (relation.status === 'pending') {
+        if (relation.receiver === myTag) {
+          pendingIncoming.push({
+            tag: `#${relation.sender}`,
+            name: relation.names?.[relation.sender] || relation.sender,
+            timestamp: relation.timestamp,
+          });
+        } else {
+          pendingOutgoing.push({
+            tag: `#${relation.receiver}`,
+            name: relation.names?.[relation.receiver] || relation.receiver,
+            timestamp: relation.timestamp,
+          });
+        }
+      }
+    }
+  }
+
+  res.json({
+    myTag: `#${myTag}`,
+    friends,
+    pendingIncoming,
+    pendingOutgoing,
+  });
+});
+
+// 2. Send Friend Request
+app.post('/api/friends/request', (req, res) => {
+  const { senderTag, receiverTag, senderName, receiverName } = req.body;
+  if (!senderTag || !receiverTag) {
+    return res.status(400).json({ error: 'senderTag y receiverTag son obligatorios' });
+  }
+
+  const s = senderTag.replace(/^#/, '').toUpperCase();
+  const r = receiverTag.replace(/^#/, '').toUpperCase();
+
+  if (s === r) {
+    return res.status(400).json({ error: 'No puedes enviarte solicitud de amistad a ti mismo' });
+  }
+
+  const pairKey = getPairKey(s, r);
+  const existing = friendships.get(pairKey);
+
+  if (existing?.status === 'accepted') {
+    return res.json({ status: 'already_friends', message: 'Ya sois amigos' });
+  }
+
+  const relation = {
+    status: 'pending',
+    sender: s,
+    receiver: r,
+    timestamp: new Date().toISOString(),
+    names: {
+      [s]: senderName || s,
+      [r]: receiverName || r,
+    },
+  };
+
+  friendships.set(pairKey, relation);
+  res.json({ success: true, relation });
+});
+
+// 3. Accept or Reject Request
+app.post('/api/friends/respond', (req, res) => {
+  const { myTag, senderTag, accept } = req.body;
+  const m = myTag.replace(/^#/, '').toUpperCase();
+  const s = senderTag.replace(/^#/, '').toUpperCase();
+  const pairKey = getPairKey(m, s);
+
+  const existing = friendships.get(pairKey);
+  if (!existing || existing.status !== 'pending') {
+    return res.status(404).json({ error: 'Solicitud no encontrada' });
+  }
+
+  if (accept) {
+    existing.status = 'accepted';
+    existing.timestamp = new Date().toISOString();
+    friendships.set(pairKey, existing);
+    return res.json({ success: true, status: 'accepted' });
+  } else {
+    friendships.delete(pairKey);
+    return res.json({ success: true, status: 'rejected' });
+  }
+});
+
+// 4. Get Chat Messages with a Friend
+app.get('/api/friends/chat/:tag1/:tag2', (req, res) => {
+  const pairKey = getPairKey(req.params.tag1, req.params.tag2);
+  const msgs = directMessages.get(pairKey) || [];
+  res.json({ pairKey, messages: msgs });
+});
+
+// 5. Send Chat Message to Friend
+app.post('/api/friends/chat/send', (req, res) => {
+  const { senderTag, receiverTag, text } = req.body;
+  if (!senderTag || !receiverTag || !text?.trim()) {
+    return res.status(400).json({ error: 'Datos incompletos' });
+  }
+
+  const pairKey = getPairKey(senderTag, receiverTag);
+  const existing = friendships.get(pairKey);
+  if (existing?.status !== 'accepted') {
+    return res.status(403).json({ error: 'Debéis ser amigos aceptados para chatear' });
+  }
+
+  const msgs = directMessages.get(pairKey) || [];
+  const newMsg = {
+    id: Math.random().toString(36).substring(2, 9),
+    senderTag: `#${senderTag.replace(/^#/, '').toUpperCase()}`,
+    text: text.trim(),
+    timestamp: new Date().toISOString(),
+  };
+
+  msgs.push(newMsg);
+  directMessages.set(pairKey, msgs);
+
+  res.json({ success: true, message: newMsg });
+});
+
 app.listen(PORT, () => {
   console.log(`🎮 Brawl Stars Draft Assistant Server running on http://localhost:${PORT}`);
 });

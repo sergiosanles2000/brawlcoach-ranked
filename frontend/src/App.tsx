@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Zap, Shield, MessageSquare, User } from 'lucide-react';
+import { Zap, Shield, MessageSquare, User, Users } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import brawlersData from './data/brawlers.json';
 import countersData from './data/counters.json';
@@ -21,6 +21,7 @@ import { DebugConsole } from './components/DebugConsole';
 import { BrawlChat } from './components/BrawlChat';
 import { SplashScreen } from './components/SplashScreen';
 import { PlayerProfileScreen } from './components/PlayerProfileScreen';
+import { FriendsScreen } from './components/FriendsScreen';
 import { UpdateModal } from './components/UpdateModal';
 import { checkForAppUpdates, type UpdateInfo } from './services/updateService';
 import { calculateDraftRecommendations } from './services/draftEngine';
@@ -71,7 +72,7 @@ export function App() {
   const [isCaptureOpen, setIsCaptureOpen] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isLogsOpen, setIsLogsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'draft' | 'chat' | 'profile'>('draft');
+  const [activeTab, setActiveTab] = useState<'draft' | 'chat' | 'friends' | 'profile'>('draft');
   const [showSplash, setShowSplash] = useState(true);
 
   // User Player Profile state
@@ -353,12 +354,12 @@ export function App() {
         onNavigateProfile={() => setActiveTab('profile')}
       />
 
-      {/* Navigation Tabs (Draft Board vs Coach Chat vs Player Profile) */}
+      {/* Navigation Tabs (Draft Board vs Coach Chat vs Friends vs Player Profile) */}
       <div className="w-full max-w-lg mx-auto px-3 pt-2.5">
-        <div className="grid grid-cols-3 p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs font-semibold gap-1">
+        <div className="grid grid-cols-4 p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs font-semibold gap-1">
           <button
             onClick={() => setActiveTab('draft')}
-            className={`py-2 px-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+            className={`py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
               activeTab === 'draft'
                 ? 'bg-slate-800 text-white font-bold border border-slate-700'
                 : 'text-slate-400 hover:text-slate-200'
@@ -369,18 +370,29 @@ export function App() {
           </button>
           <button
             onClick={() => setActiveTab('chat')}
-            className={`py-2 px-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer relative ${
+            className={`py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer relative ${
               activeTab === 'chat'
                 ? 'bg-slate-800 text-white font-bold border border-slate-700'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <MessageSquare className="w-3.5 h-3.5 text-slate-300" />
-            <span className="truncate">Estrategia</span>
+            <span className="truncate">Coach IA</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('friends')}
+            className={`py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
+              activeTab === 'friends'
+                ? 'bg-slate-800 text-white font-bold border border-slate-700'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="truncate">Amigos</span>
           </button>
           <button
             onClick={() => setActiveTab('profile')}
-            className={`py-2 px-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+            className={`py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
               activeTab === 'profile'
                 ? 'bg-slate-800 text-white font-bold border border-slate-700'
                 : 'text-slate-400 hover:text-slate-200'
@@ -449,8 +461,16 @@ export function App() {
             playerProfile={playerProfile}
           />
         </main>
+      ) : activeTab === 'friends' ? (
+        /* Tab 3: Friends & Direct Chat */
+        <main className="w-full max-w-lg mx-auto px-2.5 pt-2 pb-1 flex-1 flex flex-col">
+          <FriendsScreen
+            myProfile={playerProfile}
+            onNavigateProfile={() => setActiveTab('profile')}
+          />
+        </main>
       ) : (
-        /* Tab 3: Player Profile & Inventory */
+        /* Tab 4: Player Profile & Inventory */
         <main className="w-full max-w-lg mx-auto px-1 py-1">
           <PlayerProfileScreen
             playerProfile={playerProfile}
