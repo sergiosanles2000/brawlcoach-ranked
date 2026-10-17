@@ -9,6 +9,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PixelFormat
@@ -433,8 +434,15 @@ class FloatingOverlayService : Service() {
                 MotionEvent.ACTION_MOVE -> {
                     val dx = (event.rawX - cardTouchX).toInt()
                     val dy = (event.rawY - cardTouchY).toInt()
-                    cardParams.x = cardInitX + dx
-                    cardParams.y = cardInitY + dy
+                    val m = resources.displayMetrics
+                    val margin = (8 * density).toInt()
+                    val minX = margin
+                    val maxX = Math.max(margin, m.widthPixels - cardParams.width - margin)
+                    val minY = margin
+                    val maxY = Math.max(margin, m.heightPixels - cardParams.height - margin)
+
+                    cardParams.x = (cardInitX + dx).coerceIn(minX, maxX)
+                    cardParams.y = (cardInitY + dy).coerceIn(minY, maxY)
                     try {
                         windowManager?.updateViewLayout(cardView, cardParams)
                     } catch (_: Exception) {}
@@ -700,19 +708,34 @@ class FloatingOverlayService : Service() {
         }
         scrollContent.addView(banContainer)
 
-        // --- Action Button: Auto-Detector en tiempo real (100% Local) ---
+        scrollView.addView(scrollContent)
+
+        val scrollParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            0,
+            1f
+        )
+        cardContent.addView(scrollView, scrollParams)
+
+        // --- FIXED BOTTOM ACTION BAR (ALWAYS VISIBLE & PINNED AT BOTTOM) ---
+        val bottomBar = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            setPadding(0, (3 * density).toInt(), 0, 0)
+        }
+
         btnScan = Button(this).apply {
             text = "▶️ Auto-Detectar en Vivo"
-            textSize = 11.5f
+            textSize = 10.5f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.WHITE)
             isAllCaps = false
             background = GradientDrawable().apply {
-                cornerRadius = 8 * density
+                cornerRadius = 7 * density
                 colors = intArrayOf(Color.parseColor("#059669"), Color.parseColor("#10b981"))
                 gradientType = GradientDrawable.LINEAR_GRADIENT
             }
-            val p = (6 * density).toInt()
+            val p = (5 * density).toInt()
             setPadding(p, p, p, p)
             setOnClickListener {
                 toggleAutoScan()
@@ -722,29 +745,23 @@ class FloatingOverlayService : Service() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            topMargin = (6 * density).toInt()
-            bottomMargin = (4 * density).toInt()
+            bottomMargin = (1.5f * density).toInt()
         }
-        scrollContent.addView(btnScan, btnParams)
+        bottomBar.addView(btnScan, btnParams)
 
-        // Status Text
         tvStatus = TextView(this).apply {
-            text = "Toca un slot para seleccionar brawler o escanea"
-            textSize = 9f
-            setTextColor(Color.parseColor("#64748b"))
+            text = "Toca para escanear en tiempo real"
+            textSize = 8.5f
+            setTextColor(Color.parseColor("#94a3b8"))
             gravity = Gravity.CENTER
-            setPadding(0, 0, 0, (4 * density).toInt())
+            setPadding(0, 0, 0, (1 * density).toInt())
         }
-        scrollContent.addView(tvStatus)
+        bottomBar.addView(tvStatus)
 
-        scrollView.addView(scrollContent)
-
-        val scrollParams = LinearLayout.LayoutParams(
+        cardContent.addView(bottomBar, LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
-            0,
-            1f
-        )
-        cardContent.addView(scrollView, scrollParams)
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ))
 
         root.addView(cardContent)
 
@@ -1582,20 +1599,22 @@ class FloatingOverlayService : Service() {
                 val screenW = metrics.widthPixels
                 val density = metrics.density
 
-                // In landscape mode (gaming), cap card height to ~84% of screen height
+                // In landscape mode (gaming), cap card height to ~75% of screen height
                 val maxCardH = if (screenW > screenH) {
-                    (screenH * 0.84f).toInt()
+                    (screenH * 0.75f).toInt()
                 } else {
-                    (460 * density).toInt().coerceAtMost((screenH * 0.78f).toInt())
+                    (440 * density).toInt().coerceAtMost((screenH * 0.75f).toInt())
                 }
 
-                val cardWidth = (245 * density).toInt().coerceAtMost((screenW * 0.70f).toInt())
+                val cardWidth = (240 * density).toInt().coerceAtMost((screenW * 0.65f).toInt())
                 cardParams.width = cardWidth
                 cardParams.height = maxCardH
                 // Strictly clamp within visible screen boundaries so header & close button are never cut off
-                val margin = (12 * density).toInt()
-                cardParams.x = Math.max(margin, Math.min(bubbleParams.x - 20, screenW - cardWidth - margin))
-                cardParams.y = Math.max(margin, Math.min(bubbleParams.y - 20, screenH - maxCardH - margin))
+                val margin = (8 * density).toInt()
+                val maxX = Math.max(margin, screenW - cardWidth - margin)
+                val maxY = Math.max(margin, screenH - maxCardH - margin)
+                cardParams.x = (bubbleParams.x - 20).coerceIn(margin, maxX)
+                cardParams.y = (bubbleParams.y - 20).coerceIn(margin, maxY)
                 windowManager?.addView(cardView, cardParams)
             }
         } catch (_: Exception) {}
@@ -1603,6 +1622,40 @@ class FloatingOverlayService : Service() {
 
     private fun collapseToBubble() {
         showBubble()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        try {
+            val metrics = resources.displayMetrics
+            val density = metrics.density
+            val screenW = metrics.widthPixels
+            val screenH = metrics.heightPixels
+
+            val cardWidth = (240 * density).toInt().coerceAtMost((screenW * 0.65f).toInt())
+            val maxCardH = if (screenW > screenH) {
+                (screenH * 0.75f).toInt()
+            } else {
+                (440 * density).toInt().coerceAtMost((screenH * 0.75f).toInt())
+            }
+
+            cardParams.width = cardWidth
+            cardParams.height = maxCardH
+            val margin = (8 * density).toInt()
+            val maxX = Math.max(margin, screenW - cardWidth - margin)
+            val maxY = Math.max(margin, screenH - maxCardH - margin)
+            cardParams.x = cardParams.x.coerceIn(margin, maxX)
+            cardParams.y = cardParams.y.coerceIn(margin, maxY)
+
+            if (cardView?.isAttachedToWindow == true) {
+                windowManager?.updateViewLayout(cardView, cardParams)
+            }
+            if (bubbleView?.isAttachedToWindow == true) {
+                bubbleParams.x = bubbleParams.x.coerceIn(margin, screenW - bubbleParams.width - margin)
+                bubbleParams.y = bubbleParams.y.coerceIn(margin, screenH - bubbleParams.height - margin)
+                windowManager?.updateViewLayout(bubbleView, bubbleParams)
+            }
+        } catch (_: Exception) {}
     }
 
     // ==========================================
