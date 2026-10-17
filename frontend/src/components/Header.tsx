@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Trophy,
   RotateCcw,
@@ -409,77 +410,94 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {/* Full Map Inspection Modal */}
-      {isMapModalOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 animate-in fade-in duration-200"
-          onClick={() => setIsMapModalOpen(false)}
-        >
+      {/* Full Map Inspection Modal (Mounted directly to document.body to escape header constraints) */}
+      {isMapModalOpen && typeof document !== 'undefined' &&
+        createPortal(
           <div
-            className="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-sm w-full p-3.5 flex flex-col gap-3 shadow-2xl relative max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 pt-[max(1rem,env(safe-area-inset-top,1rem))] pb-[max(1rem,env(safe-area-inset-bottom,1rem))] animate-in fade-in duration-150"
+            onClick={() => setIsMapModalOpen(false)}
           >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-              <div>
-                <h3 className="text-sm font-black text-white flex items-center gap-1.5">
-                  <span>🗺️ {selectedMap.name}</span>
-                </h3>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className={`text-[9.5px] px-1.5 py-0.5 rounded font-bold uppercase ${getModeBadgeColor(selectedMap.mode)}`}>
-                    {selectedMap.mode}
-                  </span>
-                  <span className="text-[10px] text-slate-400">
-                    Entorno: {selectedMap.environment}
-                  </span>
+            <div
+              className="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-sm w-full flex flex-col shadow-2xl overflow-hidden max-h-[85vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Fixed Header */}
+              <div className="flex items-center justify-between border-b border-slate-800 p-3 bg-slate-900/95 shrink-0">
+                <div className="min-w-0 pr-2">
+                  <h3 className="text-sm font-black text-white flex items-center gap-1.5 truncate">
+                    <span>🗺️ {selectedMap.name}</span>
+                  </h3>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className={`text-[9.5px] px-1.5 py-0.5 rounded font-bold uppercase ${getModeBadgeColor(selectedMap.mode)}`}>
+                      {selectedMap.mode}
+                    </span>
+                    <span className="text-[10px] text-slate-400 truncate">
+                      {selectedMap.environment}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsMapModalOpen(false)}
+                  className="w-8 h-8 rounded-full bg-slate-800 hover:bg-rose-600 active:scale-95 text-slate-300 hover:text-white flex items-center justify-center border border-slate-700 transition-colors cursor-pointer shrink-0"
+                  title="Cerrar plano"
+                >
+                  <X className="w-4 h-4 font-bold" />
+                </button>
+              </div>
+
+              {/* Scrollable Map Body */}
+              <div className="p-3 overflow-y-auto flex-1 flex flex-col gap-3">
+                {/* Map Full Image Display */}
+                {mapImgSrc ? (
+                  <div className="relative rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center p-2 min-h-[160px]">
+                    <img
+                      src={mapImgSrc}
+                      alt={selectedMap.name}
+                      className="max-h-[38vh] w-auto object-contain rounded-lg shadow-inner"
+                      onError={(e) => {
+                        if (selectedMap.cdnUrl && (e.target as HTMLImageElement).src !== selectedMap.cdnUrl) {
+                          (e.target as HTMLImageElement).src = selectedMap.cdnUrl;
+                        }
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className="py-8 text-center text-xs text-slate-400">
+                    Imagen no disponible para este mapa
+                  </div>
+                )}
+
+                {/* Strategic Advice */}
+                <div className="bg-slate-950/70 rounded-xl p-2.5 border border-slate-800/80 text-[11px] text-slate-300 space-y-1">
+                  <div className="font-semibold text-amber-400 flex items-center gap-1">
+                    <span>💡 Análisis del Terreno:</span>
+                  </div>
+                  <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                    {selectedMap.environment === 'Wall-Heavy'
+                      ? 'Mapa con abundantes estructuras y muros. Lanzadores (Throwers), tanques para emboscadas y brawlers con rebote como Rico o Ruffs son prioritarios.'
+                      : selectedMap.environment === 'Open'
+                      ? 'Mapa abierto de largo alcance. Francotiradores (Snipers) como Piper, Angelo o Brock dominan los carriles.'
+                      : 'Estructura mixta con calles despejadas y arbustos de cobertura. Controla el carril central y usa brawlers con buena movilidad o control de área.'}
+                  </p>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsMapModalOpen(false)}
-                className="w-7 h-7 rounded-full bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-white flex items-center justify-center border border-slate-700 transition-colors cursor-pointer"
-                title="Cerrar plano"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
 
-            {/* Map Full Image Display */}
-            {mapImgSrc ? (
-              <div className="relative rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center p-2 min-h-[220px]">
-                <img
-                  src={mapImgSrc}
-                  alt={selectedMap.name}
-                  className="max-h-[360px] w-auto object-contain rounded-lg shadow-inner"
-                  onError={(e) => {
-                    if (selectedMap.cdnUrl && (e.target as HTMLImageElement).src !== selectedMap.cdnUrl) {
-                      (e.target as HTMLImageElement).src = selectedMap.cdnUrl;
-                    }
-                  }}
-                />
+              {/* Modal Fixed Footer with Clear Action */}
+              <div className="p-2.5 border-t border-slate-800 bg-slate-900/95 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsMapModalOpen(false)}
+                  className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-98 text-xs font-bold text-slate-200 border border-slate-700 cursor-pointer flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <X className="w-3.5 h-3.5 text-rose-400" />
+                  <span>Cerrar plano</span>
+                </button>
               </div>
-            ) : (
-              <div className="py-8 text-center text-xs text-slate-400">
-                Imagen no disponible para este mapa
-              </div>
-            )}
-
-            {/* Strategic Advice */}
-            <div className="bg-slate-950/70 rounded-xl p-2.5 border border-slate-800/80 text-[11px] text-slate-300 space-y-1">
-              <div className="font-semibold text-amber-400 flex items-center gap-1">
-                <span>💡 Análisis del Terreno:</span>
-              </div>
-              <p className="text-[10.5px] text-slate-400 leading-relaxed">
-                {selectedMap.environment === 'Wall-Heavy'
-                  ? 'Mapa con abundantes estructuras y muros. Lanzadores (Throwers), tanques para emboscadas y brawlers con rebote como Rico o Ruffs son prioritarios.'
-                  : selectedMap.environment === 'Open'
-                  ? 'Mapa abierto de largo alcance. Francotiradores (Snipers) como Piper, Angelo o Brock dominan los carriles.'
-                  : 'Estructura mixta con calles despejadas y arbustos de cobertura. Controla el carril central y usa brawlers con buena movilidad o control de área.'}
-              </p>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </header>
   );
 };

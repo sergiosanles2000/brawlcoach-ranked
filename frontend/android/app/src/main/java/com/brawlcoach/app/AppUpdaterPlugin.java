@@ -58,25 +58,37 @@ public class AppUpdaterPlugin extends Plugin {
 
         new Thread(() -> {
             try {
-                URL url = new URL(apkUrl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setConnectTimeout(15000);
-                conn.setReadTimeout(30000);
-                conn.connect();
-
-                int respCode = conn.getResponseCode();
-                if (respCode != HttpURLConnection.HTTP_OK && respCode != HttpURLConnection.HTTP_MOVED_TEMP) {
-                    activity.runOnUiThread(() -> call.reject("Error del servidor HTTP: " + respCode));
-                    return;
-                }
-
-                // Handle redirects if any
-                String redirectUrl = conn.getHeaderField("Location");
-                HttpURLConnection downloadConn = conn;
-                if (redirectUrl != null && !redirectUrl.isEmpty()) {
-                    downloadConn = (HttpURLConnection) new URL(redirectUrl).openConnection();
+                URL currentUrl = new URL(apkUrl);
+                HttpURLConnection downloadConn = null;
+                int redirects = 0;
+                while (redirects < 6) {
+                    downloadConn = (HttpURLConnection) currentUrl.openConnection();
+                    downloadConn.setInstanceFollowRedirects(true);
+                    downloadConn.setRequestMethod("GET");
+                    downloadConn.setConnectTimeout(20000);
+                    downloadConn.setReadTimeout(60000);
+                    downloadConn.setRequestProperty("User-Agent", "BrawlDraft-App");
                     downloadConn.connect();
+
+                    int code = downloadConn.getResponseCode();
+                    if (code == HttpURLConnection.HTTP_MOVED_PERM ||
+                        code == HttpURLConnection.HTTP_MOVED_TEMP ||
+                        code == HttpURLConnection.HTTP_SEE_OTHER ||
+                        code == 307 || code == 308) {
+                        String loc = downloadConn.getHeaderField("Location");
+                        if (loc != null && !loc.isEmpty()) {
+                            currentUrl = new URL(currentUrl, loc);
+                            downloadConn.disconnect();
+                            redirects++;
+                            continue;
+                        }
+                    }
+                    if (code != HttpURLConnection.HTTP_OK) {
+                        final int finalCode = code;
+                        activity.runOnUiThread(() -> call.reject("Error del servidor HTTP: " + finalCode));
+                        return;
+                    }
+                    break;
                 }
 
                 File cacheDir = context.getExternalCacheDir() != null ? context.getExternalCacheDir() : context.getCacheDir();
@@ -97,6 +109,11 @@ public class AppUpdaterPlugin extends Plugin {
                 fos.flush();
                 fos.close();
                 is.close();
+
+                if (apkFile.length() < 1000000) {
+                    activity.runOnUiThread(() -> call.reject("Error: El archivo descargado está incompleto (" + apkFile.length() + " bytes)"));
+                    return;
+                }
 
                 // Launch Android Package Installer
                 Uri apkUri = FileProvider.getUriForFile(
