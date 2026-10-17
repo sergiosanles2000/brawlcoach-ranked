@@ -40,6 +40,7 @@ import type { VisionDetectionResult } from './services/visionAi';
 import { fetchPlayerProfile } from './services/api';
 import { launchFloatingModMenu } from './services/floatingOverlay';
 import { getStoredBrawlers, getStoredCounters } from './services/metaSync';
+import { showBottomBanner, hideBottomBanner } from './services/adService';
 
 const typedBrawlers = brawlersData as Brawler[];
 const typedCounters = countersData as CountersMap;
@@ -145,7 +146,19 @@ export function App() {
         setUpdateInfo(info);
       }
     });
+
+    // Initialize bottom banner on startup
+    showBottomBanner();
   }, []);
+
+  // Ensure bottom banner hides in chat tab to not cover the keyboard/input, and shows elsewhere
+  useEffect(() => {
+    if (activeTab === 'chat') {
+      hideBottomBanner();
+    } else {
+      showBottomBanner();
+    }
+  }, [activeTab]);
 
   // Persist LM Studio settings
   useEffect(() => {
