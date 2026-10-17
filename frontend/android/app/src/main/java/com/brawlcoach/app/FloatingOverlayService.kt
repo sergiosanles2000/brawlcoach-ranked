@@ -130,6 +130,16 @@ class FloatingOverlayService : Service() {
     private var enemySlotViews = arrayOfNulls<TextView>(3)
     private var banSlotViewsContainer: LinearLayout? = null
 
+    // Local Draft Vision Engine & Real-time Auto-Detector (1-2 FPS)
+    private var visionEngine: LocalDraftVisionEngine? = null
+    private var isAutoScanning = false
+    private var mediaProjection: MediaProjection? = null
+    private var virtualDisplay: VirtualDisplay? = null
+    private var imageReader: ImageReader? = null
+    private var captureHandlerThread: HandlerThread? = null
+    private var lastFrameTimestamp = 0L
+    private var reusableRawBitmap: Bitmap? = null
+
     private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -140,6 +150,7 @@ class FloatingOverlayService : Service() {
         isRunning = true
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         createNotificationChannel()
+        visionEngine = LocalDraftVisionEngine(this)
         initViews()
     }
 
@@ -669,9 +680,9 @@ class FloatingOverlayService : Service() {
         }
         scrollContent.addView(banContainer)
 
-        // --- Action Button: Scan Draft (Optional auto scan) ---
+        // --- Action Button: Auto-Detector en tiempo real (100% Local) ---
         btnScan = Button(this).apply {
-            text = "📸 Escanear Pantalla con IA"
+            text = "▶️ Auto-Detectar en Vivo"
             textSize = 11.5f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.WHITE)
@@ -684,7 +695,7 @@ class FloatingOverlayService : Service() {
             val p = (6 * density).toInt()
             setPadding(p, p, p, p)
             setOnClickListener {
-                startScanFlow()
+                toggleAutoScan()
             }
         }
         val btnParams = LinearLayout.LayoutParams(
@@ -787,10 +798,11 @@ class FloatingOverlayService : Service() {
             enemyPicks[i] = null
         }
         bannedBrawlers.clear()
+        visionEngine?.resetState()
         updateSlotsUi()
         updateBanChips()
         recalculateDraft()
-        tvStatus?.text = "Draft reiniciado. Selecciona los picks o escanea."
+        tvStatus?.text = "Draft reiniciado. Selecciona los picks o activa auto-detector."
     }
 
     private fun updateSlotsUi() {
@@ -1552,17 +1564,25 @@ class FloatingOverlayService : Service() {
     }
 
     // ==========================================
-    // CAPTURE & VISION ANALYSIS FLOW
+    // REAL-TIME LOCAL DRAFT DETECTION (1-2 FPS)
     // ==========================================
+    private fun toggleAutoScan() {
+        if (isAutoScanning) {
+            stopContinuousCapture()
+        } else {
+            startScanFlow()
+        }
+    }
+
     private fun startScanFlow() {
         btnScan?.isEnabled = false
-        tvStatus?.text = "📸 Preparando captura de pantalla..."
+        tvStatus?.text = "📸 Iniciando auto-detector en tiempo real..."
 
-        // Temporarily hide the overlay so it doesn't appear in the screen capture
+        // Temporarily hide overlay so permission dialog is unobstructed
         bubbleView?.visibility = View.GONE
         cardView?.visibility = View.GONE
 
-        // Launch transparent trampoline activity to acquire fresh single-use MediaProjection token
+        // Launch transparent trampoline activity to acquire MediaProjection token
         CaptureTrampolineActivity.start(this)
     }
 
@@ -1571,7 +1591,8 @@ class FloatingOverlayService : Service() {
             bubbleView?.visibility = View.VISIBLE
             cardView?.visibility = View.VISIBLE
             btnScan?.isEnabled = true
-            tvStatus?.text = "⚠️ Permiso de captura cancelado"
+            updateScanButtonUi(false)
+            tvStatus?.text = "⚠️ Permiso de captura denegado"
         }
     }
 
@@ -1589,7 +1610,7 @@ class FloatingOverlayService : Service() {
         // Wait 150ms for service to be active before acquiring projection
         mainHandler.postDelayed({
             val projectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-            val mediaProjection: MediaProjection? = try {
+            mediaProjection = try {
                 projectionManager.getMediaProjection(resultCode, resultData.clone() as Intent)
             } catch (e: Exception) {
                 null
@@ -1601,10 +1622,13 @@ class FloatingOverlayService : Service() {
                 return@postDelayed
             }
 
-            // Restore overlay visibility with loading status
+            // Restore overlay visibility
             bubbleView?.visibility = View.VISIBLE
             cardView?.visibility = View.VISIBLE
-            tvStatus?.text = "🤖 Capturando fotograma..."
+            isAutoScanning = true
+            btnScan?.isEnabled = true
+            updateScanButtonUi(true)
+            tvStatus?.text = "🟢 Auto-Detector activo (<5ms local) • Escaneando..."
 
             val windowMgr = getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val metrics = DisplayMetrics()
@@ -1615,103 +1639,159 @@ class FloatingOverlayService : Service() {
             val screenHeight = metrics.heightPixels
             val screenDensity = metrics.densityDpi
 
-            val handlerThread = HandlerThread("OverlayCaptureThread")
-            handlerThread.start()
-            val bgHandler = Handler(handlerThread.looper)
+            captureHandlerThread = HandlerThread("LocalDraftCaptureThread").apply { start() }
+            val bgHandler = Handler(captureHandlerThread!!.looper)
 
-            val imageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2)
-            var virtualDisplay: VirtualDisplay? = null
-            var hasCaptured = false
+            // Scaled capture resolution for optimal performance (e.g. 1280 wide)
+            val captureW = if (screenWidth > 1280) 1280 else screenWidth
+            val captureH = (screenHeight.toFloat() * (captureW.toFloat() / screenWidth)).toInt()
 
-            val cleanup = {
-                try {
-                    virtualDisplay?.release()
-                    virtualDisplay = null
-                    imageReader.close()
-                    mediaProjection.stop()
-                    handlerThread.quitSafely()
-                    stopCaptureService()
-                } catch (_: Exception) {}
-            }
+            imageReader = ImageReader.newInstance(captureW, captureH, PixelFormat.RGBA_8888, 2)
 
-            mediaProjection.registerCallback(object : MediaProjection.Callback() {
+            mediaProjection?.registerCallback(object : MediaProjection.Callback() {
                 override fun onStop() {
                     super.onStop()
-                    try {
-                        virtualDisplay?.release()
-                        virtualDisplay = null
-                    } catch (_: Exception) {}
+                    stopContinuousCapture()
                 }
             }, Handler(Looper.getMainLooper()))
 
-            imageReader.setOnImageAvailableListener({ reader ->
-                if (hasCaptured) return@setOnImageAvailableListener
-                hasCaptured = true
+            imageReader?.setOnImageAvailableListener({ reader ->
+                val now = System.currentTimeMillis()
+                val image = reader.acquireLatestImage() ?: return@setOnImageAvailableListener
 
-                val image = reader.acquireLatestImage()
-                if (image != null) {
-                    try {
-                        val planes = image.planes
-                        val buffer = planes[0].buffer
-                        val pixelStride = planes[0].pixelStride
-                        val rowStride = planes[0].rowStride
-                        val rowPadding = rowStride - pixelStride * screenWidth
+                // Throttle to ~1.5 FPS (650ms between frames) to preserve CPU and battery
+                if (now - lastFrameTimestamp < 650L) {
+                    image.close()
+                    return@setOnImageAvailableListener
+                }
+                lastFrameTimestamp = now
 
-                        val rawBitmap = Bitmap.createBitmap(
-                            screenWidth + rowPadding / pixelStride,
-                            screenHeight,
-                            Bitmap.Config.ARGB_8888
-                        )
-                        rawBitmap.copyPixelsFromBuffer(buffer)
-                        image.close()
+                try {
+                    val planes = image.planes
+                    val buffer = planes[0].buffer
+                    val pixelStride = planes[0].pixelStride
+                    val rowStride = planes[0].rowStride
+                    val rowPadding = rowStride - pixelStride * captureW
 
-                        // Crop and scale
-                        val croppedBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, screenWidth, screenHeight)
-                        val maxW = 1280
-                        val scaledBitmap = if (screenWidth > maxW) {
-                            val scaledH = (screenHeight.toFloat() * (maxW.toFloat() / screenWidth)).toInt()
-                            Bitmap.createScaledBitmap(croppedBitmap, maxW, scaledH, true)
-                        } else {
-                            croppedBitmap
+                    val fullBitmapW = captureW + rowPadding / pixelStride
+                    if (reusableRawBitmap == null || reusableRawBitmap?.width != fullBitmapW || reusableRawBitmap?.height != captureH) {
+                        reusableRawBitmap?.recycle()
+                        reusableRawBitmap = Bitmap.createBitmap(fullBitmapW, captureH, Bitmap.Config.ARGB_8888)
+                    }
+
+                    reusableRawBitmap?.copyPixelsFromBuffer(buffer)
+                    image.close()
+
+                    val targetBitmap = if (rowPadding == 0) {
+                        reusableRawBitmap!!
+                    } else {
+                        Bitmap.createBitmap(reusableRawBitmap!!, 0, 0, captureW, captureH)
+                    }
+
+                    val engine = visionEngine ?: return@setOnImageAvailableListener
+                    val result = engine.processFrame(targetBitmap)
+
+                    if (targetBitmap != reusableRawBitmap) {
+                        targetBitmap.recycle()
+                    }
+
+                    if (result.isDraftActive) {
+                        if (result.hasChanges) {
+                            for (i in 0..2) {
+                                if (result.allyPicks[i] != null) allyPicks[i] = result.allyPicks[i]
+                                if (result.enemyPicks[i] != null) enemyPicks[i] = result.enemyPicks[i]
+                            }
+
+                            for (ban in result.bans) {
+                                if (!bannedBrawlers.contains(ban)) {
+                                    bannedBrawlers.add(ban)
+                                }
+                            }
+
+                            if (result.detectedMap != null && !result.detectedMap.equals(currentMapName, ignoreCase = true)) {
+                                val analysis = queryBrawlPickStats(result.detectedMap, result.detectedMode ?: "")
+                                mainHandler.post {
+                                    updateUiWithBrawlPick(analysis)
+                                }
+                            }
+
+                            mainHandler.post {
+                                updateSlotsUi()
+                                updateBanChips()
+                                recalculateDraft()
+                                tvStatus?.text = "🟢 Draft sincronizado en vivo"
+                            }
                         }
-
-                        val outputStream = ByteArrayOutputStream()
-                        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream)
-                        val base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
-
-                        cleanup()
-
-                        // Run Vision Call on background thread
-                        sendToGeminiVision(base64)
-                    } catch (e: Exception) {
-                        cleanup()
+                    } else {
                         mainHandler.post {
-                            tvStatus?.text = "❌ Error al procesar imagen: ${e.message}"
-                            btnScan?.isEnabled = true
+                            tvStatus?.text = "🟢 Buscando partida / draft en Brawl Stars..."
                         }
                     }
+                } catch (e: Exception) {
+                    android.util.Log.w("FloatingOverlayService", "Frame processing warning: ${e.message}")
                 }
             }, bgHandler)
 
             try {
-                virtualDisplay = mediaProjection.createVirtualDisplay(
+                virtualDisplay = mediaProjection?.createVirtualDisplay(
                     "BrawlOverlayVirtualDisplay",
-                    screenWidth,
-                    screenHeight,
+                    captureW,
+                    captureH,
                     screenDensity,
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-                    imageReader.surface,
+                    imageReader!!.surface,
                     null,
                     bgHandler
                 )
             } catch (e: Exception) {
-                cleanup()
+                stopContinuousCapture()
                 mainHandler.post {
                     tvStatus?.text = "❌ Error en VirtualDisplay: ${e.message}"
-                    btnScan?.isEnabled = true
                 }
             }
         }, 150)
+    }
+
+    private fun stopContinuousCapture() {
+        isAutoScanning = false
+        try {
+            virtualDisplay?.release()
+            virtualDisplay = null
+            imageReader?.close()
+            imageReader = null
+            mediaProjection?.stop()
+            mediaProjection = null
+            captureHandlerThread?.quitSafely()
+            captureHandlerThread = null
+            reusableRawBitmap?.recycle()
+            reusableRawBitmap = null
+            stopCaptureService()
+        } catch (_: Exception) {}
+
+        mainHandler.post {
+            btnScan?.isEnabled = true
+            updateScanButtonUi(false)
+            tvStatus?.text = "⏸️ Auto-detector pausado"
+        }
+    }
+
+    private fun updateScanButtonUi(active: Boolean) {
+        val density = resources.displayMetrics.density
+        if (active) {
+            btnScan?.text = "⏹️ Detener Auto-Detector"
+            btnScan?.background = GradientDrawable().apply {
+                cornerRadius = 8 * density
+                colors = intArrayOf(Color.parseColor("#dc2626"), Color.parseColor("#ef4444"))
+                gradientType = GradientDrawable.LINEAR_GRADIENT
+            }
+        } else {
+            btnScan?.text = "▶️ Auto-Detectar en Vivo"
+            btnScan?.background = GradientDrawable().apply {
+                cornerRadius = 8 * density
+                colors = intArrayOf(Color.parseColor("#059669"), Color.parseColor("#10b981"))
+                gradientType = GradientDrawable.LINEAR_GRADIENT
+            }
+        }
     }
 
     private fun stopCaptureService() {
@@ -1719,143 +1799,6 @@ class FloatingOverlayService : Service() {
             action = MediaProjectionService.ACTION_STOP
         }
         startService(intent)
-    }
-
-    // ==========================================
-    // GOOGLE GEMINI VISION & BRAWLPICK STATS
-    // ==========================================
-    private fun sendToGeminiVision(base64Image: String) {
-        mainHandler.post {
-            tvStatus?.text = "🤖 Identificando mapa con Google Gemini..."
-        }
-
-        Thread {
-            val prompt = """
-Eres un extractor visual OCR y analista de Brawl Stars.
-Tu ÚNICA misión es leer el texto exacto de la esquina superior izquierda de la pantalla del juego, donde aparece el cuadro de modo y mapa:
-1. En grande en la pancarta superior está el MODO (ej: ATRACO, BALÓN BRAWL, CAZA ESTELAR, ATRAPAGEMAS, ZONA CALIENTE, NOQUEO, DESTRUCCIÓN).
-2. Debajo en letra más pequeña está el NOMBRE EXACTO DEL MAPA (ej: "Patata caliente", "Zona Segura", "Aguas turbulentas", "Cañón explosivo", "Estadio central", "Mina rocosa", etc.).
-
-MAPAS DE ATRACO (HEIST):
-- Patata caliente (Hot Potato)
-- Zona segura (Safe Zone)
-- Cañón explosivo (Kaboom Canyon)
-- Aguas turbulentas / Un puente demasiado lejos (Bridge Too Far)
-- Hot Tubs
-- Jedna
-
-MAPAS DE ATRAPAGEMAS (GEM GRAB):
-- Mina rocosa (Hard Rock Mine), Cueva subterránea (Undermine), Doble dilema (Double Swoosh), Fuerte de gemas (Gem Fort).
-
-MAPAS DE BALÓN BRAWL (BRAWL BALL):
-- Estadio central (Center Stage), Sueños de pinball (Pinball Dreams), Campos furtivos (Sneaky Fields), En espiral (Spiraling Out), Triple regate (Triple Dribble).
-
-MAPAS DE ZONA CALIENTE (HOT ZONE):
-- Escarabajos en duelo (Dueling Beetles), Negocio abierto (Open Business), Jugadas paralelas (Parallel Plays), Anillo de fuego (Ring of Fire).
-
-MAPAS DE NOQUEO (KNOCKOUT):
-- Roca de Belle (Belle's Rock), Fénix resplandeciente (Flaring Phoenix), Nuevos horizontes (New Horizons), A campo abierto (Out in the Open), Barranco de brazo dorado (Goldarm Gulch).
-
-MAPAS DE CAZA ESTELAR (BOUNTY):
-- Estrella fugaz (Shooting Star), El escondite (Hideout), Pastel de capas (Layer Cake), Estación seca (Dry Season).
-
-Transcribe literalmente lo que ves escrito en pantalla.
-Responde EXCLUSIVAMENTE un JSON válido sin bloques markdown:
-{"map": "texto_exacto_del_mapa", "mode": "modo_de_juego"}
-""".trimIndent()
-
-            // Clean base64 header if present
-            val cleanBase64 = if (base64Image.contains(",")) base64Image.substringAfter(",") else base64Image
-
-            // PRIMARY (Gemini 3.5 Flash Lite) with FALLBACK (Gemma 4 31B)
-            val models = listOf("gemini-3.5-flash-lite", "gemma-4-31b-it")
-            var handled = false
-
-            for (currentModel in models) {
-                if (handled) break
-                try {
-                    val defaultKey = String(Base64.decode("QVEuQWI4Uk42S252TEgxRTN1NE91S0dNTkJRTVJDbDc2MExHX1dpUXBEN0xWNF9scmhFanc=", Base64.DEFAULT)).trim()
-                    val geminiKey = if (apiKeyStr.isNotBlank()) apiKeyStr else defaultKey
-                    val geminiUrl = URL("https://generativelanguage.googleapis.com/v1beta/models/$currentModel:generateContent?key=$geminiKey")
-                    val gConn = geminiUrl.openConnection() as HttpURLConnection
-                    gConn.requestMethod = "POST"
-                    gConn.doOutput = true
-                    gConn.connectTimeout = 12000
-                    gConn.readTimeout = 12000
-                    gConn.setRequestProperty("Content-Type", "application/json")
-
-                    val gPayload = JSONObject().apply {
-                        val contentsArr = JSONArray().apply {
-                            val contentObj = JSONObject().apply {
-                                val partsArr = JSONArray().apply {
-                                    put(JSONObject().apply { put("text", prompt) })
-                                    put(JSONObject().apply {
-                                        val inlineData = JSONObject().apply {
-                                            put("mimeType", "image/jpeg")
-                                            put("data", cleanBase64)
-                                        }
-                                        put("inlineData", inlineData)
-                                    })
-                                }
-                                put("parts", partsArr)
-                            }
-                            put(contentObj)
-                        }
-                        put("contents", contentsArr)
-                        val genConfig = JSONObject().apply {
-                            put("temperature", 0.1)
-                            put("maxOutputTokens", 250)
-                        }
-                        put("generationConfig", genConfig)
-                    }
-
-                    OutputStreamWriter(gConn.outputStream).use { writer ->
-                        writer.write(gPayload.toString())
-                        writer.flush()
-                    }
-
-                    if (gConn.responseCode == 200) {
-                        val gRespText = gConn.inputStream.bufferedReader().use { it.readText() }
-                        val gJson = JSONObject(gRespText)
-                        val candidate = gJson.optJSONArray("candidates")?.optJSONObject(0)
-                        val parts = candidate?.optJSONObject("content")?.optJSONArray("parts")
-                        val sb = StringBuilder()
-                        if (parts != null) {
-                            for (i in 0 until parts.length()) {
-                                val part = parts.optJSONObject(i)
-                                if (part != null && part.has("text") && !part.optBoolean("thought", false)) {
-                                    sb.append(part.optString("text", "")).append("\n")
-                                }
-                            }
-                        }
-                        val rawContent = sb.toString().trim()
-
-                        val matcher = "\\{[\\s\\S]*?\\}".toRegex().find(rawContent)
-                        if (matcher != null) {
-                            val parsed = JSONObject(matcher.value)
-                            val detectedMap = parsed.optString("map", parsed.optString("mapName", "")).trim()
-                            val detectedMode = parsed.optString("mode", "").trim()
-
-                            val analysis = queryBrawlPickStats(detectedMap, detectedMode)
-                            mainHandler.post {
-                                updateUiWithBrawlPick(analysis)
-                            }
-                            handled = true
-                            return@Thread
-                        }
-                    }
-                } catch (e: Exception) {
-                    // Try next model
-                }
-            }
-
-            if (!handled) {
-                mainHandler.post {
-                    tvStatus?.text = "⚠️ Servidores ocupados. Pulsa 'Escanear Mapa' de nuevo."
-                    btnScan?.isEnabled = true
-                }
-            }
-        }.start()
     }
 
     data class BrawlPickRow(
@@ -2102,6 +2045,9 @@ Responde EXCLUSIVAMENTE un JSON válido sin bloques markdown:
         super.onDestroy()
         instance = null
         isRunning = false
+        stopContinuousCapture()
+        visionEngine?.close()
+        visionEngine = null
         try {
             if (bubbleView?.isAttachedToWindow == true) windowManager?.removeView(bubbleView)
             if (cardView?.isAttachedToWindow == true) windowManager?.removeView(cardView)
