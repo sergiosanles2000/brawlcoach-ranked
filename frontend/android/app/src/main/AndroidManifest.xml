@@ -63,7 +63,13 @@
             android:exported="false"
             android:noHistory="true"
             android:taskAffinity=""
+            android:screenOrientation="fullSensor"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
             android:excludeFromRecents="true" />
+
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" />
 
         <!-- Google AdMob Application ID (Official Google Test App ID) -->
         <meta-data

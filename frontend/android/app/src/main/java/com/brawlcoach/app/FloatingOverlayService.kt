@@ -90,11 +90,18 @@ class FloatingOverlayService : Service() {
             playerProfileJsonStr = playerProfile
         }
 
+        private var cachedResultCode: Int? = null
+        private var cachedResultData: Intent? = null
+
         fun onScreenCapturePermissionGranted(resultCode: Int, data: Intent) {
+            cachedResultCode = resultCode
+            cachedResultData = data.clone() as Intent
             instance?.executeScreenCapture(resultCode, data)
         }
 
         fun onScreenCapturePermissionDenied() {
+            cachedResultCode = null
+            cachedResultData = null
             instance?.handleCaptureDenied()
         }
     }
@@ -1670,6 +1677,15 @@ class FloatingOverlayService : Service() {
     }
 
     private fun startScanFlow() {
+        val code = cachedResultCode
+        val data = cachedResultData
+        if (code != null && data != null) {
+            btnScan?.isEnabled = false
+            tvStatus?.text = "📸 Iniciando auto-detector en tiempo real..."
+            executeScreenCapture(code, data.clone() as Intent)
+            return
+        }
+
         btnScan?.isEnabled = false
         tvStatus?.text = "📸 Iniciando auto-detector en tiempo real..."
 
@@ -1682,6 +1698,8 @@ class FloatingOverlayService : Service() {
     }
 
     fun handleCaptureDenied() {
+        cachedResultCode = null
+        cachedResultData = null
         mainHandler.post {
             bubbleView?.visibility = View.VISIBLE
             cardView?.visibility = View.VISIBLE
@@ -1692,6 +1710,9 @@ class FloatingOverlayService : Service() {
     }
 
     fun executeScreenCapture(resultCode: Int, resultData: Intent) {
+        cachedResultCode = resultCode
+        cachedResultData = resultData.clone() as Intent
+
         // Start MediaProjectionService foreground service
         val serviceIntent = Intent(this, MediaProjectionService::class.java).apply {
             action = MediaProjectionService.ACTION_START
@@ -1712,6 +1733,8 @@ class FloatingOverlayService : Service() {
             }
 
             if (mediaProjection == null) {
+                cachedResultCode = null
+                cachedResultData = null
                 stopCaptureService()
                 handleCaptureDenied()
                 return@postDelayed

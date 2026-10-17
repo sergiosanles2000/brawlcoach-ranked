@@ -83,12 +83,9 @@ export async function checkForAppUpdates(): Promise<UpdateInfo | null> {
  */
 function parseVersionNumbers(versionStr: string): number[] {
   const clean = versionStr.toLowerCase().replace(/^v/, '').trim();
-  
-  // If dot-separated (e.g. "1.0.2" or "1.0")
-  if (clean.includes('.')) {
-    const parts = clean.split('.').map((p) => parseInt(p, 10) || 0);
-    while (parts.length < 3) parts.push(0);
-    return parts;
+  const match = clean.match(/(\d+)\.(\d+)(?:\.(\d+))?/);
+  if (match) {
+    return [parseInt(match[1], 10), parseInt(match[2], 10), parseInt(match[3] || '0', 10)];
   }
 
   // If compact digits (e.g. "102" -> 1.0.2)

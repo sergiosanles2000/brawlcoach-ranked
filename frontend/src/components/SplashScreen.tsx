@@ -26,7 +26,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
       }`}
     >
       <div className="w-full flex justify-end">
-        <span className="text-[10px] font-mono font-semibold tracking-wider text-slate-600">v1.0.7</span>
+        <span className="text-[10px] font-mono font-semibold tracking-wider text-slate-600">v1.3.4</span>
       </div>
 
       {/* Center Official Icon & Clean Branding */}
