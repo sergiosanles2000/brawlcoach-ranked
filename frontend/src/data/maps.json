@@ -6,10 +6,36 @@
     "name": "Center Stage",
     "environment": "Mixed",
     "tiers": {
-      "S": ["Frank", "Buster", "Melodie", "Max", "Gale", "Draco", "Kenji"],
-      "A": ["Clancy", "Surge", "Shelly", "Poco", "Sandy", "Colette", "Otis"],
-      "B": ["Bea", "Emz", "Bull", "El Primo", "Fang", "Charlie"]
-    }
+      "S": [
+        "Frank",
+        "Buster",
+        "Melodie",
+        "Max",
+        "Gale",
+        "Draco",
+        "Kenji"
+      ],
+      "A": [
+        "Clancy",
+        "Surge",
+        "Shelly",
+        "Poco",
+        "Sandy",
+        "Colette",
+        "Otis"
+      ],
+      "B": [
+        "Bea",
+        "Emz",
+        "Bull",
+        "El Primo",
+        "Fang",
+        "Charlie"
+      ]
+    },
+    "imageUrl": "/maps/bb-center-stage.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000132.png",
+    "mapId": 15000132
   },
   {
     "id": "bb-pinball-dreams",
@@ -18,10 +44,33 @@
     "name": "Pinball Dreams",
     "environment": "Wall-Heavy",
     "tiers": {
-      "S": ["Surge", "Buster", "Frank", "Gale", "Clancy", "Max"],
-      "A": ["Colt", "Sandy", "Melodie", "Colette", "Poco", "Draco"],
-      "B": ["Shelly", "Bull", "Fang", "Otis", "Dynamike"]
-    }
+      "S": [
+        "Surge",
+        "Buster",
+        "Frank",
+        "Gale",
+        "Clancy",
+        "Max"
+      ],
+      "A": [
+        "Colt",
+        "Sandy",
+        "Melodie",
+        "Colette",
+        "Poco",
+        "Draco"
+      ],
+      "B": [
+        "Shelly",
+        "Bull",
+        "Fang",
+        "Otis",
+        "Dynamike"
+      ]
+    },
+    "imageUrl": "/maps/bb-pinball-dreams.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000260.png",
+    "mapId": 15000260
   },
   {
     "id": "bb-sneaky-fields",
@@ -30,10 +79,33 @@
     "name": "Sneaky Fields",
     "environment": "Bushy",
     "tiers": {
-      "S": ["Rosa", "Buster", "Tara", "Shelly", "Frank", "Gale"],
-      "A": ["Bo", "Sandy", "Buzz", "Clancy", "Poco", "Lily"],
-      "B": ["Bull", "El Primo", "Surge", "Otis", "Emz"]
-    }
+      "S": [
+        "Rosa",
+        "Buster",
+        "Tara",
+        "Shelly",
+        "Frank",
+        "Gale"
+      ],
+      "A": [
+        "Bo",
+        "Sandy",
+        "Buzz",
+        "Clancy",
+        "Poco",
+        "Lily"
+      ],
+      "B": [
+        "Bull",
+        "El Primo",
+        "Surge",
+        "Otis",
+        "Emz"
+      ]
+    },
+    "imageUrl": "/maps/bb-sneaky-fields.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15001311.png",
+    "mapId": 15001311
   },
   {
     "id": "gg-hard-rock-mine",
@@ -42,10 +114,35 @@
     "name": "Hard Rock Mine",
     "environment": "Mixed",
     "tiers": {
-      "S": ["Gene", "Sandy", "Belle", "Larry & Lawrie", "Max", "Buster"],
-      "A": ["Piper", "Angelo", "Tara", "Gale", "Byron", "Lou", "Charlie"],
-      "B": ["Colt", "Brock", "Colette", "Otis", "Bo", "Lily"]
-    }
+      "S": [
+        "Gene",
+        "Sandy",
+        "Belle",
+        "Larry & Lawrie",
+        "Max",
+        "Buster"
+      ],
+      "A": [
+        "Piper",
+        "Angelo",
+        "Tara",
+        "Gale",
+        "Byron",
+        "Lou",
+        "Charlie"
+      ],
+      "B": [
+        "Colt",
+        "Brock",
+        "Colette",
+        "Otis",
+        "Bo",
+        "Lily"
+      ]
+    },
+    "imageUrl": "/maps/gg-hard-rock-mine.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15001319.png",
+    "mapId": 15001319
   },
   {
     "id": "gg-double-swoosh",
@@ -54,10 +151,33 @@
     "name": "Double Swoosh",
     "environment": "Bushy",
     "tiers": {
-      "S": ["Rosa", "Tara", "Buster", "Poco", "Bo", "Sandy"],
-      "A": ["Gene", "Shelly", "Frank", "Gale", "Clancy", "Lily"],
-      "B": ["Leon", "Buzz", "Max", "Emz", "Surge"]
-    }
+      "S": [
+        "Rosa",
+        "Tara",
+        "Buster",
+        "Poco",
+        "Bo",
+        "Sandy"
+      ],
+      "A": [
+        "Gene",
+        "Shelly",
+        "Frank",
+        "Gale",
+        "Clancy",
+        "Lily"
+      ],
+      "B": [
+        "Leon",
+        "Buzz",
+        "Max",
+        "Emz",
+        "Surge"
+      ]
+    },
+    "imageUrl": "/maps/gg-double-swoosh.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15001320.png",
+    "mapId": 15001320
   },
   {
     "id": "gg-undermine",
@@ -66,10 +186,32 @@
     "name": "Undermine",
     "environment": "Open",
     "tiers": {
-      "S": ["Gene", "Belle", "Angelo", "Piper", "Byron", "Sandy"],
-      "A": ["Buster", "Larry & Lawrie", "Max", "Gale", "Charlie"],
-      "B": ["Colt", "Brock", "Lou", "Bea", "Leon"]
-    }
+      "S": [
+        "Gene",
+        "Belle",
+        "Angelo",
+        "Piper",
+        "Byron",
+        "Sandy"
+      ],
+      "A": [
+        "Buster",
+        "Larry & Lawrie",
+        "Max",
+        "Gale",
+        "Charlie"
+      ],
+      "B": [
+        "Colt",
+        "Brock",
+        "Lou",
+        "Bea",
+        "Leon"
+      ]
+    },
+    "imageUrl": "/maps/gg-undermine.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15001321.png",
+    "mapId": 15001321
   },
   {
     "id": "ko-flaring-phoenix",
@@ -78,10 +220,33 @@
     "name": "Flaring Phoenix",
     "environment": "Open",
     "tiers": {
-      "S": ["Piper", "Angelo", "Belle", "Leon", "Byron", "Mico"],
-      "A": ["Brock", "Tick", "Larry & Lawrie", "Gale", "Buster", "Lily"],
-      "B": ["Gene", "Colt", "Bea", "Max", "Charlie"]
-    }
+      "S": [
+        "Piper",
+        "Angelo",
+        "Belle",
+        "Leon",
+        "Byron",
+        "Mico"
+      ],
+      "A": [
+        "Brock",
+        "Tick",
+        "Larry & Lawrie",
+        "Gale",
+        "Buster",
+        "Lily"
+      ],
+      "B": [
+        "Gene",
+        "Colt",
+        "Bea",
+        "Max",
+        "Charlie"
+      ]
+    },
+    "imageUrl": "/maps/ko-flaring-phoenix.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000459.png",
+    "mapId": 15000459
   },
   {
     "id": "ko-goldarm-gulch",
@@ -90,10 +255,33 @@
     "name": "Goldarm Gulch",
     "environment": "Mixed",
     "tiers": {
-      "S": ["Piper", "Belle", "Angelo", "Byron", "Larry & Lawrie", "Gale"],
-      "A": ["Brock", "Leon", "Tick", "Buster", "Gene", "Colt"],
-      "B": ["Max", "Lily", "Bea", "Sandy", "Charlie"]
-    }
+      "S": [
+        "Piper",
+        "Belle",
+        "Angelo",
+        "Byron",
+        "Larry & Lawrie",
+        "Gale"
+      ],
+      "A": [
+        "Brock",
+        "Leon",
+        "Tick",
+        "Buster",
+        "Gene",
+        "Colt"
+      ],
+      "B": [
+        "Max",
+        "Lily",
+        "Bea",
+        "Sandy",
+        "Charlie"
+      ]
+    },
+    "imageUrl": "/maps/ko-goldarm-gulch.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15001316.png",
+    "mapId": 15001316
   },
   {
     "id": "ko-new-horizons",
@@ -102,10 +290,31 @@
     "name": "New Horizons",
     "environment": "Open",
     "tiers": {
-      "S": ["Angelo", "Piper", "Belle", "Tick", "Leon", "Byron"],
-      "A": ["Brock", "Larry & Lawrie", "Gale", "Max", "Mico"],
-      "B": ["Colt", "Gene", "Bea", "Lily"]
-    }
+      "S": [
+        "Angelo",
+        "Piper",
+        "Belle",
+        "Tick",
+        "Leon",
+        "Byron"
+      ],
+      "A": [
+        "Brock",
+        "Larry & Lawrie",
+        "Gale",
+        "Max",
+        "Mico"
+      ],
+      "B": [
+        "Colt",
+        "Gene",
+        "Bea",
+        "Lily"
+      ]
+    },
+    "imageUrl": "/maps/ko-new-horizons.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000738.png",
+    "mapId": 15000738
   },
   {
     "id": "bty-shooting-star",
@@ -114,10 +323,31 @@
     "name": "Shooting Star",
     "environment": "Open",
     "tiers": {
-      "S": ["Piper", "Angelo", "Belle", "Tick", "Byron", "Leon"],
-      "A": ["Brock", "Larry & Lawrie", "Colt", "Gale", "Mico"],
-      "B": ["Gene", "Bea", "Max", "Lily"]
-    }
+      "S": [
+        "Piper",
+        "Angelo",
+        "Belle",
+        "Tick",
+        "Byron",
+        "Leon"
+      ],
+      "A": [
+        "Brock",
+        "Larry & Lawrie",
+        "Colt",
+        "Gale",
+        "Mico"
+      ],
+      "B": [
+        "Gene",
+        "Bea",
+        "Max",
+        "Lily"
+      ]
+    },
+    "imageUrl": "/maps/bty-shooting-star.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000692.png",
+    "mapId": 15000692
   },
   {
     "id": "bty-canal-grande",
@@ -126,10 +356,32 @@
     "name": "Canal Grande",
     "environment": "Bushy / Water",
     "tiers": {
-      "S": ["Angelo", "Tick", "Piper", "Lily", "Bo", "Gene"],
-      "A": ["Belle", "Leon", "Rosa", "Buster", "Larry & Lawrie", "Gale"],
-      "B": ["Tara", "Sandy", "Brock", "Max"]
-    }
+      "S": [
+        "Angelo",
+        "Tick",
+        "Piper",
+        "Lily",
+        "Bo",
+        "Gene"
+      ],
+      "A": [
+        "Belle",
+        "Leon",
+        "Rosa",
+        "Buster",
+        "Larry & Lawrie",
+        "Gale"
+      ],
+      "B": [
+        "Tara",
+        "Sandy",
+        "Brock",
+        "Max"
+      ]
+    },
+    "imageUrl": "/maps/bty-canal-grande.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000620.png",
+    "mapId": 15000620
   },
   {
     "id": "hz-ring-of-fire",
@@ -138,10 +390,32 @@
     "name": "Ring of Fire",
     "environment": "Open Zone",
     "tiers": {
-      "S": ["Lou", "Amber", "Belle", "Gale", "Emz", "Larry & Lawrie"],
-      "A": ["Piper", "Angelo", "Sandy", "Buster", "Gene", "Byron"],
-      "B": ["Otis", "Clancy", "Colt", "Colette"]
-    }
+      "S": [
+        "Lou",
+        "Amber",
+        "Belle",
+        "Gale",
+        "Emz",
+        "Larry & Lawrie"
+      ],
+      "A": [
+        "Piper",
+        "Angelo",
+        "Sandy",
+        "Buster",
+        "Gene",
+        "Byron"
+      ],
+      "B": [
+        "Otis",
+        "Clancy",
+        "Colt",
+        "Colette"
+      ]
+    },
+    "imageUrl": "/maps/hz-ring-of-fire.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000715.png",
+    "mapId": 15000715
   },
   {
     "id": "hz-dueling-beetles",
@@ -150,10 +424,32 @@
     "name": "Dueling Beetles",
     "environment": "Choke Points",
     "tiers": {
-      "S": ["Lou", "Larry & Lawrie", "Dynamike", "Barley", "Otis", "Gale"],
-      "A": ["Sandy", "Buster", "Emz", "Frank", "Tick", "Clancy"],
-      "B": ["Rosa", "Bull", "Bo", "Charlie"]
-    }
+      "S": [
+        "Lou",
+        "Larry & Lawrie",
+        "Dynamike",
+        "Barley",
+        "Otis",
+        "Gale"
+      ],
+      "A": [
+        "Sandy",
+        "Buster",
+        "Emz",
+        "Frank",
+        "Tick",
+        "Clancy"
+      ],
+      "B": [
+        "Rosa",
+        "Bull",
+        "Bo",
+        "Charlie"
+      ]
+    },
+    "imageUrl": "/maps/hz-dueling-beetles.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000713.png",
+    "mapId": 15000713
   },
   {
     "id": "hz-parallel-plays",
@@ -162,10 +458,32 @@
     "name": "Parallel Plays",
     "environment": "Split Zones",
     "tiers": {
-      "S": ["Larry & Lawrie", "Gale", "Buster", "Sandy", "Lou", "Clancy"],
-      "A": ["Frank", "Otis", "Emz", "Melodie", "Draco", "Dynamike"],
-      "B": ["Shelly", "Surge", "Max", "Barley"]
-    }
+      "S": [
+        "Larry & Lawrie",
+        "Gale",
+        "Buster",
+        "Sandy",
+        "Lou",
+        "Clancy"
+      ],
+      "A": [
+        "Frank",
+        "Otis",
+        "Emz",
+        "Melodie",
+        "Draco",
+        "Dynamike"
+      ],
+      "B": [
+        "Shelly",
+        "Surge",
+        "Max",
+        "Barley"
+      ]
+    },
+    "imageUrl": "/maps/hz-parallel-plays.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000293.png",
+    "mapId": 15000293
   },
   {
     "id": "hst-hot-potato",
@@ -174,10 +492,35 @@
     "name": "Hot Potato",
     "environment": "Choke Points",
     "tiers": {
-      "S": ["Bull", "Chuck", "Melodie", "Clancy", "Colette", "Darryl", "Colt"],
-      "A": ["Barley", "Frank", "Rosa", "Buster", "Shelly", "Dynamike", "Rico"],
-      "B": ["Brock", "Surge", "Gale", "Draco", "Spike"]
-    }
+      "S": [
+        "Bull",
+        "Chuck",
+        "Melodie",
+        "Clancy",
+        "Colette",
+        "Darryl",
+        "Colt"
+      ],
+      "A": [
+        "Barley",
+        "Frank",
+        "Rosa",
+        "Buster",
+        "Shelly",
+        "Dynamike",
+        "Rico"
+      ],
+      "B": [
+        "Brock",
+        "Surge",
+        "Gale",
+        "Draco",
+        "Spike"
+      ]
+    },
+    "imageUrl": "/maps/hst-hot-potato.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000053.png",
+    "mapId": 15000053
   },
   {
     "id": "hst-kaboom-canyon",
@@ -186,10 +529,33 @@
     "name": "Kaboom Canyon",
     "environment": "Destructible Walls",
     "tiers": {
-      "S": ["Colt", "Melodie", "Brock", "Chuck", "Clancy", "Colette", "Angelo"],
-      "A": ["Piper", "Belle", "Buster", "Max", "Bull", "Rico"],
-      "B": ["Larry & Lawrie", "Surge", "Dynamike", "Leon"]
-    }
+      "S": [
+        "Colt",
+        "Melodie",
+        "Brock",
+        "Chuck",
+        "Clancy",
+        "Colette",
+        "Angelo"
+      ],
+      "A": [
+        "Piper",
+        "Belle",
+        "Buster",
+        "Max",
+        "Bull",
+        "Rico"
+      ],
+      "B": [
+        "Larry & Lawrie",
+        "Surge",
+        "Dynamike",
+        "Leon"
+      ]
+    },
+    "imageUrl": "/maps/hst-kaboom-canyon.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000785.png",
+    "mapId": 15000785
   },
   {
     "id": "hst-safe-zone",
@@ -198,10 +564,31 @@
     "name": "Safe Zone",
     "environment": "Open Lane",
     "tiers": {
-      "S": ["Colt", "Melodie", "Clancy", "Colette", "Piper", "Angelo"],
-      "A": ["Belle", "Brock", "Buster", "Max", "Bull"],
-      "B": ["Larry & Lawrie", "Surge", "Charlie", "Leon"]
-    }
+      "S": [
+        "Colt",
+        "Melodie",
+        "Clancy",
+        "Colette",
+        "Piper",
+        "Angelo"
+      ],
+      "A": [
+        "Belle",
+        "Brock",
+        "Buster",
+        "Max",
+        "Bull"
+      ],
+      "B": [
+        "Larry & Lawrie",
+        "Surge",
+        "Charlie",
+        "Leon"
+      ]
+    },
+    "imageUrl": "/maps/hst-safe-zone.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000019.png",
+    "mapId": 15000019
   },
   {
     "id": "hst-pit-stop",
@@ -210,10 +597,31 @@
     "name": "Pit Stop",
     "environment": "Enclosed Base",
     "tiers": {
-      "S": ["Bull", "El Primo", "Melodie", "Clancy", "Colette", "Dynamike"],
-      "A": ["Barley", "Frank", "Rosa", "Buster", "Shelly"],
-      "B": ["Colt", "Surge", "Gale", "Draco"]
-    }
+      "S": [
+        "Bull",
+        "El Primo",
+        "Melodie",
+        "Clancy",
+        "Colette",
+        "Dynamike"
+      ],
+      "A": [
+        "Barley",
+        "Frank",
+        "Rosa",
+        "Buster",
+        "Shelly"
+      ],
+      "B": [
+        "Colt",
+        "Surge",
+        "Gale",
+        "Draco"
+      ]
+    },
+    "imageUrl": "/maps/hst-pit-stop.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000137.png",
+    "mapId": 15000137
   },
   {
     "id": "hst-aguas-turbulentas",
@@ -222,9 +630,34 @@
     "name": "Aguas turbulentas",
     "environment": "Turbulent Waters",
     "tiers": {
-      "S": ["Colt", "Melodie", "Clancy", "Colette", "Piper", "Angelo", "Brock", "Eve"],
-      "A": ["Belle", "Buster", "Max", "Bull", "Rico", "Spike"],
-      "B": ["Larry & Lawrie", "Surge", "Charlie", "Leon", "Tick"]
-    }
+      "S": [
+        "Colt",
+        "Melodie",
+        "Clancy",
+        "Colette",
+        "Piper",
+        "Angelo",
+        "Brock",
+        "Eve"
+      ],
+      "A": [
+        "Belle",
+        "Buster",
+        "Max",
+        "Bull",
+        "Rico",
+        "Spike"
+      ],
+      "B": [
+        "Larry & Lawrie",
+        "Surge",
+        "Charlie",
+        "Leon",
+        "Tick"
+      ]
+    },
+    "imageUrl": "/maps/hst-aguas-turbulentas.png",
+    "cdnUrl": "https://cdn.brawlify.com/maps/regular/15000077.png",
+    "mapId": 15000077
   }
 ]

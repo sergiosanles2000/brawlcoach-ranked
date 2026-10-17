@@ -50,6 +50,9 @@ export interface GameMap {
   modeKey: string;
   name: string;
   environment: string;
+  imageUrl?: string;
+  cdnUrl?: string;
+  mapId?: number;
   tiers: {
     S: string[];
     A: string[];

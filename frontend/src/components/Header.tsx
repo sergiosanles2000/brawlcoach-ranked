@@ -10,11 +10,34 @@ import {
   RefreshCw,
   Terminal,
   Key,
+  Maximize2,
+  Eye,
+  Layers,
+  X,
 } from 'lucide-react';
 import type { GameMap, PlayerProfile, Brawler, CountersMap } from '../types/brawl';
 import { syncMetaFromApi, getLastUpdatedMeta } from '../services/metaSync';
 
 export const STORAGE_CUSTOM_API_KEY = 'brawl_user_custom_gemini_key';
+
+export const getModeBadgeColor = (mode: string) => {
+  switch (mode?.toLowerCase()) {
+    case 'brawl ball':
+      return 'bg-emerald-950/70 border border-emerald-500/50 text-emerald-300';
+    case 'gem grab':
+      return 'bg-purple-950/70 border border-purple-500/50 text-purple-300';
+    case 'heist':
+      return 'bg-rose-950/70 border border-rose-500/50 text-rose-300';
+    case 'hot zone':
+      return 'bg-amber-950/70 border border-amber-500/50 text-amber-300';
+    case 'knockout':
+      return 'bg-orange-950/70 border border-orange-500/50 text-orange-300';
+    case 'bounty':
+      return 'bg-cyan-950/70 border border-cyan-500/50 text-cyan-300';
+    default:
+      return 'bg-slate-800 border border-slate-700 text-slate-300';
+  }
+};
 
 interface HeaderProps {
   maps: GameMap[];
@@ -57,6 +80,8 @@ export const Header: React.FC<HeaderProps> = ({
     return localStorage.getItem(STORAGE_CUSTOM_API_KEY) || '';
   });
 
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+
   const handleSaveCustomApiKey = (key: string) => {
     const trimmed = key.trim();
     setCustomApiKey(trimmed);
@@ -83,6 +108,8 @@ export const Header: React.FC<HeaderProps> = ({
       setIsUpdatingMeta(false);
     }
   };
+
+  const mapImgSrc = selectedMap.imageUrl || selectedMap.cdnUrl || (selectedMap.mapId ? `https://cdn.brawlify.com/maps/regular/${selectedMap.mapId}.png` : undefined);
 
   return (
     <header className="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 sticky top-0 z-30 px-3 pb-2 pt-[max(0.75rem,env(safe-area-inset-top,0.75rem))]">
@@ -177,6 +204,65 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Selected Map Visual Card with Thumbnail & Tap-to-Enlarge */}
+        {selectedMap && (
+          <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 bg-slate-950/70 border border-slate-800/90 rounded-xl">
+            <div className="flex items-center gap-2.5 min-w-0">
+              {/* Map Thumbnail */}
+              {mapImgSrc ? (
+                <div
+                  onClick={() => setIsMapModalOpen(true)}
+                  className="relative w-11 h-11 rounded-lg overflow-hidden border border-slate-700 bg-slate-900 shrink-0 cursor-pointer group shadow-sm hover:border-amber-400 transition-all"
+                  title="Toca para ampliar el mapa"
+                >
+                  <img
+                    src={mapImgSrc}
+                    alt={selectedMap.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    onError={(e) => {
+                      if (selectedMap.cdnUrl && (e.target as HTMLImageElement).src !== selectedMap.cdnUrl) {
+                        (e.target as HTMLImageElement).src = selectedMap.cdnUrl;
+                      }
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Maximize2 className="w-3 h-3 text-white drop-shadow" />
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Map Info & Mode Badge */}
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-xs font-bold text-white truncate">
+                    {selectedMap.name}
+                  </span>
+                  <span className={`text-[9.5px] px-1.5 py-0.2 rounded font-bold uppercase ${getModeBadgeColor(selectedMap.mode)}`}>
+                    {selectedMap.mode}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] text-slate-400 mt-0.5">
+                  <span className="flex items-center gap-1">
+                    <Layers className="w-3 h-3 text-slate-500" />
+                    {selectedMap.environment}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Tap to View Full Layout Button */}
+            <button
+              type="button"
+              onClick={() => setIsMapModalOpen(true)}
+              className="text-[11px] px-2 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1 cursor-pointer shrink-0 transition-colors shadow-sm"
+              title="Ver plano del mapa en grande"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span>Ver mapa</span>
+            </button>
+          </div>
+        )}
 
         {/* Collapsible Settings Drawer */}
         {isConfigOpen && (
@@ -322,6 +408,78 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         )}
       </div>
+
+      {/* Full Map Inspection Modal */}
+      {isMapModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 animate-in fade-in duration-200"
+          onClick={() => setIsMapModalOpen(false)}
+        >
+          <div
+            className="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-sm w-full p-3.5 flex flex-col gap-3 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+              <div>
+                <h3 className="text-sm font-black text-white flex items-center gap-1.5">
+                  <span>🗺️ {selectedMap.name}</span>
+                </h3>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className={`text-[9.5px] px-1.5 py-0.5 rounded font-bold uppercase ${getModeBadgeColor(selectedMap.mode)}`}>
+                    {selectedMap.mode}
+                  </span>
+                  <span className="text-[10px] text-slate-400">
+                    Entorno: {selectedMap.environment}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsMapModalOpen(false)}
+                className="w-7 h-7 rounded-full bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-white flex items-center justify-center border border-slate-700 transition-colors cursor-pointer"
+                title="Cerrar plano"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Map Full Image Display */}
+            {mapImgSrc ? (
+              <div className="relative rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center p-2 min-h-[220px]">
+                <img
+                  src={mapImgSrc}
+                  alt={selectedMap.name}
+                  className="max-h-[360px] w-auto object-contain rounded-lg shadow-inner"
+                  onError={(e) => {
+                    if (selectedMap.cdnUrl && (e.target as HTMLImageElement).src !== selectedMap.cdnUrl) {
+                      (e.target as HTMLImageElement).src = selectedMap.cdnUrl;
+                    }
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="py-8 text-center text-xs text-slate-400">
+                Imagen no disponible para este mapa
+              </div>
+            )}
+
+            {/* Strategic Advice */}
+            <div className="bg-slate-950/70 rounded-xl p-2.5 border border-slate-800/80 text-[11px] text-slate-300 space-y-1">
+              <div className="font-semibold text-amber-400 flex items-center gap-1">
+                <span>💡 Análisis del Terreno:</span>
+              </div>
+              <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                {selectedMap.environment === 'Wall-Heavy'
+                  ? 'Mapa con abundantes estructuras y muros. Lanzadores (Throwers), tanques para emboscadas y brawlers con rebote como Rico o Ruffs son prioritarios.'
+                  : selectedMap.environment === 'Open'
+                  ? 'Mapa abierto de largo alcance. Francotiradores (Snipers) como Piper, Angelo o Brock dominan los carriles.'
+                  : 'Estructura mixta con calles despejadas y arbustos de cobertura. Controla el carril central y usa brawlers con buena movilidad o control de área.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

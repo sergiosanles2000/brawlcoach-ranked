@@ -232,18 +232,20 @@ class FloatingOverlayService : Service() {
             y = (180 * density).toInt()
         }
 
-        // 2. Card Layout Params (Width: 330dp, Height: WRAP_CONTENT with Max bounds in Landscape)
-        val cardWidth = (330 * density).toInt()
+        // 2. Card Layout Params (Ultra-compact: 245dp, always clamped within screen)
+        val metrics = resources.displayMetrics
+        val screenW = metrics.widthPixels
+        val cardWidth = (245 * density).toInt().coerceAtMost((screenW * 0.70f).toInt())
         cardParams = WindowManager.LayoutParams(
             cardWidth,
             WindowManager.LayoutParams.WRAP_CONTENT,
             overlayType,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            x = (20 * density).toInt()
-            y = (20 * density).toInt()
+            x = (12 * density).toInt()
+            y = (12 * density).toInt()
         }
 
         buildBubbleView()
@@ -324,28 +326,28 @@ class FloatingOverlayService : Service() {
 
         val cardContent = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            val pad = (10 * density).toInt()
+            val pad = (6 * density).toInt()
             setPadding(pad, pad, pad, pad)
             val bg = GradientDrawable().apply {
                 shape = GradientDrawable.RECTANGLE
-                cornerRadius = 16 * density
+                cornerRadius = 14 * density
                 setColor(Color.parseColor("#F50F172A")) // 96% opacity dark slate
-                setStroke((2 * density).toInt(), Color.parseColor("#38bdf8"))
+                setStroke((1.5f * density).toInt(), Color.parseColor("#38bdf8"))
             }
             background = bg
             elevation = 20f * density
         }
 
-        // --- Draggable Header Bar ---
+        // --- FIXED HEADER BAR (ALWAYS PINNED AT TOP) ---
         val header = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(0, 0, 0, (4 * density).toInt())
+            setPadding((2 * density).toInt(), (2 * density).toInt(), (2 * density).toInt(), (4 * density).toInt())
         }
 
         val tvTitle = TextView(this).apply {
             text = "⚡ BRAWLDRAFT"
-            textSize = 12f
+            textSize = 10.5f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#38bdf8"))
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
@@ -354,16 +356,16 @@ class FloatingOverlayService : Service() {
 
         // Reset Draft Button
         val btnReset = TextView(this).apply {
-            text = "🔄 Limpiar"
-            textSize = 10f
-            typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#94a3b8"))
-            val p = (5 * density).toInt()
-            setPadding(p, (2 * density).toInt(), p, (2 * density).toInt())
+            text = "🔄"
+            textSize = 11f
+            gravity = Gravity.CENTER
             background = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
                 cornerRadius = 6 * density
                 setColor(Color.parseColor("#1e293b"))
             }
+            val p = (5 * density).toInt()
+            setPadding(p, (3 * density).toInt(), p, (3 * density).toInt())
             setOnClickListener { resetDraft() }
         }
         val resetParams = LinearLayout.LayoutParams(
@@ -374,24 +376,42 @@ class FloatingOverlayService : Service() {
         }
         header.addView(btnReset, resetParams)
 
-        // Minimize Button
+        // Minimize Button (Circular)
         val btnMinimize = TextView(this).apply {
-            text = " ─ "
-            textSize = 13f
+            text = "─"
+            textSize = 11f
             typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#94a3b8"))
-            setPadding((6 * density).toInt(), 0, (6 * density).toInt(), 0)
+            setTextColor(Color.parseColor("#cbd5e1"))
+            gravity = Gravity.CENTER
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(Color.parseColor("#334155"))
+            }
+            layoutParams = LinearLayout.LayoutParams(
+                (24 * density).toInt(),
+                (24 * density).toInt()
+            ).apply {
+                rightMargin = (6 * density).toInt()
+            }
             setOnClickListener { collapseToBubble() }
         }
         header.addView(btnMinimize)
 
-        // Close Button
+        // Close Button (Circular Bright Red - Easy to tap)
         val btnClose = TextView(this).apply {
-            text = " ✕ "
-            textSize = 13f
+            text = "✕"
+            textSize = 12f
             typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#f87171"))
-            setPadding((6 * density).toInt(), 0, (2 * density).toInt(), 0)
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(Color.parseColor("#dc2626"))
+            }
+            layoutParams = LinearLayout.LayoutParams(
+                (24 * density).toInt(),
+                (24 * density).toInt()
+            )
             setOnClickListener { stopSelf() }
         }
         header.addView(btnClose)
@@ -424,6 +444,17 @@ class FloatingOverlayService : Service() {
             }
         }
         cardContent.addView(header)
+
+        // Scrollable container wrapping ALL content below the fixed header
+        val scrollView = ScrollView(this).apply {
+            isVerticalScrollBarEnabled = true
+            isScrollbarFadingEnabled = false
+            overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
+        }
+
+        val scrollContent = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+        }
 
         // --- MAP SELECTOR BAR ---
         val mapSelectorBar = LinearLayout(this).apply {
@@ -462,17 +493,17 @@ class FloatingOverlayService : Service() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            bottomMargin = (6 * density).toInt()
+            bottomMargin = (4 * density).toInt()
         }
-        cardContent.addView(mapSelectorBar, mapBarParams)
+        scrollContent.addView(mapSelectorBar, mapBarParams)
 
         // --- DRAFT BOARD (ALIADOS vs RIVALES) ---
         draftBoardContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            val padD = (6 * density).toInt()
+            val padD = (4 * density).toInt()
             setPadding(padD, padD, padD, padD)
             background = GradientDrawable().apply {
-                cornerRadius = 10 * density
+                cornerRadius = 8 * density
                 setColor(Color.parseColor("#090f1d")) // Very dark slate
                 setStroke((1 * density).toInt(), Color.parseColor("#1e293b"))
             }
@@ -486,30 +517,30 @@ class FloatingOverlayService : Service() {
         val allyCol = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                rightMargin = (4 * density).toInt()
+                rightMargin = (3 * density).toInt()
             }
         }
         val tvAllyHeader = TextView(this).apply {
             text = "💙 MI EQUIPO"
-            textSize = 9.5f
+            textSize = 9f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#38bdf8"))
             gravity = Gravity.CENTER
-            setPadding(0, 0, 0, (3 * density).toInt())
+            setPadding(0, 0, 0, (2 * density).toInt())
         }
         allyCol.addView(tvAllyHeader)
 
         for (i in 0..2) {
             val slot = TextView(this).apply {
                 text = "+ Aliado ${i + 1}"
-                textSize = 9.5f
+                textSize = 8.5f
                 typeface = Typeface.DEFAULT_BOLD
                 setTextColor(Color.parseColor("#64748b"))
                 gravity = Gravity.CENTER
-                val sp = (5 * density).toInt()
+                val sp = (3 * density).toInt()
                 setPadding(sp, sp, sp, sp)
                 background = GradientDrawable().apply {
-                    cornerRadius = 6 * density
+                    cornerRadius = 5 * density
                     setColor(Color.parseColor("#1e293b"))
                     setStroke((1 * density).toInt(), Color.parseColor("#0284c7"))
                 }
@@ -517,7 +548,7 @@ class FloatingOverlayService : Service() {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    bottomMargin = (4 * density).toInt()
+                    bottomMargin = (2.5f * density).toInt()
                 }
                 setOnClickListener {
                     openBrawlerPicker("ALLY_$i")
@@ -532,30 +563,30 @@ class FloatingOverlayService : Service() {
         val enemyCol = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                leftMargin = (4 * density).toInt()
+                leftMargin = (3 * density).toInt()
             }
         }
         val tvEnemyHeader = TextView(this).apply {
             text = "❤️ RIVALES"
-            textSize = 9.5f
+            textSize = 9f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#f87171"))
             gravity = Gravity.CENTER
-            setPadding(0, 0, 0, (3 * density).toInt())
+            setPadding(0, 0, 0, (2 * density).toInt())
         }
         enemyCol.addView(tvEnemyHeader)
 
         for (i in 0..2) {
             val slot = TextView(this).apply {
                 text = "+ Rival ${i + 1}"
-                textSize = 9.5f
+                textSize = 8.5f
                 typeface = Typeface.DEFAULT_BOLD
                 setTextColor(Color.parseColor("#64748b"))
                 gravity = Gravity.CENTER
-                val sp = (5 * density).toInt()
+                val sp = (3 * density).toInt()
                 setPadding(sp, sp, sp, sp)
                 background = GradientDrawable().apply {
-                    cornerRadius = 6 * density
+                    cornerRadius = 5 * density
                     setColor(Color.parseColor("#1e293b"))
                     setStroke((1 * density).toInt(), Color.parseColor("#b91c1c"))
                 }
@@ -563,7 +594,7 @@ class FloatingOverlayService : Service() {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    bottomMargin = (4 * density).toInt()
+                    bottomMargin = (2.5f * density).toInt()
                 }
                 setOnClickListener {
                     openBrawlerPicker("ENEMY_$i")
@@ -585,7 +616,7 @@ class FloatingOverlayService : Service() {
 
         val tvBanLabel = TextView(this).apply {
             text = "🚫 Baneos: "
-            textSize = 9f
+            textSize = 8.5f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#f87171"))
         }
@@ -601,11 +632,11 @@ class FloatingOverlayService : Service() {
 
         val btnAddBan = TextView(this).apply {
             text = "+ Ban"
-            textSize = 9f
+            textSize = 8.5f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#cbd5e1"))
             val bp = (4 * density).toInt()
-            setPadding(bp, (2 * density).toInt(), bp, (2 * density).toInt())
+            setPadding(bp, (1.5f * density).toInt(), bp, (1.5f * density).toInt())
             background = GradientDrawable().apply {
                 cornerRadius = 4 * density
                 setColor(Color.parseColor("#334155"))
@@ -622,31 +653,20 @@ class FloatingOverlayService : Service() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            bottomMargin = (6 * density).toInt()
+            bottomMargin = (4 * density).toInt()
         }
-        cardContent.addView(draftBoardContainer, boardParams)
+        scrollContent.addView(draftBoardContainer, boardParams)
 
         // Turn & Phase indicator
         tvDraftPhaseInfo = TextView(this).apply {
             text = currentTurnText
-            textSize = 9.5f
+            textSize = 9f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#38bdf8"))
             gravity = Gravity.CENTER
-            setPadding(0, 0, 0, (4 * density).toInt())
+            setPadding(0, 0, 0, (3 * density).toInt())
         }
-        cardContent.addView(tvDraftPhaseInfo)
-
-        // Scrollable container for Recommendations and Screen Scan
-        val scrollView = ScrollView(this).apply {
-            isVerticalScrollBarEnabled = true
-            isScrollbarFadingEnabled = false
-            overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
-        }
-
-        val scrollContent = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-        }
+        scrollContent.addView(tvDraftPhaseInfo)
 
         // --- Section Header: Recomendaciones Tácticas ---
         val tvSection = TextView(this).apply {
@@ -885,10 +905,19 @@ class FloatingOverlayService : Service() {
         pickerHeader.addView(tvTitle)
 
         val btnClose = TextView(this).apply {
-            text = " ✕ "
-            textSize = 14f
+            text = "✕"
+            textSize = 12f
             typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#f87171"))
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(Color.parseColor("#dc2626"))
+            }
+            layoutParams = LinearLayout.LayoutParams(
+                (24 * density).toInt(),
+                (24 * density).toInt()
+            )
             setOnClickListener {
                 container.visibility = View.GONE
             }
@@ -1064,10 +1093,19 @@ class FloatingOverlayService : Service() {
         }
 
         val btnClose = TextView(this).apply {
-            text = " ✕ "
-            textSize = 14f
+            text = "✕"
+            textSize = 12f
             typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#f87171"))
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(Color.parseColor("#dc2626"))
+            }
+            layoutParams = LinearLayout.LayoutParams(
+                (24 * density).toInt(),
+                (24 * density).toInt()
+            )
             setOnClickListener {
                 container.visibility = View.GONE
             }
@@ -1544,16 +1582,20 @@ class FloatingOverlayService : Service() {
                 val screenW = metrics.widthPixels
                 val density = metrics.density
 
-                // In landscape mode (gaming), cap card height to ~88% of screen height
+                // In landscape mode (gaming), cap card height to ~84% of screen height
                 val maxCardH = if (screenW > screenH) {
-                    (screenH * 0.90f).toInt()
+                    (screenH * 0.84f).toInt()
                 } else {
-                    (480 * density).toInt().coerceAtMost((screenH * 0.80f).toInt())
+                    (460 * density).toInt().coerceAtMost((screenH * 0.78f).toInt())
                 }
 
+                val cardWidth = (245 * density).toInt().coerceAtMost((screenW * 0.70f).toInt())
+                cardParams.width = cardWidth
                 cardParams.height = maxCardH
-                cardParams.x = Math.max(15, bubbleParams.x - 30)
-                cardParams.y = Math.max(15, Math.min(bubbleParams.y - 30, screenH - maxCardH - 20))
+                // Strictly clamp within visible screen boundaries so header & close button are never cut off
+                val margin = (12 * density).toInt()
+                cardParams.x = Math.max(margin, Math.min(bubbleParams.x - 20, screenW - cardWidth - margin))
+                cardParams.y = Math.max(margin, Math.min(bubbleParams.y - 20, screenH - maxCardH - margin))
                 windowManager?.addView(cardView, cardParams)
             }
         } catch (_: Exception) {}
