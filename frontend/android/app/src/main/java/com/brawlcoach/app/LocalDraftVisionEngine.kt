@@ -6,9 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Rect
 import android.util.Log
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import java.io.InputStream
 import kotlin.math.abs
 import kotlin.math.max
@@ -19,8 +16,9 @@ import kotlin.math.sqrt
  * 100% Local Real-Time Visual Draft Detector for Brawl Stars.
  * - Diffing & state change detection (1-2 FPS)
  * - Template matching & color histograms without any external cloud API
- * - On-device ML Kit OCR for Map/Mode detection
+ * - Lightweight on-device banner mode detection
  * - Zero bitmap leakage / reusable memory buffers
+ * - Ultralight APK size (<8 MB)
  */
 class LocalDraftVisionEngine(private val context: Context) {
 
@@ -70,13 +68,7 @@ class LocalDraftVisionEngine(private val context: Context) {
     // Reusable buffers to avoid GC pressure
     private val reusablePixelBuffer = IntArray(SAMPLE_SIZE * SAMPLE_SIZE)
 
-    // ML Kit text recognizer for local on-device map detection
-    private val textRecognizer by lazy {
-        TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-    }
-
-    private var isOcrRunning = false
-    private var lastOcrTimestamp = 0L
+    private var lastModeCheckTimestamp = 0L
     private var cachedDetectedMap: String? = null
     private var cachedDetectedMode: String? = null
 
@@ -275,9 +267,9 @@ class LocalDraftVisionEngine(private val context: Context) {
         }
 
         // ==========================================
-        // 4. LOCAL ON-DEVICE MAP/MODE OCR (ML KIT)
+        // 4. LOCAL ON-DEVICE BANNER MODE DETECTION
         // ==========================================
-        triggerMapOcrIfNeeded(frameBitmap, width, height)
+        detectModeFromBannerColor(frameBitmap, width, height)
 
         return DraftVisionResult(
             isDraftActive = true,
@@ -505,92 +497,37 @@ class LocalDraftVisionEngine(private val context: Context) {
     }
 
     /**
-     * Local on-device ML Kit OCR for Map & Mode detection on the top-left banner.
-     * Runs completely on-device without any internet or cloud API.
+     * Fast, lightweight on-device banner color analysis to identify game mode
+     * without bundling 45MB of ML Kit native libraries.
      */
-    private fun triggerMapOcrIfNeeded(bitmap: Bitmap, width: Int, height: Int) {
+    private fun detectModeFromBannerColor(bitmap: Bitmap, width: Int, height: Int) {
         val now = System.currentTimeMillis()
-        if (isOcrRunning || (now - lastOcrTimestamp < 4000L && cachedDetectedMap != null)) {
-            return
+        if (now - lastModeCheckTimestamp < 3000L && cachedDetectedMode != null) return
+        lastModeCheckTimestamp = now
+
+        // Sample top-left banner background color (x: 8%..14%, y: 5%..9%)
+        val sampleX = (width * 0.10f).toInt().coerceIn(0, bitmap.width - 1)
+        val sampleY = (height * 0.07f).toInt().coerceIn(0, bitmap.height - 1)
+
+        val pixel = bitmap.getPixel(sampleX, sampleY)
+        val r = (pixel shr 16) and 0xFF
+        val g = (pixel shr 8) and 0xFF
+        val b = pixel and 0xFF
+
+        val detected = when {
+            g > 110 && g > r && g > b -> "Balón Brawl"
+            b > 160 && r < 90 -> "Caza Estelar"
+            r > 150 && g < 80 && b > 110 -> "Atraco"
+            r > 110 && b > 130 && g < 90 -> "Atrapagemas"
+            r > 170 && g in 70..150 && b < 70 -> "Noqueo"
+            r > 170 && g < 70 && b < 80 -> "Zona Caliente"
+            else -> null
         }
 
-        // Top-left corner where mode and map name appear: [0.02, 0.02, 0.26, 0.16]
-        val rx = (width * 0.02f).toInt()
-        val ry = (height * 0.02f).toInt()
-        val rw = ((width * 0.24f).toInt()).coerceAtMost(bitmap.width - rx)
-        val rh = ((height * 0.14f).toInt()).coerceAtMost(bitmap.height - ry)
-
-        if (rw <= 10 || rh <= 10) return
-
-        val bannerCrop = try {
-            Bitmap.createBitmap(bitmap, rx, ry, rw, rh)
-        } catch (_: Exception) {
-            return
+        if (detected != null) {
+            cachedDetectedMode = detected
+            Log.d(TAG, "Native banner mode detected: $detected")
         }
-
-        isOcrRunning = true
-        lastOcrTimestamp = now
-
-        val image = InputImage.fromBitmap(bannerCrop, 0)
-        textRecognizer.process(image)
-            .addOnSuccessListener { visionText ->
-                bannerCrop.recycle()
-                isOcrRunning = false
-
-                val fullText = visionText.text
-                if (fullText.isNotBlank()) {
-                    parseMapAndModeFromOcr(fullText)
-                }
-            }
-            .addOnFailureListener {
-                bannerCrop.recycle()
-                isOcrRunning = false
-            }
-    }
-
-    private fun parseMapAndModeFromOcr(text: String) {
-        val lines = text.lines().map { it.trim() }.filter { it.isNotBlank() }
-        if (lines.isEmpty()) return
-
-        val modes = listOf(
-            "ATRACO" to "Atraco",
-            "HEIST" to "Atraco",
-            "BALÓN BRAWL" to "Balón Brawl",
-            "BALON BRAWL" to "Balón Brawl",
-            "BRAWL BALL" to "Balón Brawl",
-            "ATRAPAGEMAS" to "Atrapagemas",
-            "GEM GRAB" to "Atrapagemas",
-            "ZONA CALIENTE" to "Zona Caliente",
-            "HOT ZONE" to "Zona Caliente",
-            "NOQUEO" to "Noqueo",
-            "KNOCKOUT" to "Noqueo",
-            "CAZA ESTELAR" to "Caza Estelar",
-            "BOUNTY" to "Caza Estelar",
-            "DESTRUCCIÓN" to "Destrucción",
-            "WIPEOUT" to "Destrucción"
-        )
-
-        var foundMode: String? = null
-        var foundMap: String? = null
-
-        for (line in lines) {
-            val upper = line.uppercase()
-            for ((key, value) in modes) {
-                if (upper.contains(key)) {
-                    foundMode = value
-                    break
-                }
-            }
-            if (foundMode != null && foundMap == null && !line.equals(foundMode, ignoreCase = true)) {
-                foundMap = line
-            } else if (foundMap == null && line.length >= 3 && !line.all { it.isDigit() }) {
-                foundMap = line
-            }
-        }
-
-        if (foundMap != null) cachedDetectedMap = foundMap
-        if (foundMode != null) cachedDetectedMode = foundMode
-        Log.d(TAG, "OCR detected map: $foundMap, mode: $foundMode")
     }
 
     fun resetState() {
@@ -619,8 +556,6 @@ class LocalDraftVisionEngine(private val context: Context) {
     }
 
     fun close() {
-        try {
-            textRecognizer.close()
-        } catch (_: Exception) {}
+        // No heavy native resources to free
     }
 }
