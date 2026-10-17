@@ -201,43 +201,62 @@ Responde EXCLUSIVAMENTE este JSON sin explicaciones ni markdown:
     },
   };
 
-  const modelsToTry = [GEMINI_MODEL, FALLBACK_VISION_MODEL];
+  // Cascade Strategy:
+  // 1. If user provided their own key, try [userKey + GEMINI_MODEL] -> [userKey + FALLBACK_VISION_MODEL]
+  // 2. If it fails or user provided no key, fallback to [systemKey + GEMINI_MODEL] -> [systemKey + FALLBACK_VISION_MODEL]
+  const keysToTry: { key: string; isCustom: boolean }[] = [];
+  const storedUserKey = typeof localStorage !== 'undefined' ? (localStorage.getItem('brawl_user_custom_gemini_key') || '').trim() : '';
+  const effectiveCustomKey = apiKey && apiKey !== GEMINI_API_KEY && !apiKey.startsWith('sk-') ? apiKey : storedUserKey;
+
+  if (effectiveCustomKey) {
+    keysToTry.push({ key: effectiveCustomKey, isCustom: true });
+  }
+  keysToTry.push({ key: GEMINI_API_KEY, isCustom: false });
+
   let lastErr = null;
 
-  for (const modelToUse of modelsToTry) {
-    try {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
-      const startTime = Date.now();
-      logger.add('API_REQ', `Petición enviada a Google IA (${modelToUse})`, 'Identificando mapa y modo');
+  for (const { key: activeKey, isCustom } of keysToTry) {
+    const modelsToTry = [GEMINI_MODEL, FALLBACK_VISION_MODEL];
+    for (const modelToUse of modelsToTry) {
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${activeKey}`;
+        const startTime = Date.now();
+        const originLabel = isCustom ? 'Clave Personal' : 'Servidor Compartido';
+        logger.add('API_REQ', `Consultando a Google IA (${originLabel} - ${modelToUse})`, 'Identificando mapa y modo');
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal,
-      });
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal,
+        });
 
-      const durationSec = ((Date.now() - startTime) / 1000).toFixed(2);
-      if (response.ok) {
-        const data = await response.json();
-        const parts = data?.candidates?.[0]?.content?.parts || [];
-        const answerParts = parts.filter((p: any) => !p.thought);
-        const rawText = (answerParts.length > 0 ? answerParts : parts)
-          .map((p: any) => p.text || '')
-          .join('\n')
-          .trim();
+        const durationSec = ((Date.now() - startTime) / 1000).toFixed(2);
+        if (response.ok) {
+          const data = await response.json();
+          const parts = data?.candidates?.[0]?.content?.parts || [];
+          const answerParts = parts.filter((p: any) => !p.thought);
+          const rawText = (answerParts.length > 0 ? answerParts : parts)
+            .map((p: any) => p.text || '')
+            .join('\n')
+            .trim();
 
-        logger.add('API_RES', `Google API OK (${durationSec}s)`, rawText.slice(0, 150));
-        onProgress?.(rawText);
-        return { rawText, modelUsed: `google/${modelToUse}` };
-      } else {
-        const errorBody = await response.text().catch(() => '');
-        logger.add('ERROR', `Aviso Google HTTP ${response.status} (${durationSec}s)`, errorBody.slice(0, 100));
-        lastErr = new Error(`HTTP ${response.status}`);
+          logger.add('API_RES', `Google API OK (${originLabel} - ${durationSec}s)`, rawText.slice(0, 150));
+          onProgress?.(rawText);
+          return { rawText, modelUsed: `google/${modelToUse}` };
+        } else {
+          const errorBody = await response.text().catch(() => '');
+          logger.add('INFO', `Google HTTP ${response.status} en ${originLabel} (${modelToUse})`, `Haciendo fallback: ${errorBody.slice(0, 80)}`);
+          lastErr = new Error(`HTTP ${response.status}`);
+          // Break to fallback immediately on 429 quota or 403 invalid key
+          if (response.status === 429 || response.status === 403) {
+            break;
+          }
+        }
+      } catch (err: any) {
+        if (err.name === 'AbortError' || signal?.aborted) throw err;
+        lastErr = err;
       }
-    } catch (err: any) {
-      if (err.name === 'AbortError' || signal?.aborted) throw err;
-      lastErr = err;
     }
   }
 

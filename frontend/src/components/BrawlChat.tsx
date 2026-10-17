@@ -188,89 +188,108 @@ INSTRUCCIONES DE RESPUESTA:
     let assistantReply = '';
     let success = false;
 
-    // Retry pipeline: Primary (Gemini 3.5 Flash Lite) -> Auto-retry (Gemini) -> Fallback (Gemma 4 31B)
-    const modelsToTry = [PRIMARY_MODEL, PRIMARY_MODEL, FALLBACK_MODEL];
+    // Cascade Strategy:
+    // 1. If user configured their own key in Settings, try with userKey: [PRIMARY_MODEL, FALLBACK_MODEL]
+    // 2. If it fails or user has no custom key, fallback to systemKey: [PRIMARY_MODEL, FALLBACK_MODEL]
+    const customUserKey = typeof localStorage !== 'undefined'
+      ? (localStorage.getItem('brawl_user_custom_gemini_key') || '').trim()
+      : '';
 
-    for (let attempt = 0; attempt < modelsToTry.length; attempt++) {
-      const currentModel = modelsToTry[attempt];
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${GEMINI_API_KEY}`;
-      const attemptLabel = attempt > 0 ? ` (reintento ${attempt})` : '';
+    const keysToTry: { key: string; isCustom: boolean }[] = [];
+    if (customUserKey) {
+      keysToTry.push({ key: customUserKey, isCustom: true });
+    }
+    keysToTry.push({ key: GEMINI_API_KEY, isCustom: false });
 
-      try {
-        logger.add('API_REQ', `Consultando a Google IA (${currentModel})${attemptLabel}`, `Pregunta: "${text.slice(0, 50)}..."`);
-        const systemInstruction = buildSystemPrompt();
+    for (const { key: activeKey, isCustom } of keysToTry) {
+      if (success) break;
+      const modelsToTry = [PRIMARY_MODEL, FALLBACK_MODEL];
+      const originLabel = isCustom ? 'Clave Personal' : 'Servidor Compartido';
 
-        const historyTurns = messages
-          .filter((m) => m.id !== 'welcome' && !m.id.startsWith('welcome-'))
-          .slice(-6)
-          .map((m) => ({
-            role: m.role === 'assistant' ? 'model' : 'user',
-            parts: [{ text: m.content }],
-          }));
+      for (let attempt = 0; attempt < modelsToTry.length; attempt++) {
+        const currentModel = modelsToTry[attempt];
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${activeKey}`;
+        const attemptLabel = attempt > 0 ? ` (fallback ${attempt})` : '';
 
-        const sanitizedTurns: Array<{ role: string; parts: Array<{ text: string }> }> = [];
-        for (const turn of historyTurns) {
-          if (sanitizedTurns.length === 0 && turn.role !== 'user') continue;
-          const last = sanitizedTurns[sanitizedTurns.length - 1];
-          if (last && last.role === turn.role) {
-            last.parts[0].text += `\n${turn.parts[0].text}`;
+        try {
+          logger.add('API_REQ', `Consultando a Google IA (${originLabel} - ${currentModel})${attemptLabel}`, `Pregunta: "${text.slice(0, 50)}..."`);
+          const systemInstruction = buildSystemPrompt();
+
+          const historyTurns = messages
+            .filter((m) => m.id !== 'welcome' && !m.id.startsWith('welcome-'))
+            .slice(-6)
+            .map((m) => ({
+              role: m.role === 'assistant' ? 'model' : 'user',
+              parts: [{ text: m.content }],
+            }));
+
+          const sanitizedTurns: Array<{ role: string; parts: Array<{ text: string }> }> = [];
+          for (const turn of historyTurns) {
+            if (sanitizedTurns.length === 0 && turn.role !== 'user') continue;
+            const last = sanitizedTurns[sanitizedTurns.length - 1];
+            if (last && last.role === turn.role) {
+              last.parts[0].text += `\n${turn.parts[0].text}`;
+            } else {
+              sanitizedTurns.push(turn);
+            }
+          }
+
+          const lastTurn = sanitizedTurns[sanitizedTurns.length - 1];
+          if (lastTurn && lastTurn.role === 'user') {
+            lastTurn.parts[0].text += `\n${text}`;
           } else {
-            sanitizedTurns.push(turn);
+            sanitizedTurns.push({
+              role: 'user',
+              parts: [{ text }],
+            });
           }
-        }
 
-        const lastTurn = sanitizedTurns[sanitizedTurns.length - 1];
-        if (lastTurn && lastTurn.role === 'user') {
-          lastTurn.parts[0].text += `\n${text}`;
-        } else {
-          sanitizedTurns.push({
-            role: 'user',
-            parts: [{ text }],
+          const geminiPayload = {
+            systemInstruction: {
+              parts: [{ text: systemInstruction }],
+            },
+            contents: sanitizedTurns,
+            generationConfig: {
+              temperature: 0.3,
+              maxOutputTokens: 500,
+            },
+          };
+
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(geminiPayload),
           });
-        }
 
-        const geminiPayload = {
-          systemInstruction: {
-            parts: [{ text: systemInstruction }],
-          },
-          contents: sanitizedTurns,
-          generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 500,
-          },
-        };
+          if (res.ok) {
+            const data = await res.json();
+            const candidateParts = data?.candidates?.[0]?.content?.parts || [];
+            const answerParts = candidateParts.filter((p: any) => !p.thought);
+            const replyText = (answerParts.length > 0 ? answerParts : candidateParts)
+              .map((p: any) => p.text || '')
+              .join('\n')
+              .trim();
 
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(geminiPayload),
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          const candidateParts = data?.candidates?.[0]?.content?.parts || [];
-          const answerParts = candidateParts.filter((p: any) => !p.thought);
-          const replyText = (answerParts.length > 0 ? answerParts : candidateParts)
-            .map((p: any) => p.text || '')
-            .join('\n')
-            .trim();
-
-          if (replyText) {
-            assistantReply = replyText;
-            success = true;
-            logger.add('API_RES', `Respuesta recibida (${currentModel})`, replyText.slice(0, 100));
-            break;
+            if (replyText) {
+              assistantReply = replyText;
+              success = true;
+              logger.add('API_RES', `Respuesta recibida (${originLabel} - ${currentModel})`, replyText.slice(0, 100));
+              break;
+            }
+          } else {
+            const errTxt = await res.text().catch(() => '');
+            logger.add('INFO', `Google HTTP ${res.status} en ${originLabel} (${currentModel})`, `Saltando a fallback: ${errTxt.slice(0, 80)}`);
+            if (res.status === 429 || res.status === 403) {
+              break; // Saltamos inmediatamente a la siguiente clave
+            }
           }
-        } else {
-          const errTxt = await res.text().catch(() => '');
-          logger.add('ERROR', `Aviso en llamada IA HTTP ${res.status} (${currentModel})`, errTxt.slice(0, 100));
+        } catch (err: any) {
+          logger.add('ERROR', `Fallo de red al conectar con IA (${currentModel})`, err.message || 'Sin conexión');
         }
-      } catch (err: any) {
-        logger.add('ERROR', `Fallo de red al conectar con IA (${currentModel})`, err.message || 'Sin conexión');
-      }
 
-      // Small pause before next attempt
-      await new Promise((r) => setTimeout(r, 600));
+        // Small pause before next attempt
+        await new Promise((r) => setTimeout(r, 400));
+      }
     }
 
     if (success && assistantReply) {

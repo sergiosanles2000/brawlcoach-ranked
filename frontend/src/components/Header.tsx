@@ -9,9 +9,12 @@ import {
   Server,
   RefreshCw,
   Terminal,
+  Key,
 } from 'lucide-react';
 import type { GameMap, PlayerProfile, Brawler, CountersMap } from '../types/brawl';
 import { syncMetaFromApi, getLastUpdatedMeta } from '../services/metaSync';
+
+export const STORAGE_CUSTOM_API_KEY = 'brawl_user_custom_gemini_key';
 
 interface HeaderProps {
   maps: GameMap[];
@@ -50,6 +53,19 @@ export const Header: React.FC<HeaderProps> = ({
   const [isUpdatingMeta, setIsUpdatingMeta] = useState(false);
   const [metaMessage, setMetaMessage] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(() => getLastUpdatedMeta());
+  const [customApiKey, setCustomApiKey] = useState<string>(() => {
+    return localStorage.getItem(STORAGE_CUSTOM_API_KEY) || '';
+  });
+
+  const handleSaveCustomApiKey = (key: string) => {
+    const trimmed = key.trim();
+    setCustomApiKey(trimmed);
+    if (trimmed) {
+      localStorage.setItem(STORAGE_CUSTOM_API_KEY, trimmed);
+    } else {
+      localStorage.removeItem(STORAGE_CUSTOM_API_KEY);
+    }
+  };
 
   const handleUpdateMeta = async () => {
     setIsUpdatingMeta(true);
@@ -175,6 +191,48 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-mono border border-slate-700">
                   Gemma 31B
                 </span>
+              </div>
+            </div>
+
+            {/* Custom Gemini API Key (User Own Key with Fallback) */}
+            <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                  <Key className="w-3.5 h-3.5 text-amber-400" />
+                  Tu Clave Gemini API (Opcional)
+                </span>
+                <a
+                  href="https://aistudio.google.com/app/apikey"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[10px] text-cyan-400 hover:underline font-mono"
+                >
+                  Obtener gratis ↗
+                </a>
+              </div>
+              <p className="text-[10px] text-slate-400 leading-tight">
+                Si pegas tu propia clave de Google AI Studio, la app la usará prioritariamente. Si falla o se agota, hará <span className="text-emerald-400 font-bold">callback automático</span> a la del sistema (Gemma 31B/Gemini).
+              </p>
+              <div className="flex gap-1.5 mt-1">
+                <input
+                  type="password"
+                  placeholder="AIzaSy... (o déjalo vacío para usar la compartida)"
+                  value={customApiKey}
+                  onChange={(e) => handleSaveCustomApiKey(e.target.value)}
+                  className="flex-1 bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-amber-500 font-mono"
+                />
+                {customApiKey && (
+                  <button
+                    onClick={() => handleSaveCustomApiKey('')}
+                    className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-lg text-xs"
+                    title="Borrar clave"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center justify-between text-[9.5px] text-slate-500 pt-0.5">
+                <span>Estado: {customApiKey ? '🟢 Clave personalizada activa' : '⚪ Usando clave compartida + fallback'}</span>
               </div>
             </div>
 

@@ -358,13 +358,17 @@ export function App() {
     }
 
     try {
+      const customKey = localStorage.getItem('brawl_user_custom_gemini_key') || '';
+      const fallbackKey = typeof atob === 'function' ? atob('QVEuQWI4Uk42S252TEgxRTN1NE91S0dNTkJRTVJDbDc2MExHX1dpUXBEN0xWNF9scmhFanc=') : '';
+      const activeKey = customKey || fallbackKey;
+
       const res = await launchFloatingModMenu({
         brawlers,
         counters,
         maps: typedMaps,
         currentMapId: selectedMap.id,
-        apiKey: typeof atob === 'function' ? atob('QVEuQWI4Uk42S252TEgxRTN1NE91S0dNTkJRTVJDbDc2MExHX1dpUXBEN0xWNF9scmhFanc=') : '',
-        model: 'gemma-4-31b-it',
+        apiKey: activeKey,
+        model: 'gemini-3.5-flash-lite',
         playerProfile: playerProfile || undefined,
       });
 
