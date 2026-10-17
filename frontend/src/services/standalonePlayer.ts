@@ -9,14 +9,15 @@ export function generateStandalonePlayer(tag: string): PlayerProfile {
     return sergioRealProfile as PlayerProfile;
   }
   
-  // Dynamic fallback for other tags
+  // For other tags without network data
   return {
-    isMock: false,
+    isMock: true,
     tag: `#${cleanTag}`,
-    name: cleanTag === 'GGJ2QLJY' ? 'SergioSR' : `Jugador #${cleanTag}`,
-    trophies: sergioRealProfile.trophies,
-    highestTrophies: sergioRealProfile.highestTrophies,
-    expLevel: sergioRealProfile.expLevel,
-    brawlers: sergioRealProfile.brawlers as any,
+    name: `Jugador #${cleanTag}`,
+    trophies: 0,
+    highestTrophies: 0,
+    expLevel: 1,
+    brawlers: [],
+    battles: [],
   };
 }

@@ -66,11 +66,35 @@ export async function fetchPlayerProfile(tag: string): Promise<PlayerProfile> {
           battles,
         };
 
+        // Save successfully fetched tag to localStorage
+        try {
+          localStorage.setItem('brawl_player_tag', cleanTag);
+        } catch {}
+
         return profile;
       }
+    } else {
+      // Check if server returned a 404 / NOT_FOUND
+      try {
+        const errJson = await response.json();
+        if (
+          errJson?.error?.json?.data?.code === 'NOT_FOUND' ||
+          errJson?.error?.json?.message?.toLowerCase().includes('not found') ||
+          response.status === 404
+        ) {
+          throw new Error(`El tag #${cleanTag} no existe o no tiene partidas registradas en Brawl Stars.`);
+        }
+      } catch (parseErr: any) {
+        if (parseErr.message?.includes('no existe')) {
+          throw parseErr;
+        }
+      }
     }
-  } catch (err) {
-    console.warn('[Player Profile] Direct network fetch failed, using standalone fallback:', err);
+  } catch (err: any) {
+    if (err.message && err.message.includes('no existe')) {
+      throw err;
+    }
+    console.warn('[Player Profile] Direct network fetch failed, using fallback:', err);
   }
 
   // 2. Try local backend server if running
@@ -78,12 +102,15 @@ export async function fetchPlayerProfile(tag: string): Promise<PlayerProfile> {
     const response = await fetch(`/api/player/${cleanTag}`);
     if (response.ok) {
       const data: PlayerProfile = await response.json();
+      try {
+        localStorage.setItem('brawl_player_tag', cleanTag);
+      } catch {}
       return data;
     }
   } catch {
     // Ignore and proceed to standalone fallback
   }
 
-  // 3. Standalone fallback (has exact real stats for GGJ2QLJY)
+  // 3. Standalone fallback (only uses Sergio's preloaded profile for his exact tag)
   return generateStandalonePlayer(cleanTag);
 }

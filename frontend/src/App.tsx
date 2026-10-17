@@ -137,8 +137,10 @@ export function App() {
 
   // Auto-sync initial player tag and check for updates on startup
   useEffect(() => {
-    const savedTag = localStorage.getItem('brawl_player_tag') || 'GGJ2QLJY';
-    handleSyncPlayer(savedTag);
+    const savedTag = localStorage.getItem('brawl_player_tag');
+    if (savedTag) {
+      handleSyncPlayer(savedTag);
+    }
 
     // Check GitHub releases in background
     checkForAppUpdates().then((info) => {
@@ -607,7 +609,7 @@ export function App() {
       <SharedDraftRoomModal
         isOpen={isShareRoomOpen}
         onClose={() => setIsShareRoomOpen(false)}
-        myTag={playerProfile?.tag || 'GGJ2QLJY'}
+        myTag={playerProfile?.tag || ''}
         selectedMap={selectedMap}
         allyPicks={allyPicks}
         enemyPicks={enemyPicks}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Trophy, Zap, Search, CheckCircle2, Heart, Play } from 'lucide-react';
+import { User, Trophy, Zap, Search, CheckCircle2, Heart, Play, RefreshCw } from 'lucide-react';
 import type { PlayerProfile } from '../types/brawl';
 import { showRewardedAdSupport } from '../services/adService';
 
@@ -21,7 +21,7 @@ export function PlayerProfileScreen({
   onToggleOnlyRankedReady,
 }: PlayerProfileScreenProps) {
   const [tagInput, setTagInput] = useState(() => {
-    return localStorage.getItem('brawl_player_tag') || 'GGJ2QLJY';
+    return localStorage.getItem('brawl_player_tag') || '';
   });
   const [filterQuery, setFilterQuery] = useState('');
   const [isWatchingAd, setIsWatchingAd] = useState(false);
@@ -60,7 +60,7 @@ export function PlayerProfileScreen({
               type="text"
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value.toUpperCase())}
-              placeholder="GGJ2QLJY"
+              placeholder="EJ: 2PR0Y9QL"
               className="w-full pl-7 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs font-mono text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-blue-400 uppercase tracking-wider"
             />
           </div>
@@ -150,9 +150,15 @@ export function PlayerProfileScreen({
                   <span>⚔️</span>
                   <span>Últimas Partidas ({playerProfile.battles.length})</span>
                 </h4>
-                <span className="text-[10px] text-slate-400 font-mono">
-                  Historial en vivo
-                </span>
+                <button
+                  onClick={() => onSyncPlayer(playerProfile.tag)}
+                  disabled={isLoadingPlayer}
+                  className="flex items-center gap-1 text-[10px] text-blue-400 hover:text-blue-300 font-mono cursor-pointer px-2 py-0.5 rounded-lg bg-blue-950/40 border border-blue-800/40"
+                  title="Actualizar historial de partidas ahora"
+                >
+                  <RefreshCw className={`w-3 h-3 ${isLoadingPlayer ? 'animate-spin' : ''}`} />
+                  <span>Actualizar</span>
+                </button>
               </div>
 
               <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1 scrollbar-thin">
@@ -163,10 +169,11 @@ export function PlayerProfileScreen({
 
                   // Find user brawler in battle
                   let myBrawler = 'Brawler';
+                  const cleanMyTag = playerProfile.tag.replace('#', '').toUpperCase();
                   if (bt.teams) {
                     for (const team of bt.teams) {
-                      const me = team.find((p) => p.tag?.replace('#', '') === playerProfile.tag.replace('#', ''));
-                      if (me) {
+                      const me = team.find((p) => p.tag?.replace('#', '').toUpperCase() === cleanMyTag);
+                      if (me && me.brawler) {
                         myBrawler = me.brawler;
                         break;
                       }
