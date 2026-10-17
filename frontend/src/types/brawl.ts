@@ -21,6 +21,7 @@ export interface Brawler {
   rarity: string;
   class: BrawlerClass;
   attackRange: string;
+  description?: string;
   hasHypercharge: boolean;
   iconUrl: string;
   gadgets?: BrawlerAbility[];

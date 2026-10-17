@@ -18,6 +18,7 @@ interface DraftSlotsProps {
   activeSlot: ActiveSlotType;
   onSelectSlot: (slot: ActiveSlotType) => void;
   onClearSlot: (team: 'ally' | 'enemy', type: 'pick' | 'ban', index: number) => void;
+  onInspectBrawler?: (brawler: Brawler) => void;
 }
 
 export const DraftSlots: React.FC<DraftSlotsProps> = ({
@@ -29,11 +30,31 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
   activeSlot,
   onSelectSlot,
   onClearSlot,
+  onInspectBrawler,
 }) => {
+  const longPressTimerRef = React.useRef<any>(null);
+  const isLongPressTriggeredRef = React.useRef(false);
+
   // Helper to find brawler details
   const getBrawler = (name: string | null) => {
     if (!name) return null;
     return allBrawlers.find((b) => b.displayName.toLowerCase() === name.toLowerCase()) || null;
+  };
+
+  const handlePointerDown = (brawler: Brawler | null) => {
+    if (!brawler || !onInspectBrawler) return;
+    isLongPressTriggeredRef.current = false;
+    longPressTimerRef.current = setTimeout(() => {
+      isLongPressTriggeredRef.current = true;
+      onInspectBrawler(brawler);
+    }, 450);
+  };
+
+  const handlePointerUpOrLeave = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
   };
 
   const isSlotActive = (team: 'ally' | 'enemy', type: 'pick' | 'ban', index: number) => {
@@ -66,7 +87,13 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
               return (
                 <div
                   key={`ally-pick-${idx}`}
-                  onClick={() => onSelectSlot({ team: 'ally', type: 'pick', index: idx })}
+                  onPointerDown={() => handlePointerDown(brawler)}
+                  onPointerUp={handlePointerUpOrLeave}
+                  onPointerLeave={handlePointerUpOrLeave}
+                  onClick={() => {
+                    if (isLongPressTriggeredRef.current) return;
+                    onSelectSlot({ team: 'ally', type: 'pick', index: idx });
+                  }}
                   className={`relative flex items-center justify-between p-1.5 rounded-xl border transition-all cursor-pointer select-none ${
                     active
                       ? 'border-blue-400 bg-blue-900/40 shadow-[0_0_12px_rgba(59,130,246,0.5)] ring-1 ring-blue-400'
@@ -134,7 +161,13 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
                 return (
                   <div
                     key={`ally-ban-${idx}`}
-                    onClick={() => onSelectSlot({ team: 'ally', type: 'ban', index: idx })}
+                    onPointerDown={() => handlePointerDown(brawler)}
+                    onPointerUp={handlePointerUpOrLeave}
+                    onPointerLeave={handlePointerUpOrLeave}
+                    onClick={() => {
+                      if (isLongPressTriggeredRef.current) return;
+                      onSelectSlot({ team: 'ally', type: 'ban', index: idx });
+                    }}
                     className={`relative h-9 rounded-lg border flex items-center justify-center cursor-pointer transition-all ${
                       active
                         ? 'border-red-400 bg-red-950/50 shadow-[0_0_8px_rgba(239,68,68,0.4)]'
@@ -182,7 +215,13 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
               return (
                 <div
                   key={`enemy-pick-${idx}`}
-                  onClick={() => onSelectSlot({ team: 'enemy', type: 'pick', index: idx })}
+                  onPointerDown={() => handlePointerDown(brawler)}
+                  onPointerUp={handlePointerUpOrLeave}
+                  onPointerLeave={handlePointerUpOrLeave}
+                  onClick={() => {
+                    if (isLongPressTriggeredRef.current) return;
+                    onSelectSlot({ team: 'enemy', type: 'pick', index: idx });
+                  }}
                   className={`relative flex items-center justify-between p-1.5 rounded-xl border transition-all cursor-pointer select-none ${
                     active
                       ? 'border-red-400 bg-red-900/40 shadow-[0_0_12px_rgba(239,68,68,0.5)] ring-1 ring-red-400'
@@ -250,7 +289,13 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
                 return (
                   <div
                     key={`enemy-ban-${idx}`}
-                    onClick={() => onSelectSlot({ team: 'enemy', type: 'ban', index: idx })}
+                    onPointerDown={() => handlePointerDown(brawler)}
+                    onPointerUp={handlePointerUpOrLeave}
+                    onPointerLeave={handlePointerUpOrLeave}
+                    onClick={() => {
+                      if (isLongPressTriggeredRef.current) return;
+                      onSelectSlot({ team: 'enemy', type: 'ban', index: idx });
+                    }}
                     className={`relative h-9 rounded-lg border flex items-center justify-center cursor-pointer transition-all ${
                       active
                         ? 'border-red-400 bg-red-950/50 shadow-[0_0_8px_rgba(239,68,68,0.4)]'

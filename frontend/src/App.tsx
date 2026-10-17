@@ -22,6 +22,13 @@ import { BrawlChat } from './components/BrawlChat';
 import { SplashScreen } from './components/SplashScreen';
 import { PlayerProfileScreen } from './components/PlayerProfileScreen';
 import { FriendsScreen } from './components/FriendsScreen';
+import { BrawlerDetailModal } from './components/BrawlerDetailModal';
+import {
+  InteractiveGuide,
+  getSeenGuides,
+  markGuideAsSeen,
+  type GuideStep,
+} from './components/InteractiveGuide';
 import { UpdateModal } from './components/UpdateModal';
 import { checkForAppUpdates, type UpdateInfo } from './services/updateService';
 import { calculateDraftRecommendations } from './services/draftEngine';
@@ -83,6 +90,45 @@ export function App() {
 
   // Auto-update state
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null);
+
+  // Inspected Brawler Modal state (long-press to see description, gadgets & star powers)
+  const [inspectedBrawler, setInspectedBrawler] = useState<Brawler | null>(null);
+
+  // Interactive Onboarding Guides state
+  const [activeGuide, setActiveGuide] = useState<GuideStep | null>(null);
+
+  // Trigger contextual guides based on tab and action
+  useEffect(() => {
+    const seen = getSeenGuides();
+
+    if (activeTab === 'draft' && !seen.has('guide_draft_slots')) {
+      setActiveGuide({
+        id: 'guide_draft_slots',
+        title: 'Asistente de Draft & Info Brawler',
+        description: 'Toca un slot para elegir brawler. ¡Tip pro: Mantén pulsado cualquier brawler para ver sus Star Powers, Gadgets y descripción!',
+        badge: 'Nuevo',
+        actionText: '¡Entendido!',
+      });
+    } else if (activeTab === 'chat' && !seen.has('guide_coach_chat')) {
+      setActiveGuide({
+        id: 'guide_coach_chat',
+        title: 'Entrenador Táctico IA',
+        description: 'Pregúntale al Coach por qué perdiste tus últimas partidas, cómo ganar en este mapa o qué build llevar.',
+        badge: 'Estrategia',
+        actionText: 'Probar Chat',
+      });
+    } else if (activeTab === 'friends' && !seen.has('guide_social_friends')) {
+      setActiveGuide({
+        id: 'guide_social_friends',
+        title: 'Sistema de Amigos por #TAG',
+        description: 'Introduce el #TAG de tu compañero para enviarle solicitud y hablar por chat privado para coordinar el draft.',
+        badge: 'Social',
+        actionText: '¡Genial!',
+      });
+    } else {
+      setActiveGuide(null);
+    }
+  }, [activeTab]);
 
   // Auto-sync initial player tag and check for updates on startup
   useEffect(() => {
@@ -435,6 +481,7 @@ export function App() {
               activeSlot={activeSlot}
               onSelectSlot={handleSelectSlot}
               onClearSlot={handleClearSlot}
+              onInspectBrawler={(b) => setInspectedBrawler(b)}
             />
 
             {/* Real-time Recommendation List with BrawlPick Statistics */}
@@ -444,6 +491,7 @@ export function App() {
               onQuickPick={handleQuickPick}
               onQuickBan={handleQuickBan}
               onApplyOptimalTeam={handleApplyOptimalTeam}
+              onInspectBrawler={(b) => setInspectedBrawler(b)}
             />
           </main>
         </>
@@ -491,6 +539,25 @@ export function App() {
         unavailableNames={unavailableNames}
         activeSlot={activeSlot}
         onSelectBrawler={handleAssignBrawler}
+      />
+
+      {/* Modal for Long-Press Brawler Inspection (Description, Gadgets, Star Powers) */}
+      <BrawlerDetailModal
+        brawler={inspectedBrawler}
+        onClose={() => setInspectedBrawler(null)}
+      />
+
+      {/* Interactive Contextual Onboarding Guide (Shown once per feature) */}
+      <InteractiveGuide
+        currentStep={activeGuide}
+        onDismiss={() => {
+          if (activeGuide) markGuideAsSeen(activeGuide.id);
+          setActiveGuide(null);
+        }}
+        onComplete={() => {
+          if (activeGuide) markGuideAsSeen(activeGuide.id);
+          setActiveGuide(null);
+        }}
       />
 
       {/* Capture Overlay Modal */}

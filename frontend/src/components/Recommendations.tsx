@@ -15,6 +15,7 @@ interface RecommendationsProps {
   onQuickPick?: (brawlerName: string) => void;
   onQuickBan?: (brawlerName: string) => void;
   onApplyOptimalTeam?: (teamBrawlers: string[]) => void;
+  onInspectBrawler?: (brawler: import('../types/brawl').Brawler) => void;
   isAnalyzing?: boolean;
 }
 
@@ -24,8 +25,27 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
   onQuickPick,
   onQuickBan,
   onApplyOptimalTeam,
+  onInspectBrawler,
   isAnalyzing = false,
 }) => {
+  const longPressTimerRef = React.useRef<any>(null);
+  const isLongPressTriggeredRef = React.useRef(false);
+
+  const handlePointerDown = (brawler?: import('../types/brawl').Brawler) => {
+    if (!brawler || !onInspectBrawler) return;
+    isLongPressTriggeredRef.current = false;
+    longPressTimerRef.current = setTimeout(() => {
+      isLongPressTriggeredRef.current = true;
+      onInspectBrawler(brawler);
+    }, 450);
+  };
+
+  const handlePointerUpOrLeave = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
   const {
     status,
     matchedMapName,
@@ -272,7 +292,13 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
               return (
                 <div
                   key={brawlerName}
-                  onClick={() => onQuickPick?.(brawlerName)}
+                  onPointerDown={() => handlePointerDown(brawlerObj)}
+                  onPointerUp={handlePointerUpOrLeave}
+                  onPointerLeave={handlePointerUpOrLeave}
+                  onClick={() => {
+                    if (isLongPressTriggeredRef.current) return;
+                    onQuickPick?.(brawlerName);
+                  }}
                   className={`relative flex flex-col p-2.5 rounded-xl border transition-all cursor-pointer active:scale-[0.99] gap-1.5 ${
                     isFirst
                       ? 'bg-slate-900 border-emerald-500/60'
