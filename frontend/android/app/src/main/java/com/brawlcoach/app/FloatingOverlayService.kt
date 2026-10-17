@@ -32,6 +32,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -111,6 +112,23 @@ class FloatingOverlayService : Service() {
     private var btnScan: Button? = null
     private var recContainer: LinearLayout? = null
     private var banContainer: LinearLayout? = null
+
+    // Interactive Draft State
+    private var currentModeName: String = "Brawl Ball"
+    private var currentMapName: String = "Center Stage"
+    private val allyPicks = arrayOf<String?>(null, null, null)
+    private val enemyPicks = arrayOf<String?>(null, null, null)
+    private val bannedBrawlers = mutableListOf<String>()
+    private var activePickerTarget: String? = null // e.g. "ALLY_0", "ENEMY_1", "BAN"
+    private var currentTurnText = "1st Pick (Tu turno)"
+
+    // UI Interactive views
+    private var draftBoardContainer: LinearLayout? = null
+    private var pickerOverlayContainer: FrameLayout? = null
+    private var tvDraftPhaseInfo: TextView? = null
+    private var allySlotViews = arrayOfNulls<TextView>(3)
+    private var enemySlotViews = arrayOfNulls<TextView>(3)
+    private var banSlotViewsContainer: LinearLayout? = null
 
     private val mainHandler = Handler(Looper.getMainLooper())
 
@@ -203,8 +221,8 @@ class FloatingOverlayService : Service() {
             y = (180 * density).toInt()
         }
 
-        // 2. Card Layout Params (Width: 320dp, Height: WRAP_CONTENT with Max bounds in Landscape)
-        val cardWidth = (320 * density).toInt()
+        // 2. Card Layout Params (Width: 330dp, Height: WRAP_CONTENT with Max bounds in Landscape)
+        val cardWidth = (330 * density).toInt()
         cardParams = WindowManager.LayoutParams(
             cardWidth,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -291,14 +309,16 @@ class FloatingOverlayService : Service() {
     @SuppressLint("ClickableViewAccessibility")
     private fun buildCardView() {
         val density = resources.displayMetrics.density
-        val root = LinearLayout(this).apply {
+        val root = FrameLayout(this)
+
+        val cardContent = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            val pad = (12 * density).toInt()
+            val pad = (10 * density).toInt()
             setPadding(pad, pad, pad, pad)
             val bg = GradientDrawable().apply {
                 shape = GradientDrawable.RECTANGLE
-                cornerRadius = 18 * density
-                setColor(Color.parseColor("#F20F172A")) // 95% opacity dark slate
+                cornerRadius = 16 * density
+                setColor(Color.parseColor("#F50F172A")) // 96% opacity dark slate
                 setStroke((2 * density).toInt(), Color.parseColor("#38bdf8"))
             }
             background = bg
@@ -309,11 +329,11 @@ class FloatingOverlayService : Service() {
         val header = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(0, 0, 0, (6 * density).toInt())
+            setPadding(0, 0, 0, (4 * density).toInt())
         }
 
         val tvTitle = TextView(this).apply {
-            text = "BRAWLDRAFT ASSISTANT"
+            text = "⚡ BRAWLDRAFT"
             textSize = 12f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#38bdf8"))
@@ -321,13 +341,35 @@ class FloatingOverlayService : Service() {
         }
         header.addView(tvTitle)
 
+        // Reset Draft Button
+        val btnReset = TextView(this).apply {
+            text = "🔄 Limpiar"
+            textSize = 10f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#94a3b8"))
+            val p = (5 * density).toInt()
+            setPadding(p, (2 * density).toInt(), p, (2 * density).toInt())
+            background = GradientDrawable().apply {
+                cornerRadius = 6 * density
+                setColor(Color.parseColor("#1e293b"))
+            }
+            setOnClickListener { resetDraft() }
+        }
+        val resetParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            rightMargin = (6 * density).toInt()
+        }
+        header.addView(btnReset, resetParams)
+
         // Minimize Button
         val btnMinimize = TextView(this).apply {
             text = " ─ "
-            textSize = 14f
+            textSize = 13f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#94a3b8"))
-            setPadding((8 * density).toInt(), 0, (8 * density).toInt(), 0)
+            setPadding((6 * density).toInt(), 0, (6 * density).toInt(), 0)
             setOnClickListener { collapseToBubble() }
         }
         header.addView(btnMinimize)
@@ -335,15 +377,15 @@ class FloatingOverlayService : Service() {
         // Close Button
         val btnClose = TextView(this).apply {
             text = " ✕ "
-            textSize = 14f
+            textSize = 13f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.parseColor("#f87171"))
-            setPadding((6 * density).toInt(), 0, (4 * density).toInt(), 0)
+            setPadding((6 * density).toInt(), 0, (2 * density).toInt(), 0)
             setOnClickListener { stopSelf() }
         }
         header.addView(btnClose)
 
-        // Header touch listener to drag the card
+        // Dragging listener for card header
         var cardInitX = 0
         var cardInitY = 0
         var cardTouchX = 0f
@@ -370,32 +412,276 @@ class FloatingOverlayService : Service() {
                 else -> true
             }
         }
-        root.addView(header)
+        cardContent.addView(header)
 
-        // Scrollable container for landscape and small screens
+        // --- MAP SELECTOR BAR ---
+        val mapSelectorBar = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            val p = (6 * density).toInt()
+            setPadding(p, (4 * density).toInt(), p, (4 * density).toInt())
+            background = GradientDrawable().apply {
+                cornerRadius = 8 * density
+                setColor(Color.parseColor("#1e293b"))
+                setStroke((1 * density).toInt(), Color.parseColor("#334155"))
+            }
+            setOnClickListener {
+                openMapPicker()
+            }
+        }
+
+        tvMapInfo = TextView(this).apply {
+            text = "🗺️ $currentModeName: $currentMapName"
+            textSize = 10.5f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#facc15")) // Gold
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+        mapSelectorBar.addView(tvMapInfo)
+
+        val tvChangeMap = TextView(this).apply {
+            text = "Cambiar ▾"
+            textSize = 9.5f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#38bdf8"))
+        }
+        mapSelectorBar.addView(tvChangeMap)
+
+        val mapBarParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            bottomMargin = (6 * density).toInt()
+        }
+        cardContent.addView(mapSelectorBar, mapBarParams)
+
+        // --- DRAFT BOARD (ALIADOS vs RIVALES) ---
+        draftBoardContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            val padD = (6 * density).toInt()
+            setPadding(padD, padD, padD, padD)
+            background = GradientDrawable().apply {
+                cornerRadius = 10 * density
+                setColor(Color.parseColor("#090f1d")) // Very dark slate
+                setStroke((1 * density).toInt(), Color.parseColor("#1e293b"))
+            }
+        }
+
+        val draftColumns = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+        }
+
+        // Aliados Col (Azul)
+        val allyCol = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                rightMargin = (4 * density).toInt()
+            }
+        }
+        val tvAllyHeader = TextView(this).apply {
+            text = "💙 MI EQUIPO"
+            textSize = 9.5f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#38bdf8"))
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, (3 * density).toInt())
+        }
+        allyCol.addView(tvAllyHeader)
+
+        for (i in 0..2) {
+            val slot = TextView(this).apply {
+                text = "+ Aliado ${i + 1}"
+                textSize = 9.5f
+                typeface = Typeface.DEFAULT_BOLD
+                setTextColor(Color.parseColor("#64748b"))
+                gravity = Gravity.CENTER
+                val sp = (5 * density).toInt()
+                setPadding(sp, sp, sp, sp)
+                background = GradientDrawable().apply {
+                    cornerRadius = 6 * density
+                    setColor(Color.parseColor("#1e293b"))
+                    setStroke((1 * density).toInt(), Color.parseColor("#0284c7"))
+                }
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    bottomMargin = (4 * density).toInt()
+                }
+                setOnClickListener {
+                    openBrawlerPicker("ALLY_$i")
+                }
+            }
+            allySlotViews[i] = slot
+            allyCol.addView(slot)
+        }
+        draftColumns.addView(allyCol)
+
+        // Rivales Col (Rojo)
+        val enemyCol = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                leftMargin = (4 * density).toInt()
+            }
+        }
+        val tvEnemyHeader = TextView(this).apply {
+            text = "❤️ RIVALES"
+            textSize = 9.5f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#f87171"))
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, (3 * density).toInt())
+        }
+        enemyCol.addView(tvEnemyHeader)
+
+        for (i in 0..2) {
+            val slot = TextView(this).apply {
+                text = "+ Rival ${i + 1}"
+                textSize = 9.5f
+                typeface = Typeface.DEFAULT_BOLD
+                setTextColor(Color.parseColor("#64748b"))
+                gravity = Gravity.CENTER
+                val sp = (5 * density).toInt()
+                setPadding(sp, sp, sp, sp)
+                background = GradientDrawable().apply {
+                    cornerRadius = 6 * density
+                    setColor(Color.parseColor("#1e293b"))
+                    setStroke((1 * density).toInt(), Color.parseColor("#b91c1c"))
+                }
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    bottomMargin = (4 * density).toInt()
+                }
+                setOnClickListener {
+                    openBrawlerPicker("ENEMY_$i")
+                }
+            }
+            enemySlotViews[i] = slot
+            enemyCol.addView(slot)
+        }
+        draftColumns.addView(enemyCol)
+
+        draftBoardContainer?.addView(draftColumns)
+
+        // Ban Strip Row
+        val banRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, (2 * density).toInt(), 0, 0)
+        }
+
+        val tvBanLabel = TextView(this).apply {
+            text = "🚫 Baneos: "
+            textSize = 9f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#f87171"))
+        }
+        banRow.addView(tvBanLabel)
+
+        banSlotViewsContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+        updateBanChips()
+        banRow.addView(banSlotViewsContainer)
+
+        val btnAddBan = TextView(this).apply {
+            text = "+ Ban"
+            textSize = 9f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#cbd5e1"))
+            val bp = (4 * density).toInt()
+            setPadding(bp, (2 * density).toInt(), bp, (2 * density).toInt())
+            background = GradientDrawable().apply {
+                cornerRadius = 4 * density
+                setColor(Color.parseColor("#334155"))
+            }
+            setOnClickListener {
+                openBrawlerPicker("BAN")
+            }
+        }
+        banRow.addView(btnAddBan)
+
+        draftBoardContainer?.addView(banRow)
+
+        val boardParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            bottomMargin = (6 * density).toInt()
+        }
+        cardContent.addView(draftBoardContainer, boardParams)
+
+        // Turn & Phase indicator
+        tvDraftPhaseInfo = TextView(this).apply {
+            text = currentTurnText
+            textSize = 9.5f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#38bdf8"))
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, (4 * density).toInt())
+        }
+        cardContent.addView(tvDraftPhaseInfo)
+
+        // Scrollable container for Recommendations and Screen Scan
         val scrollView = ScrollView(this).apply {
             isVerticalScrollBarEnabled = true
             isScrollbarFadingEnabled = false
             overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
         }
 
-        val content = LinearLayout(this).apply {
+        val scrollContent = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
         }
 
-        // --- Action Button: Scan Draft (Placed at top of content for easy reach) ---
+        // --- Section Header: Recomendaciones Tácticas ---
+        val tvSection = TextView(this).apply {
+            text = "⚡ RECOMENDACIONES TÁCTICAS"
+            textSize = 9.5f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#38bdf8"))
+            setPadding(0, (2 * density).toInt(), 0, (3 * density).toInt())
+        }
+        scrollContent.addView(tvSection)
+
+        // --- Container for Top Picks ---
+        recContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+        }
+        scrollContent.addView(recContainer)
+
+        // --- Section Header: Baneos Sugeridos ---
+        val tvBanSection = TextView(this).apply {
+            text = "BANEO SUGERIDO"
+            textSize = 9.5f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#f87171"))
+            setPadding(0, (4 * density).toInt(), 0, (3 * density).toInt())
+        }
+        scrollContent.addView(tvBanSection)
+
+        // --- Container for Suggested Bans ---
+        banContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+        }
+        scrollContent.addView(banContainer)
+
+        // --- Action Button: Scan Draft (Optional auto scan) ---
         btnScan = Button(this).apply {
-            text = "📸 Escanear Mapa y Picks"
-            textSize = 13f
+            text = "📸 Escanear Pantalla con IA"
+            textSize = 11.5f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.WHITE)
             isAllCaps = false
             background = GradientDrawable().apply {
-                cornerRadius = 10 * density
+                cornerRadius = 8 * density
                 colors = intArrayOf(Color.parseColor("#059669"), Color.parseColor("#10b981"))
                 gradientType = GradientDrawable.LINEAR_GRADIENT
             }
-            val p = (8 * density).toInt()
+            val p = (6 * density).toInt()
             setPadding(p, p, p, p)
             setOnClickListener {
                 startScanFlow()
@@ -405,97 +691,752 @@ class FloatingOverlayService : Service() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            bottomMargin = (8 * density).toInt()
+            topMargin = (6 * density).toInt()
+            bottomMargin = (4 * density).toInt()
         }
-        content.addView(btnScan, btnParams)
+        scrollContent.addView(btnScan, btnParams)
 
-        // --- Status Text ---
+        // Status Text
         tvStatus = TextView(this).apply {
-            text = "Toca Escanear para consultar BrawlPick"
-            textSize = 9.5f
+            text = "Toca un slot para seleccionar brawler o escanea"
+            textSize = 9f
             setTextColor(Color.parseColor("#64748b"))
             gravity = Gravity.CENTER
-            setPadding(0, 0, 0, (6 * density).toInt())
+            setPadding(0, 0, 0, (4 * density).toInt())
         }
-        content.addView(tvStatus)
+        scrollContent.addView(tvStatus)
 
-        // --- Map / Mode Info Box ---
-        tvMapInfo = TextView(this).apply {
-            text = "📍 Modo/Mapa: Sin detectar aún"
-            textSize = 11f
-            typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#facc15")) // Amber
-            val p = (8 * density).toInt()
-            setPadding(p, (4 * density).toInt(), p, (4 * density).toInt())
-            background = GradientDrawable().apply {
-                cornerRadius = 8 * density
-                setColor(Color.parseColor("#1e293b"))
-            }
-        }
-        content.addView(tvMapInfo)
+        scrollView.addView(scrollContent)
 
-        // --- Detected Picks Info ---
-        tvPicksInfo = TextView(this).apply {
-            text = "Toca Escanear para analizar mapa y estadísticas"
-            textSize = 9.5f
-            setTextColor(Color.parseColor("#94a3b8"))
-            setPadding(0, (3 * density).toInt(), 0, (5 * density).toInt())
-        }
-        content.addView(tvPicksInfo)
-
-        // --- Section Header: Top Picks (BrawlPick) ---
-        val tvSection = TextView(this).apply {
-            text = "MEJORES PICKS (BRAWLPICK)"
-            textSize = 9.5f
-            typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#38bdf8"))
-            setPadding(0, (2 * density).toInt(), 0, (3 * density).toInt())
-        }
-        content.addView(tvSection)
-
-        // --- Container for Top Picks ---
-        recContainer = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-        }
-        renderDefaultPicks(recContainer!!)
-        content.addView(recContainer)
-
-        // --- Section Header: Baneos Sugeridos ---
-        val tvBanSection = TextView(this).apply {
-            text = "BANEO SUGERIDO (HEURÍSTICO)"
-            textSize = 9.5f
-            typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#f87171"))
-            setPadding(0, (4 * density).toInt(), 0, (3 * density).toInt())
-        }
-        content.addView(tvBanSection)
-
-        // --- Container for Suggested Bans ---
-        banContainer = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-        }
-        renderDefaultBans(banContainer!!)
-        content.addView(banContainer)
-
-        scrollView.addView(content)
-
-        // In landscape, cap the scrollview height so it never goes off-screen
         val scrollParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             0,
             1f
         )
-        root.addView(scrollView, scrollParams)
+        cardContent.addView(scrollView, scrollParams)
+
+        root.addView(cardContent)
+
+        // Overlay picker container (hidden by default)
+        pickerOverlayContainer = FrameLayout(this).apply {
+            visibility = View.GONE
+            val bg = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = 16 * density
+                setColor(Color.parseColor("#FA090D16")) // Near black 98%
+                setStroke((2 * density).toInt(), Color.parseColor("#38bdf8"))
+            }
+            background = bg
+            elevation = 30f * density
+        }
+        root.addView(pickerOverlayContainer)
 
         cardView = root
+
+        // Run initial recommendation recalculation
+        recalculateDraft()
+    }
+
+    private fun updateBanChips() {
+        val container = banSlotViewsContainer ?: return
+        val density = resources.displayMetrics.density
+        container.removeAllViews()
+
+        if (bannedBrawlers.isEmpty()) {
+            val tvEmpty = TextView(this).apply {
+                text = "Ninguno"
+                textSize = 8.5f
+                setTextColor(Color.parseColor("#64748b"))
+            }
+            container.addView(tvEmpty)
+            return
+        }
+
+        for (ban in bannedBrawlers) {
+            val chip = TextView(this).apply {
+                text = "$ban ✕"
+                textSize = 8.5f
+                typeface = Typeface.DEFAULT_BOLD
+                setTextColor(Color.parseColor("#fca5a5"))
+                val cp = (4 * density).toInt()
+                setPadding(cp, (1 * density).toInt(), cp, (1 * density).toInt())
+                background = GradientDrawable().apply {
+                    cornerRadius = 4 * density
+                    setColor(Color.parseColor("#450a0a"))
+                    setStroke((1 * density).toInt(), Color.parseColor("#991b1b"))
+                }
+                setOnClickListener {
+                    bannedBrawlers.remove(ban)
+                    updateBanChips()
+                    recalculateDraft()
+                }
+            }
+            val chipParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                rightMargin = (4 * density).toInt()
+            }
+            container.addView(chip, chipParams)
+        }
+    }
+
+    private fun resetDraft() {
+        for (i in 0..2) {
+            allyPicks[i] = null
+            enemyPicks[i] = null
+        }
+        bannedBrawlers.clear()
+        updateSlotsUi()
+        updateBanChips()
+        recalculateDraft()
+        tvStatus?.text = "Draft reiniciado. Selecciona los picks o escanea."
+    }
+
+    private fun updateSlotsUi() {
+        val density = resources.displayMetrics.density
+        for (i in 0..2) {
+            val allyPick = allyPicks[i]
+            val allyView = allySlotViews[i]
+            if (allyView != null) {
+                if (allyPick != null) {
+                    allyView.text = "🛡️ $allyPick"
+                    allyView.setTextColor(Color.WHITE)
+                    allyView.background = GradientDrawable().apply {
+                        cornerRadius = 6 * density
+                        setColor(Color.parseColor("#0369a1")) // Blue filled
+                        setStroke((1 * density).toInt(), Color.parseColor("#38bdf8"))
+                    }
+                } else {
+                    allyView.text = "+ Aliado ${i + 1}"
+                    allyView.setTextColor(Color.parseColor("#64748b"))
+                    allyView.background = GradientDrawable().apply {
+                        cornerRadius = 6 * density
+                        setColor(Color.parseColor("#1e293b"))
+                        setStroke((1 * density).toInt(), Color.parseColor("#0284c7"))
+                    }
+                }
+            }
+
+            val enemyPick = enemyPicks[i]
+            val enemyView = enemySlotViews[i]
+            if (enemyView != null) {
+                if (enemyPick != null) {
+                    enemyView.text = "⚔️ $enemyPick"
+                    enemyView.setTextColor(Color.WHITE)
+                    enemyView.background = GradientDrawable().apply {
+                        cornerRadius = 6 * density
+                        setColor(Color.parseColor("#991b1b")) // Red filled
+                        setStroke((1 * density).toInt(), Color.parseColor("#f87171"))
+                    }
+                } else {
+                    enemyView.text = "+ Rival ${i + 1}"
+                    enemyView.setTextColor(Color.parseColor("#64748b"))
+                    enemyView.background = GradientDrawable().apply {
+                        cornerRadius = 6 * density
+                        setColor(Color.parseColor("#1e293b"))
+                        setStroke((1 * density).toInt(), Color.parseColor("#b91c1c"))
+                    }
+                }
+            }
+        }
+    }
+
+    // ==========================================
+    // IN-OVERLAY MAP PICKER
+    // ==========================================
+    private fun openMapPicker() {
+        val container = pickerOverlayContainer ?: return
+        val density = resources.displayMetrics.density
+        container.removeAllViews()
+
+        val rootPicker = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            val p = (10 * density).toInt()
+            setPadding(p, p, p, p)
+        }
+
+        // Header
+        val pickerHeader = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, 0, 0, (6 * density).toInt())
+        }
+
+        val tvTitle = TextView(this).apply {
+            text = "ELEGIR MAPA"
+            textSize = 12f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#facc15"))
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+        pickerHeader.addView(tvTitle)
+
+        val btnClose = TextView(this).apply {
+            text = " ✕ "
+            textSize = 14f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#f87171"))
+            setOnClickListener {
+                container.visibility = View.GONE
+            }
+        }
+        pickerHeader.addView(btnClose)
+        rootPicker.addView(pickerHeader)
+
+        // Parse Maps from JSON
+        val mapsArr = try {
+            JSONArray(mapsJsonStr)
+        } catch (_: Exception) {
+            JSONArray()
+        }
+
+        val mapItems = mutableListOf<Pair<String, String>>() // (mode, mapName)
+        for (i in 0 until mapsArr.length()) {
+            val obj = mapsArr.optJSONObject(i) ?: continue
+            val mode = obj.optString("mode", "")
+            val name = obj.optString("name", "")
+            if (name.isNotBlank()) {
+                mapItems.add(Pair(mode, name))
+            }
+        }
+
+        // Fallback default ranked maps if mapsJsonStr is empty
+        if (mapItems.isEmpty()) {
+            mapItems.addAll(listOf(
+                Pair("Brawl Ball", "Center Stage"),
+                Pair("Brawl Ball", "Pinball Dreams"),
+                Pair("Brawl Ball", "Sneaky Fields"),
+                Pair("Gem Grab", "Hard Rock Mine"),
+                Pair("Gem Grab", "Double Swoosh"),
+                Pair("Heist", "Hot Potato"),
+                Pair("Heist", "Safe Zone"),
+                Pair("Heist", "Kaboom Canyon"),
+                Pair("Hot Zone", "Dueling Beetles"),
+                Pair("Hot Zone", "Open Business"),
+                Pair("Hot Zone", "Parallel Plays"),
+                Pair("Knockout", "Belle's Rock"),
+                Pair("Knockout", "Flaring Phoenix"),
+                Pair("Knockout", "Out in the Open"),
+                Pair("Bounty", "Shooting Star"),
+                Pair("Bounty", "Hideout")
+            ))
+        }
+
+        // Group by Mode
+        val groupedByMode = mapItems.groupBy { it.first }
+
+        val scroll = ScrollView(this)
+        val listLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+        }
+
+        for ((mode, list) in groupedByMode) {
+            val tvModeHeader = TextView(this).apply {
+                text = "📍 $mode".uppercase()
+                textSize = 10f
+                typeface = Typeface.DEFAULT_BOLD
+                setTextColor(Color.parseColor("#38bdf8"))
+                val hp = (4 * density).toInt()
+                setPadding(hp, (6 * density).toInt(), hp, (2 * density).toInt())
+            }
+            listLayout.addView(tvModeHeader)
+
+            for (item in list) {
+                val mapBtn = TextView(this).apply {
+                    text = item.second
+                    textSize = 11f
+                    typeface = Typeface.DEFAULT_BOLD
+                    setTextColor(Color.WHITE)
+                    val p = (8 * density).toInt()
+                    setPadding(p, (6 * density).toInt(), p, (6 * density).toInt())
+                    background = GradientDrawable().apply {
+                        cornerRadius = 6 * density
+                        setColor(Color.parseColor("#1e293b"))
+                    }
+                    setOnClickListener {
+                        currentModeName = item.first
+                        currentMapName = item.second
+                        tvMapInfo?.text = "🗺️ $currentModeName: $currentMapName"
+                        container.visibility = View.GONE
+                        recalculateDraft()
+                    }
+                }
+                val btnParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    bottomMargin = (4 * density).toInt()
+                }
+                listLayout.addView(mapBtn, btnParams)
+            }
+        }
+
+        scroll.addView(listLayout)
+        rootPicker.addView(scroll, LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            0,
+            1f
+        ))
+
+        container.addView(rootPicker)
+        container.visibility = View.VISIBLE
+    }
+
+    // ==========================================
+    // IN-OVERLAY BRAWLER PICKER
+    // ==========================================
+    private fun openBrawlerPicker(targetSlot: String) {
+        activePickerTarget = targetSlot
+        val container = pickerOverlayContainer ?: return
+        val density = resources.displayMetrics.density
+        container.removeAllViews()
+
+        val rootPicker = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            val p = (8 * density).toInt()
+            setPadding(p, p, p, p)
+        }
+
+        // Header with Target Slot Info & Quick Clear
+        val pickerHeader = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, 0, 0, (4 * density).toInt())
+        }
+
+        val slotTitle = when {
+            targetSlot.startsWith("ALLY_") -> "Elegir Aliado #${targetSlot.substringAfter("ALLY_").toInt() + 1}"
+            targetSlot.startsWith("ENEMY_") -> "Elegir Rival #${targetSlot.substringAfter("ENEMY_").toInt() + 1}"
+            else -> "Elegir Baneo"
+        }
+
+        val tvTitle = TextView(this).apply {
+            text = slotTitle
+            textSize = 11f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(if (targetSlot.startsWith("ENEMY_")) Color.parseColor("#f87171") else Color.parseColor("#38bdf8"))
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+        pickerHeader.addView(tvTitle)
+
+        // Clear Slot button
+        if (!targetSlot.startsWith("BAN")) {
+            val btnClearSlot = TextView(this).apply {
+                text = "Vaciar"
+                textSize = 9.5f
+                typeface = Typeface.DEFAULT_BOLD
+                setTextColor(Color.parseColor("#94a3b8"))
+                val cp = (5 * density).toInt()
+                setPadding(cp, (2 * density).toInt(), cp, (2 * density).toInt())
+                background = GradientDrawable().apply {
+                    cornerRadius = 4 * density
+                    setColor(Color.parseColor("#334155"))
+                }
+                setOnClickListener {
+                    val idx = targetSlot.substringAfter("_").toIntOrNull() ?: 0
+                    if (targetSlot.startsWith("ALLY_")) allyPicks[idx] = null
+                    else enemyPicks[idx] = null
+                    container.visibility = View.GONE
+                    updateSlotsUi()
+                    recalculateDraft()
+                }
+            }
+            val clearParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                rightMargin = (6 * density).toInt()
+            }
+            pickerHeader.addView(btnClearSlot, clearParams)
+        }
+
+        val btnClose = TextView(this).apply {
+            text = " ✕ "
+            textSize = 14f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#f87171"))
+            setOnClickListener {
+                container.visibility = View.GONE
+            }
+        }
+        pickerHeader.addView(btnClose)
+        rootPicker.addView(pickerHeader)
+
+        // Parse Brawlers list
+        val brawlersArr = try { JSONArray(brawlersJsonStr) } catch (_: Exception) { JSONArray() }
+        data class BrawlerItem(val name: String, val bClass: String)
+        val allBrawlersList = mutableListOf<BrawlerItem>()
+
+        for (i in 0 until brawlersArr.length()) {
+            val b = brawlersArr.optJSONObject(i) ?: continue
+            val name = b.optString("displayName", b.optString("name", ""))
+            val bClass = b.optString("class", "General")
+            if (name.isNotBlank()) {
+                allBrawlersList.add(BrawlerItem(name, bClass))
+            }
+        }
+        allBrawlersList.sortBy { it.name }
+
+        // Filter chips bar (Todos, Tanques, Asesinos, Tiradores, etc.)
+        val filterScroll = HorizontalScrollView(this).apply {
+            isHorizontalScrollBarEnabled = false
+            overScrollMode = View.OVER_SCROLL_NEVER
+        }
+        val filterRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, 0, 0, (4 * density).toInt())
+        }
+
+        val gridContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+        }
+
+        fun renderBrawlers(filterClass: String) {
+            gridContainer.removeAllViews()
+            val filtered = if (filterClass == "Todos") allBrawlersList else allBrawlersList.filter {
+                it.bClass.contains(filterClass, ignoreCase = true)
+            }
+
+            // Group into rows of 3 brawlers for easy thumb tapping
+            val rows = filtered.chunked(3)
+            for (chunk in rows) {
+                val row = LinearLayout(this).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        bottomMargin = (4 * density).toInt()
+                    }
+                }
+                for (brawler in chunk) {
+                    val isAlreadyPicked = allyPicks.contains(brawler.name) ||
+                            enemyPicks.contains(brawler.name) ||
+                            bannedBrawlers.contains(brawler.name)
+
+                    val brawlerBtn = TextView(this).apply {
+                        text = brawler.name
+                        textSize = 9.5f
+                        typeface = Typeface.DEFAULT_BOLD
+                        gravity = Gravity.CENTER
+                        val bp = (4 * density).toInt()
+                        setPadding(bp, (8 * density).toInt(), bp, (8 * density).toInt())
+
+                        if (isAlreadyPicked) {
+                            setTextColor(Color.parseColor("#475569"))
+                            background = GradientDrawable().apply {
+                                cornerRadius = 6 * density
+                                setColor(Color.parseColor("#0f172a"))
+                                setStroke((1 * density).toInt(), Color.parseColor("#1e293b"))
+                            }
+                        } else {
+                            setTextColor(Color.WHITE)
+                            background = GradientDrawable().apply {
+                                cornerRadius = 6 * density
+                                setColor(Color.parseColor("#1e293b"))
+                                setStroke((1 * density).toInt(), Color.parseColor("#334155"))
+                            }
+                            setOnClickListener {
+                                onBrawlerSelected(brawler.name, targetSlot)
+                                container.visibility = View.GONE
+                            }
+                        }
+
+                        layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                            setMargins((2 * density).toInt(), 0, (2 * density).toInt(), 0)
+                        }
+                    }
+                    row.addView(brawlerBtn)
+                }
+                // Fill remainder if chunk < 3
+                if (chunk.size < 3) {
+                    for (k in 0 until (3 - chunk.size)) {
+                        val spacer = View(this).apply {
+                            layoutParams = LinearLayout.LayoutParams(0, 0, 1f).apply {
+                                setMargins((2 * density).toInt(), 0, (2 * density).toInt(), 0)
+                            }
+                        }
+                        row.addView(spacer)
+                    }
+                }
+                gridContainer.addView(row)
+            }
+        }
+
+        val categories = listOf("Todos", "Tank", "Assassin", "Marksman", "Damage Dealer", "Artillery", "Support", "Controller")
+        val categoryViews = mutableListOf<TextView>()
+
+        for (cat in categories) {
+            val catLabel = when (cat) {
+                "Tank" -> "Tanques"
+                "Assassin" -> "Asesinos"
+                "Marksman" -> "Tiradores"
+                "Damage Dealer" -> "Daño"
+                "Artillery" -> "Lanzadores"
+                "Support" -> "Apoyo"
+                "Controller" -> "Control"
+                else -> cat
+            }
+
+            val chip = TextView(this).apply {
+                text = catLabel
+                textSize = 9f
+                typeface = Typeface.DEFAULT_BOLD
+                val cp = (6 * density).toInt()
+                setPadding(cp, (3 * density).toInt(), cp, (3 * density).toInt())
+
+                if (cat == "Todos") {
+                    setTextColor(Color.BLACK)
+                    background = GradientDrawable().apply {
+                        cornerRadius = 10 * density
+                        setColor(Color.parseColor("#38bdf8"))
+                    }
+                } else {
+                    setTextColor(Color.parseColor("#94a3b8"))
+                    background = GradientDrawable().apply {
+                        cornerRadius = 10 * density
+                        setColor(Color.parseColor("#1e293b"))
+                    }
+                }
+
+                setOnClickListener {
+                    for (cv in categoryViews) {
+                        cv.setTextColor(Color.parseColor("#94a3b8"))
+                        (cv.background as? GradientDrawable)?.setColor(Color.parseColor("#1e293b"))
+                    }
+                    setTextColor(Color.BLACK)
+                    (background as? GradientDrawable)?.setColor(Color.parseColor("#38bdf8"))
+                    renderBrawlers(cat)
+                }
+            }
+            categoryViews.add(chip)
+            val chipParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                rightMargin = (4 * density).toInt()
+            }
+            filterRow.addView(chip, chipParams)
+        }
+        filterScroll.addView(filterRow)
+        rootPicker.addView(filterScroll)
+
+        // Scrollview holding brawler grid
+        val brawlerScroll = ScrollView(this).apply {
+            isVerticalScrollBarEnabled = true
+        }
+        renderBrawlers("Todos")
+        brawlerScroll.addView(gridContainer)
+
+        rootPicker.addView(brawlerScroll, LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            0,
+            1f
+        ))
+
+        container.addView(rootPicker)
+        container.visibility = View.VISIBLE
+    }
+
+    private fun onBrawlerSelected(brawlerName: String, targetSlot: String) {
+        when {
+            targetSlot.startsWith("ALLY_") -> {
+                val idx = targetSlot.substringAfter("ALLY_").toIntOrNull() ?: 0
+                allyPicks[idx] = brawlerName
+            }
+            targetSlot.startsWith("ENEMY_") -> {
+                val idx = targetSlot.substringAfter("ENEMY_").toIntOrNull() ?: 0
+                enemyPicks[idx] = brawlerName
+            }
+            targetSlot == "BAN" -> {
+                if (!bannedBrawlers.contains(brawlerName)) {
+                    bannedBrawlers.add(brawlerName)
+                }
+            }
+        }
+        updateSlotsUi()
+        updateBanChips()
+        recalculateDraft()
+    }
+
+    // ==========================================
+    // LOCAL COUNTER RECOMMENDATION ENGINE
+    // ==========================================
+    private fun recalculateDraft() {
+        val totalLocked = allyPicks.count { it != null } + enemyPicks.count { it != null }
+        currentTurnText = when (totalLocked) {
+            0 -> "⚡ First Pick (Fase Inicial)"
+            1, 2 -> "⚡ Turno 2 (Mid Pick)"
+            3, 4 -> "⚡ Turno 3 (Pick Tardío)"
+            5 -> "⚡ Último Pick (Counter Directo)"
+            else -> "✅ Draft Completo"
+        }
+        tvDraftPhaseInfo?.text = currentTurnText
+
+        // 1. Gather Map Tiers
+        val mapsArr = try { JSONArray(mapsJsonStr) } catch (_: Exception) { JSONArray() }
+        var mapTiersS = mutableListOf<String>()
+        var mapTiersA = mutableListOf<String>()
+        var mapTiersB = mutableListOf<String>()
+
+        for (i in 0 until mapsArr.length()) {
+            val m = mapsArr.optJSONObject(i) ?: continue
+            val name = m.optString("name", "")
+            if (name.equals(currentMapName, ignoreCase = true) || normalize(name) == normalize(currentMapName)) {
+                val tiers = m.optJSONObject("tiers")
+                if (tiers != null) {
+                    val sArr = tiers.optJSONArray("S") ?: JSONArray()
+                    val aArr = tiers.optJSONArray("A") ?: JSONArray()
+                    val bArr = tiers.optJSONArray("B") ?: JSONArray()
+                    for (x in 0 until sArr.length()) mapTiersS.add(sArr.optString(x))
+                    for (x in 0 until aArr.length()) mapTiersA.add(aArr.optString(x))
+                    for (x in 0 until bArr.length()) mapTiersB.add(bArr.optString(x))
+                }
+                break
+            }
+        }
+
+        // 2. Counters Map
+        val countersObj = try { JSONObject(countersJsonStr) } catch (_: Exception) { JSONObject() }
+
+        // 3. All brawlers list
+        val brawlersArr = try { JSONArray(brawlersJsonStr) } catch (_: Exception) { JSONArray() }
+        data class ScoredCandidate(
+            val name: String,
+            val score: Int,
+            val tier: String,
+            val primaryReason: String,
+            val badge: String,
+            val badgeColor: Int
+        )
+
+        val candidates = mutableListOf<ScoredCandidate>()
+        val lockedSet = (allyPicks.filterNotNull() + enemyPicks.filterNotNull() + bannedBrawlers).toSet()
+
+        for (i in 0 until brawlersArr.length()) {
+            val bObj = brawlersArr.optJSONObject(i) ?: continue
+            val name = bObj.optString("displayName", bObj.optString("name", ""))
+            if (name.isBlank() || lockedSet.contains(name)) continue
+
+            var tierScore = 0
+            var tier = "C"
+            var primaryReason = "Opción estándar"
+
+            // Map tier
+            if (mapTiersS.any { it.equals(name, ignoreCase = true) }) {
+                tier = "S"
+                tierScore = 40
+                primaryReason = "Dominante en este mapa"
+            } else if (mapTiersA.any { it.equals(name, ignoreCase = true) }) {
+                tier = "A"
+                tierScore = 25
+                primaryReason = "A-Tier consistente en mapa"
+            } else if (mapTiersB.any { it.equals(name, ignoreCase = true) }) {
+                tier = "B"
+                tierScore = 12
+                primaryReason = "Opción viable de mapa"
+            }
+
+            // Counters vs Enemy Picks
+            var counterScore = 0
+            val brawlerCounters = countersObj.optJSONObject(name)
+            if (brawlerCounters != null) {
+                val directCounters = brawlerCounters.optJSONArray("counters") ?: JSONArray()
+                val counteredBy = brawlerCounters.optJSONArray("counteredBy") ?: JSONArray()
+                val synergies = brawlerCounters.optJSONArray("synergies") ?: JSONArray()
+
+                for (enemy in enemyPicks.filterNotNull()) {
+                    for (c in 0 until directCounters.length()) {
+                        if (directCounters.optString(c).equals(enemy, ignoreCase = true)) {
+                            counterScore += 24
+                            primaryReason = "Counter demoledor vs $enemy"
+                        }
+                    }
+                    for (cb in 0 until counteredBy.length()) {
+                        if (counteredBy.optString(cb).equals(enemy, ignoreCase = true)) {
+                            counterScore -= 22
+                        }
+                    }
+                }
+
+                // Ally Synergies
+                for (ally in allyPicks.filterNotNull()) {
+                    for (s in 0 until synergies.length()) {
+                        if (synergies.optString(s).equals(ally, ignoreCase = true)) {
+                            counterScore += 12
+                            if (!primaryReason.contains("Counter")) {
+                                primaryReason = "Gran sinergia con $ally"
+                            }
+                        }
+                    }
+                }
+            }
+
+            val totalScore = Math.max(10, Math.min(100, 25 + tierScore + counterScore))
+            val badgeText = when {
+                counterScore >= 20 -> "🔥 COUNTER"
+                tier == "S" -> "S-TIER"
+                tier == "A" -> "A-TIER"
+                else -> "${totalScore} pts"
+            }
+            val badgeColor = when {
+                counterScore >= 20 -> Color.parseColor("#10b981") // Emerald Green
+                tier == "S" -> Color.parseColor("#facc15") // Gold
+                tier == "A" -> Color.parseColor("#38bdf8") // Sky Blue
+                else -> Color.parseColor("#64748b")
+            }
+
+            candidates.add(
+                ScoredCandidate(
+                    name = name,
+                    score = totalScore,
+                    tier = tier,
+                    primaryReason = primaryReason,
+                    badge = badgeText,
+                    badgeColor = badgeColor
+                )
+            )
+        }
+
+        candidates.sortByDescending { it.score }
+
+        // Render Top 5 Recommendations
+        recContainer?.removeAllViews()
+        val topCandidates = candidates.take(5)
+        if (topCandidates.isEmpty()) {
+            recContainer?.addView(createStatRow("Todos los brawlers seleccionados", "Reinicia draft para comenzar", "FULL", Color.parseColor("#64748b")))
+        } else {
+            for ((idx, pick) in topCandidates.withIndex()) {
+                val medal = when (idx) {
+                    0 -> "🥇 "
+                    1 -> "🥈 "
+                    2 -> "🥉 "
+                    else -> "#${idx + 1} "
+                }
+                recContainer?.addView(createStatRow(medal + pick.name, pick.primaryReason, pick.badge, pick.badgeColor))
+            }
+        }
+
+        // Render Suggested Bans (from map S-Tier or highest priority)
+        banContainer?.removeAllViews()
+        val banCandidates = mapTiersS.filter { !lockedSet.contains(it) }.take(2)
+        if (banCandidates.isNotEmpty()) {
+            for (ban in banCandidates) {
+                banContainer?.addView(createStatRow("🚫 $ban", "Baneo prioritario: dominancia S-Tier en mapa", "BAN", Color.parseColor("#f87171")))
+            }
+        } else {
+            val fallbackBan = candidates.firstOrNull()?.name ?: "Buster"
+            banContainer?.addView(createStatRow("🚫 $fallbackBan", "Baneo recomendado por potencia de combate", "BAN", Color.parseColor("#f87171")))
+        }
     }
 
     private fun renderDefaultPicks(container: LinearLayout) {
         container.removeAllViews()
         val defaultPicks = listOf(
-            Triple("1. (Escanear pantalla)", "BrawlPick", "Esperando captura..."),
-            Triple("2. (Escanear pantalla)", "BrawlPick", "Esperando captura..."),
-            Triple("3. (Escanear pantalla)", "BrawlPick", "Esperando captura...")
+            Triple("1. Selecciona mapa o brawlers", "Local Engine", "Calculando picks..."),
+            Triple("2. Escanear pantalla", "BrawlPick", "Esperando datos..."),
+            Triple("3. Toca cualquier slot", "Manual", "Personalizable")
         )
         for ((name, tier, reason) in defaultPicks) {
             container.addView(createStatRow(name, reason, tier, Color.parseColor("#475569")))
@@ -505,7 +1446,7 @@ class FloatingOverlayService : Service() {
     private fun renderDefaultBans(container: LinearLayout) {
         container.removeAllViews()
         val defaultBans = listOf(
-            Triple("🚫 (Escanear pantalla)", "BAN", "Esperando captura...")
+            Triple("🚫 Frank", "BAN", "Prioritario por control de mapa")
         )
         for ((name, tier, reason) in defaultBans) {
             container.addView(createStatRow(name, reason, tier, Color.parseColor("#64748b")))
@@ -517,7 +1458,7 @@ class FloatingOverlayService : Service() {
         val row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            val p = (6 * density).toInt()
+            val p = (5 * density).toInt()
             setPadding(p, p, p, p)
             background = GradientDrawable().apply {
                 cornerRadius = 8 * density
@@ -527,7 +1468,7 @@ class FloatingOverlayService : Service() {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                bottomMargin = (4 * density).toInt()
+                bottomMargin = (3 * density).toInt()
             }
         }
 
@@ -538,7 +1479,7 @@ class FloatingOverlayService : Service() {
 
         val tvName = TextView(this).apply {
             text = title
-            textSize = 12f
+            textSize = 11f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.WHITE)
         }
@@ -546,7 +1487,7 @@ class FloatingOverlayService : Service() {
 
         val tvReason = TextView(this).apply {
             text = subtitle
-            textSize = 9.5f
+            textSize = 9f
             setTextColor(Color.parseColor("#94a3b8"))
         }
         textCol.addView(tvReason)
@@ -554,13 +1495,13 @@ class FloatingOverlayService : Service() {
 
         val badge = TextView(this).apply {
             text = badgeText
-            textSize = 10f
+            textSize = 9.5f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.BLACK)
             val bp = (5 * density).toInt()
             setPadding(bp, (2 * density).toInt(), bp, (2 * density).toInt())
             background = GradientDrawable().apply {
-                cornerRadius = 6 * density
+                cornerRadius = 5 * density
                 setColor(badgeBgColor)
             }
         }
@@ -591,11 +1532,11 @@ class FloatingOverlayService : Service() {
                 val screenW = metrics.widthPixels
                 val density = metrics.density
 
-                // In landscape mode (gaming), cap card height to ~85% of screen height
+                // In landscape mode (gaming), cap card height to ~88% of screen height
                 val maxCardH = if (screenW > screenH) {
-                    (screenH * 0.88f).toInt()
+                    (screenH * 0.90f).toInt()
                 } else {
-                    (450 * density).toInt().coerceAtMost((screenH * 0.75f).toInt())
+                    (480 * density).toInt().coerceAtMost((screenH * 0.80f).toInt())
                 }
 
                 cardParams.height = maxCardH
@@ -1114,12 +2055,10 @@ Responde EXCLUSIVAMENTE un JSON válido sin bloques markdown:
             return
         }
 
-        val rankedBadge = if (data.isRanked) "🏆 RANKED" else "Casual"
-        tvMapInfo?.text = "📍 [${data.mode.uppercase()}] ${data.mapName}  $rankedBadge"
-        tvPicksInfo?.text = "📊 BrawlPick: ${data.totalBattles} partidas competitivas analizadas"
-
-        // Render Top Picks
-        recContainer?.removeAllViews()
+        currentModeName = data.mode
+        currentMapName = data.mapName
+        tvMapInfo?.text = "🗺️ ${data.mode}: ${data.mapName}"
+        recalculateDraft()
         for ((idx, pick) in data.topPicks.withIndex()) {
             val prefix = when (idx) {
                 0 -> "🥇 "
