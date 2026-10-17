@@ -1,4 +1,5 @@
 import brawlpickRaw from '../data/brawlpick_maps.json';
+import tacticalKnowledgeRaw from '../data/tacticalKnowledge.json';
 import type { Brawler, CountersMap } from '../types/brawl';
 
 export interface BrawlPickPick {
@@ -504,7 +505,6 @@ export function queryBrawlPickStats({
         tacticalReason = `Meta dominante en ${spanishName} con pocos counters directos.`;
       }
     } else if (enemyPicksRemaining > 0) {
-      // Enemy still has 1 or 2 picks remaining
       if (countersAgainstEnemies.length > 0) {
         if (isHighRiskArchetype && enemyPicksRemaining >= 2) {
           riskLevel = 'MEDIUM';
@@ -527,7 +527,6 @@ export function queryBrawlPickStats({
         tacticalReason = `Rendimiento estadístico sólido en ${spanishName}.`;
       }
     } else {
-      // enemyPicksRemaining === 0 (Enemy team is 100% locked in!)
       riskLevel = 'LOW';
       if (countersAgainstEnemies.length > 0) {
         phaseScoreModifier += 22;
@@ -542,6 +541,23 @@ export function queryBrawlPickStats({
         draftBadge = 'Pick Neutral';
         tacticalReason = `Matchup equilibrado frente a la composición rival.`;
       }
+    }
+
+    // Enrich tactical reason from expert knowledge base if available
+    const knowledgeBase = tacticalKnowledgeRaw as any;
+    const brawlerTips = knowledgeBase?.brawlerMastery?.[brawler.displayName] || knowledgeBase?.brawlerMastery?.[brawler.name];
+    const mapKnowledge = knowledgeBase?.maps?.[spanishName] || knowledgeBase?.maps?.[englishName];
+
+    if (brawlerTips?.proTip) {
+      if (countersAgainstEnemies.length > 0 && brawlerTips.bestMatchup) {
+        tacticalReason = `${tacticalReason} 💡 Pro Tip: ${brawlerTips.proTip}`;
+      } else if (counteredByEnemies.length > 0 && brawlerTips.dangerMatchup) {
+        tacticalReason = `${tacticalReason} ⚠️ Cuidado: ${brawlerTips.dangerMatchup}`;
+      } else {
+        tacticalReason = `${brawlerTips.proTip} (${brawlerTips.bestBuild || ''})`;
+      }
+    } else if (mapKnowledge?.strategy && cleanEnemyPicks.length === 0) {
+      tacticalReason = `${mapKnowledge.strategy}`;
     }
 
     const rawTotal = 30 + mapScore + counterAdvantage + synergyScore + phaseScoreModifier - penaltyScore;

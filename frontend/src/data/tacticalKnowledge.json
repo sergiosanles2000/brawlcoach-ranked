@@ -1,0 +1,243 @@
+{
+  "maps": {
+    "Center Stage": {
+      "strategy": "Mapa clásico con muros que encierran el gol. El control del círculo central y la rotura temprana de los muros de la portería rival deciden el 80% de los partidos.",
+      "bestBuild": "Tanques con apoyo curativo o rompemuros agresivos.",
+      "keyLanes": {
+        "Izquierda": "Avanzar pegado a la pared para cortar el pase del balón.",
+        "Centro": "Brawlers de control masivo (Frank/Buster) para dominar el respawn del balón.",
+        "Derecha": "Presión con tirador o asesino rápido (Melodie/Max)."
+      }
+    },
+    "Pinball Dreams": {
+      "strategy": "Pasillos estrechos con rebotes y coberturas abundantes. Los lanzadores y brawlers de daño en área sacan máxima ventaja de los ángulos de rebote.",
+      "bestBuild": "Brawlers con rebote o daño continuo (Surge/Rico/Gale/Buster).",
+      "keyLanes": {
+        "Izquierda": "Zona de rebote continuo; ideal para Rico o tiradores.",
+        "Centro": "Línea de contención; no dejar cruzar el balón al tercio defensivo.",
+        "Derecha": "Carril de flanqueo para emboscadas de asesinos."
+      }
+    },
+    "Sneaky Fields": {
+      "strategy": "Masa gigante de arbustos centrales. Brawlers con visión, barrido amplio de hierba o escudos dominan la iniciativa.",
+      "bestBuild": "Tanques de choque con gadget de velocidad/visión (Rosa/Tara/Bo/Buster).",
+      "keyLanes": {
+        "Izquierda": "Limpieza sistemática de arbustos antes de avanzar.",
+        "Centro": "Zona caliente de contacto físico: no entrar solo sin super o escudo.",
+        "Derecha": "Flanqueo de brawlers de visión (Bo/Tara)."
+      }
+    },
+    "Hard Rock Mine": {
+      "strategy": "Minas de gemas con muros defensivos en 'L'. El portador de gemas debe mantenerse en el centro mientras los laterales ganan espacio ofensivo.",
+      "bestBuild": "Gene, Sandy, Larry & Lawrie o Belle para forzar retroceso rival.",
+      "keyLanes": {
+        "Izquierda": "Duelo a distancia tras el muro de cobertura.",
+        "Centro": "Portador de gemas seguro con rango o supervivencia (Gene/Belle).",
+        "Derecha": "Control agresivo para cortar el flujo de refuerzos rivales."
+      }
+    },
+    "Double Swoosh": {
+      "strategy": "Dos grandes ríos de hierba en los laterales. El primer equipo que se adueña de ambos arbustos asfixia al rival en su base.",
+      "bestBuild": "Rosa, Tara, Buster, Poco con brawler de daño pesado.",
+      "keyLanes": {
+        "Izquierda": "Control absoluto del arbusto lateral; emboscadas directas.",
+        "Centro": "Portador de gemas que no se expone a los flancos.",
+        "Derecha": "Asesino o tanque de choque barriendo la hierba opuesta."
+      }
+    },
+    "Hot Potato": {
+      "strategy": "Carreras de daño a la caja (DPS race). Las aperturas rápidas de los muros frontales de la caja permiten daño directo a distancia.",
+      "bestBuild": "DPS continuo ultra alto: Colt, Chuck, Bull, Jessie, Colette.",
+      "keyLanes": {
+        "Izquierda": "Ruta de aproximación rápida a la caja enemiga.",
+        "Centro": "Defensa fija para ralentizar o anular al ariete rival.",
+        "Derecha": "Ataque continuo con rebote o proyectiles de largo alcance."
+      }
+    },
+    "Safe Zone": {
+      "strategy": "Mapa extremadamente abierto con pasillos laterales. Francotiradores dominan el rango y tanques de daño a distancia pulverizan la caja.",
+      "bestBuild": "Piper, Angelo, Colt, Belle, Colette, Nani.",
+      "keyLanes": {
+        "Izquierda": "Francotirador de largo rango manteniendo la distancia.",
+        "Centro": "Presión frontal a la caja rival sin perder la cobertura.",
+        "Derecha": "Duelo de tiradores; el que gane la línea asegura 30% de daño a la caja."
+      }
+    },
+    "Kaboom Canyon": {
+      "strategy": "Ríos centrales que dividen el mapa en dos vías. Los lanzadores y brawlers de salto castigan la caja desde el agua con total impunidad.",
+      "bestBuild": "Dynamike, Chuck, Colt, Melodie, Brock.",
+      "keyLanes": {
+        "Izquierda": "Acoso a la caja por el borde del agua.",
+        "Centro": "Defensa activa contra Chuck o brawlers de dash.",
+        "Derecha": "Vía de empuje principal con apoyo de lanzador."
+      }
+    },
+    "Dueling Beetles": {
+      "strategy": "Zona caliente única flanqueada por muros y agua. Los brawlers con supers de área tóxica o ralentización impiden el acceso rival.",
+      "bestBuild": "Lou, Gale, Sandy, Larry & Lawrie, Buster.",
+      "keyLanes": {
+        "Izquierda": "Corte de entrada rival a la zona con proyectiles de rebote.",
+        "Centro": "Ocupación de la zona caliente con brawler de alta resistencia.",
+        "Derecha": "Castigo a tiradores enemigos tras la pared."
+      }
+    },
+    "Ring of Fire": {
+      "strategy": "Zona central abierta y limpia rodeada de pasillos laterales. Los francotiradores cortan la zona mientras un controlador sólido suma puntos.",
+      "bestBuild": "Meg, Belle, Angelo, Amber, Gale, Lou.",
+      "keyLanes": {
+        "Izquierda": "Tirador de largo rango castigando a quien pise el anillo.",
+        "Centro": "Brawler resistente puntuando sin arriesgar la vida.",
+        "Derecha": "Control con fuego continuo o proyectiles teledirigidos."
+      }
+    },
+    "Belle's Rock": {
+      "strategy": "Mapa de Noqueo con muros centrales muy marcados. Los lanzadores y tiradores con rebote fuerzan al rival hacia las esquinas.",
+      "bestBuild": "Nani, Piper, Angelo, Tick, Sprout, Belle.",
+      "keyLanes": {
+        "Izquierda": "Asedio por el pasillo lateral con tiro curvo o rebotado.",
+        "Centro": "Tirador de máxima precisión esperando el fallo rival.",
+        "Derecha": "Presión defensiva; no perder la vida antes del humo tóxico."
+      }
+    },
+    "Out in the Open": {
+      "strategy": "Cero arbustos en el centro y muros mínimos. Pura puntería y espaciado de francotiradores. Un solo error de posicionamiento es muerte instantánea.",
+      "bestBuild": "Piper, Nani, Angelo, Belle, Mandy, Brock.",
+      "keyLanes": {
+        "Izquierda": "Tirador con cobertura mínima; mantener rango máximo.",
+        "Centro": "Duelo directo de francotiradores de élite.",
+        "Derecha": "Flanqueo buscando el ángulo muerto del rival."
+      }
+    },
+    "Shooting Star": {
+      "strategy": "El mapa insignia de francotiradores en Caza Estelar. La primera baja da una ventaja estratégica masiva que se debe defender con calma.",
+      "bestBuild": "Nani, Piper, Angelo, Mandy, Belle, Tick.",
+      "keyLanes": {
+        "Izquierda": "Presión milimétrica a distancia sin regalar estrellas.",
+        "Centro": "Control de visión y apoyo con Nani o Piper.",
+        "Derecha": "Castigo de largo alcance por el flanco libre."
+      }
+    }
+  },
+  "brawlerMastery": {
+    "Frank": {
+      "proTip": "Espera a cargar la súper y usa el gadget 'Atracción irresistible' para arrasar a 2 o 3 rivales juntos tras un muro.",
+      "bestBuild": "Gadget: Atracción irresistible • Star Power: Esponja • Gear: Carga de súper + Salud",
+      "bestMatchup": "Destroza a brawlers sin aturdimiento como Mortis, Poco, Byron o Sandy.",
+      "dangerMatchup": "Evita enfrentarte a Gale, Colette, Clancy o Surge que anulan tus ataques con empuje continuo."
+    },
+    "Mortis": {
+      "proTip": "Nunca inicies con los 3 dashes al aire. Guarda al menos un dash para esquivar y activa la súper en varios enemigos para curarte al 100%.",
+      "bestBuild": "Gadget: Pala de supervivencia • Star Power: Serpiente enroscada • Gear: Daño + Escudo",
+      "bestMatchup": "Aniquila tiradores y lanzadores: Dynamike, Tick, Piper, Sprout, Grom.",
+      "dangerMatchup": "Huye de tanques pesados con escopeta: Shelly, Bull, Buster y Jacky."
+    },
+    "Piper": {
+      "proTip": "Mantén siempre la distancia máxima para multiplicar el daño. Guarda el gadget de auto-aim para frenar saltos de asesinos como Edgar o Buzz.",
+      "bestBuild": "Gadget: Truco casero • Star Power: Emboscada • Gear: Daño + Recarga",
+      "bestMatchup": "Domina a tiradores lentos y brawlers de corto rango en campo abierto.",
+      "dangerMatchup": "Nani (te gana en rango con retorno) y asesinos con sigilo como Leon o Lily."
+    },
+    "Gale": {
+      "proTip": "El rey absoluto del anti-tanques. Usa el torbellino en cuellos de botella para sellar el avance del balón o de los tanques.",
+      "bestBuild": "Gadget: Torbellino • Star Power: Nieve congelante • Gear: Carga de súper + Daño",
+      "bestMatchup": "Inutiliza por completo a Frank, Bull, Edgar, Buzz, El Primo y Fang.",
+      "dangerMatchup": "Francotiradores de largo rango que te atacan fuera de tu alcance (Piper, Belle, Angelo)."
+    },
+    "Colt": {
+      "proTip": "En mapas con estructuras clave como Patata Caliente o Estadio Central, usa el gadget 'Bala de plata' en el primer segundo para abrir la base rival.",
+      "bestBuild": "Gadget: Bala de plata • Star Power: Pistoletazo • Gear: Recarga + Daño",
+      "bestMatchup": "Cajas de atraco, tanques lentos y estructuras defensivas.",
+      "dangerMatchup": "Francotiradores con mayor velocidad de proyectil y asesinos sorpresa."
+    },
+    "Dynamike": {
+      "proTip": "Coloca cartuchos anticipando el camino de escape del rival en vez de tirar directamente a donde está parado.",
+      "bestBuild": "Gadget: Fidget Spinner / Gadget de Stun • Star Power: Demolición • Gear: Daño + Escudo",
+      "bestMatchup": "Controla a brawlers lentos sin movilidad tras los muros (8-Bit, Pam, Jessie).",
+      "dangerMatchup": "Mortis, Mico, Edgar y Lily entran en tu zona muerta y te eliminan sin respuesta."
+    },
+    "Larry & Lawrie": {
+      "proTip": "El doble impacto de la orden castiga a quien intente esconderse tras esquinas. Despliega a Lawrie para absorber fuego pesado y acorralar.",
+      "bestBuild": "Gadget: Protocolo de retirada • Star Power: Protocolo de ayuda • Gear: Daño + Escudo",
+      "bestMatchup": "Asfixia a tiradores y controladores en mapas con esquinas cerradas.",
+      "dangerMatchup": "Asesinos con invulnerabilidad o salto directo que no sufren el rebote de la explosión."
+    },
+    "Buster": {
+      "proTip": "Usa tu escudo frontal para escoltar a tus compañeros con el balón o portadores de gemas. Su gadget de atracción saca a francotiradores de cobertura.",
+      "bestBuild": "Gadget: Cámara lenta • Star Power: Chaleco antibalas • Gear: Carga de súper + Daño",
+      "bestMatchup": "Anula por completo a francotiradores y ráfagas (Colt, Rico, Piper, Bea) devolviendo sus balas.",
+      "dangerMatchup": "Brawlers que disparan a través del escudo o con daño por segundo cuerpo a cuerpo continuo."
+    },
+    "Melodie": {
+      "proTip": "Carga tus 3 notas musicales contra tanques antes de lanzarte. Usa los 3 dashes de tu súper para rodear al enemigo y que las notas hagan daño triple.",
+      "bestBuild": "Gadget: Interludio (Escudo) • Star Power: Tempo rápido • Gear: Escudo + Daño",
+      "bestMatchup": "Tiradores frágiles y cajas de Atraco que caen en menos de 3 segundos.",
+      "dangerMatchup": "Gale, Otis o Clancy que silencian o frenan tus dashes."
+    },
+    "Clancy": {
+      "proTip": "Juega seguro y defensivo en Fase 1 hasta acumular fichas. Al llegar a Fase 3, tu súper es la más devastadora del juego: derrite cajas y tanques instantáneamente.",
+      "bestBuild": "Gadget: Maniobra de escape • Star Power: Munición extra • Gear: Daño + Recarga",
+      "bestMatchup": "Cualquier tanque o rival que cometa el error de acercarse a rango medio en Fase 3.",
+      "dangerMatchup": "Francotiradores que te deniegan fichas en Fase 1 manteniéndote a raya a larga distancia."
+    },
+    "Kenji": {
+      "proTip": "Alterna el slash de corte y el dash largo para esquivar disparos pesados mientras regeneras vida con cada golpe exitoso.",
+      "bestBuild": "Gadget: Dashi / Nigiri • Star Power: Cuchillas curativas • Gear: Daño + Escudo",
+      "bestMatchup": "Brawlers de disparo individual que fallan sus balas ante tu movilidad errática.",
+      "dangerMatchup": "Controladores con silencio o stun garantizado (Otis, Lou, Frank con gadget)."
+    },
+    "Gene": {
+      "proTip": "El chip damage de la dispersión mágica anula la curación natural del rival. No tires la mano a la desesperada: úsala solo cuando tu equipo esté listo para matar.",
+      "bestBuild": "Gadget: Lámpara mágica • Star Power: Curación mágica • Gear: Hablar con el espíritu + Visión",
+      "bestMatchup": "Brawlers frágiles que intentan curarse tras cobertura; es el mejor portador de gemas del juego.",
+      "dangerMatchup": "Generadores de mascotas (Tara, Charlie, Mr. P) que bloquean tu mano con minions."
+    },
+    "Sandy": {
+      "proTip": "La tormenta de arena otorga invisibilidad a todo tu equipo. Úsala no solo para atacar, sino para forzar al rival a desperdiciar munición disparando a ciegas.",
+      "bestBuild": "Gadget: Somnífero • Star Power: Arenas curativas / Daño • Gear: Carga de súper + Daño",
+      "bestMatchup": "Partidas cerradas donde la emboscada sorpresa con invisibilidad da la vuelta al marcador.",
+      "dangerMatchup": "Brawlers con habilidades de visión o daño residual que revelan la posición en la tormenta."
+    },
+    "Colette": {
+      "proTip": "Regla matemática universal: 2 disparos básicos + 1 súper con empuje = MUERTE garantizada a cualquier brawler del juego, sin importar su vida máxima.",
+      "bestBuild": "Gadget: Liquidación • Star Power: Empujón • Gear: Daño + Carga de súper",
+      "bestMatchup": "La pesadilla absoluta de Frank, Draco, Meg, Buster, Bull y El Primo.",
+      "dangerMatchup": "Lanzadores y francotiradores que no le permiten conectar los básicos a rango."
+    },
+    "Surge": {
+      "proTip": "Consigue tu Nivel 2 lo antes posible para ganar velocidad de movimiento. Usa el salto de la súper para esquivar proyectiles masivos como la bala de Piper o el gancho de Gene.",
+      "bestBuild": "Gadget: Subidón de energía • Star Power: Al máximo • Gear: Daño + Escudo",
+      "bestMatchup": "Devora tanques y asesinos que saltan sobre él (Edgar, Buzz, Fang).",
+      "dangerMatchup": "Tiradores de larguísimo alcance que no le dejan cargar su primera fase evolutiva."
+    },
+    "Angelo": {
+      "proTip": "Carga la flecha al máximo mientras caminas por el agua donde nadie puede seguirte. El veneno anula la curación del rival durante 4 segundos completos.",
+      "bestBuild": "Gadget: Salto de escape • Star Power: Flotación veloz • Gear: Daño + Visión",
+      "bestMatchup": "Duelos de francotiradores en mapas con agua (Safe Zone, Belle's Rock, Shooting Star).",
+      "dangerMatchup": "Asesinos con salto directo que no le dan tiempo a tensar el arco."
+    },
+    "Tara": {
+      "proTip": "En mapas con hierba, tu gadget de tres ojos revela la posición exacta de todo el equipo enemigo durante 5 segundos. Es ventaja táctica automática.",
+      "bestBuild": "Gadget: Ojo que todo lo ve • Star Power: Sombra curativa • Gear: Daño + Carga de súper",
+      "bestMatchup": "Agrupaciones enemigas; su agujero negro voltea partidas perdidas en el último segundo.",
+      "dangerMatchup": "Tiradores lejanos que la desgastan sin dejarla acumular súper."
+    },
+    "Rosa": {
+      "proTip": "Usa tu gadget de arbusto para conectar franjas de hierba y moverte invisible por todo el mapa sin recibir un solo disparo.",
+      "bestBuild": "Gadget: Fertilizante • Star Power: Naturaleza viva • Gear: Velocidad en hierba + Daño",
+      "bestMatchup": "Sneaky Fields y Double Swoosh; domina la hierba con curación pasiva continua.",
+      "dangerMatchup": "Gale, Colette, Emz y Clancy que la derriten a pesar de activar su escudo."
+    },
+    "Chuck": {
+      "proTip": "Coloca tus 4 postes en línea recta conectando tu base con la caja rival. Podrás volar a través del mapa entero cada 5 segundos de forma invulnerable.",
+      "bestBuild": "Gadget: Desvío • Star Power: Pitido de tren • Gear: Daño + Recarga",
+      "bestMatchup": "Mapas de Atraco (Hot Potato, Safe Zone, Kaboom Canyon) donde garantiza victoria por DPS.",
+      "dangerMatchup": "Defensores con aturdimiento en el punto exacto de la caja que cortan tu trayecto."
+    },
+    "Nani": {
+      "proTip": "La mayor francotiradora de daño individual. Si un francotirador rival te dispara, activa el gadget de retorno para devolverle su propio daño y borrarlo del mapa.",
+      "bestBuild": "Gadget: Retorno al remitente • Star Power: Autofoco • Gear: Daño + Recarga",
+      "bestMatchup": "Derrota a Piper, Mandy, Belle y Brock devolviendo sus disparos de máxima potencia.",
+      "dangerMatchup": "Mascotas o generadores de minions que interceptan sus 3 esferas de luz."
+    }
+  }
+}
