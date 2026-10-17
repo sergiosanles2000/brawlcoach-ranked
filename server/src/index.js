@@ -382,6 +382,41 @@ app.post('/api/friends/chat/send', (req, res) => {
   res.json({ success: true, message: newMsg });
 });
 
+// ==========================================
+// 6. LIVE SHARED DRAFT ROOMS (REAL-TIME SYNC WITH FRIENDS)
+// ==========================================
+// draftRooms: { [roomCode]: { roomCode, hostTag, mapId, allyPicks, enemyPicks, allyBans, enemyBans, updatedAt } }
+const draftRooms = new Map();
+
+app.post('/api/draft/room/sync', (req, res) => {
+  const { roomCode, hostTag, mapId, allyPicks, enemyPicks, allyBans, enemyBans } = req.body;
+  if (!roomCode) return res.status(400).json({ error: 'roomCode requerido' });
+
+  const cleanCode = roomCode.trim().toUpperCase();
+  const roomData = {
+    roomCode: cleanCode,
+    hostTag: hostTag || 'Host',
+    mapId: mapId || 'patata-caliente',
+    allyPicks: allyPicks || [null, null, null],
+    enemyPicks: enemyPicks || [null, null, null],
+    allyBans: allyBans || [null, null, null],
+    enemyBans: enemyBans || [null, null, null],
+    updatedAt: new Date().toISOString(),
+  };
+
+  draftRooms.set(cleanCode, roomData);
+  res.json({ success: true, room: roomData });
+});
+
+app.get('/api/draft/room/:code', (req, res) => {
+  const cleanCode = req.params.code.trim().toUpperCase();
+  const room = draftRooms.get(cleanCode);
+  if (!room) {
+    return res.status(404).json({ error: 'Sala no encontrada' });
+  }
+  res.json({ success: true, room });
+});
+
 app.listen(PORT, () => {
   console.log(`🎮 Brawl Stars Draft Assistant Server running on http://localhost:${PORT}`);
 });

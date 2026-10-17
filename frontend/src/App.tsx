@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Zap, Shield, MessageSquare, User, Users } from 'lucide-react';
+import { Zap, Shield, MessageSquare, User, Users, Gamepad2, Share2 } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import brawlersData from './data/brawlers.json';
 import countersData from './data/counters.json';
@@ -15,6 +15,9 @@ import type {
 import { Header } from './components/Header';
 import { DraftSlots, type ActiveSlotType } from './components/DraftSlots';
 import { Recommendations } from './components/Recommendations';
+import { LiveWinrateAndLanes } from './components/LiveWinrateAndLanes';
+import { PracticeDraftSimulator } from './components/PracticeDraftSimulator';
+import { SharedDraftRoomModal } from './components/SharedDraftRoomModal';
 import { BrawlerPickerModal } from './components/BrawlerPickerModal';
 import { CaptureOverlay } from './components/CaptureOverlay';
 import { DebugConsole } from './components/DebugConsole';
@@ -79,8 +82,9 @@ export function App() {
   const [isCaptureOpen, setIsCaptureOpen] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isLogsOpen, setIsLogsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'draft' | 'chat' | 'friends' | 'profile'>('draft');
+  const [activeTab, setActiveTab] = useState<'draft' | 'practice' | 'chat' | 'friends' | 'profile'>('draft');
   const [showSplash, setShowSplash] = useState(true);
+  const [isShareRoomOpen, setIsShareRoomOpen] = useState(false);
 
   // User Player Profile state
   const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(null);
@@ -400,12 +404,12 @@ export function App() {
         onNavigateProfile={() => setActiveTab('profile')}
       />
 
-      {/* Navigation Tabs (Draft Board vs Coach Chat vs Friends vs Player Profile) */}
+      {/* Navigation Tabs (Draft Board vs Practice vs Coach Chat vs Friends vs Player Profile) */}
       <div className="w-full max-w-lg mx-auto px-3 pt-2.5">
-        <div className="grid grid-cols-4 p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs font-semibold gap-1">
+        <div className="grid grid-cols-5 p-1 bg-slate-900 rounded-xl border border-slate-800 text-[11px] font-semibold gap-1">
           <button
             onClick={() => setActiveTab('draft')}
-            className={`py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
+            className={`py-2 px-0.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
               activeTab === 'draft'
                 ? 'bg-slate-800 text-white font-bold border border-slate-700'
                 : 'text-slate-400 hover:text-slate-200'
@@ -415,8 +419,19 @@ export function App() {
             <span className="truncate">Draft</span>
           </button>
           <button
+            onClick={() => setActiveTab('practice')}
+            className={`py-2 px-0.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
+              activeTab === 'practice'
+                ? 'bg-slate-800 text-white font-bold border border-slate-700'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Gamepad2 className="w-3.5 h-3.5 text-purple-400" />
+            <span className="truncate">Práctica</span>
+          </button>
+          <button
             onClick={() => setActiveTab('chat')}
-            className={`py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer relative ${
+            className={`py-2 px-0.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer relative ${
               activeTab === 'chat'
                 ? 'bg-slate-800 text-white font-bold border border-slate-700'
                 : 'text-slate-400 hover:text-slate-200'
@@ -427,7 +442,7 @@ export function App() {
           </button>
           <button
             onClick={() => setActiveTab('friends')}
-            className={`py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
+            className={`py-2 px-0.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
               activeTab === 'friends'
                 ? 'bg-slate-800 text-white font-bold border border-slate-700'
                 : 'text-slate-400 hover:text-slate-200'
@@ -438,7 +453,7 @@ export function App() {
           </button>
           <button
             onClick={() => setActiveTab('profile')}
-            className={`py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
+            className={`py-2 px-0.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
               activeTab === 'profile'
                 ? 'bg-slate-800 text-white font-bold border border-slate-700'
                 : 'text-slate-400 hover:text-slate-200'
@@ -455,21 +470,46 @@ export function App() {
         <>
           {/* Main Content Area */}
           <main className="w-full max-w-lg mx-auto px-3 py-2.5 flex flex-col gap-3">
-            {/* Prominent Floating Mod Menu Overlay Button */}
-            <button
-              onClick={handleToggleFloatingOverlay}
-              className="w-full py-2.5 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs border border-slate-800 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer"
-            >
-              <div className="flex items-center gap-2">
-                <span className="p-1 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-400">
-                  <Zap className="w-3.5 h-3.5" />
+            {/* Top Action Bar: Floating Mod Menu + Share Live Draft Room */}
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={handleToggleFloatingOverlay}
+                className="py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs border border-slate-800 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-1.5 truncate">
+                  <span className="p-1 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-400">
+                    <Zap className="w-3.5 h-3.5" />
+                  </span>
+                  <span className="truncate">Burbuja</span>
+                </div>
+                <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-300 font-mono">
+                  Activa
                 </span>
-                <span>Superposición Flotante</span>
-              </div>
-              <span className="text-[10.5px] bg-slate-800 px-2 py-0.5 rounded text-slate-300 font-mono">
-                Burbuja Activa
-              </span>
-            </button>
+              </button>
+
+              <button
+                onClick={() => setIsShareRoomOpen(true)}
+                className="py-2 px-3 rounded-xl bg-gradient-to-r from-blue-900/40 to-indigo-900/40 hover:from-blue-900/60 hover:to-indigo-900/60 text-blue-200 font-semibold text-xs border border-blue-500/30 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer shadow-sm"
+              >
+                <div className="flex items-center gap-1.5 truncate">
+                  <span className="p-1 rounded-md bg-blue-500/20 text-blue-400">
+                    <Share2 className="w-3.5 h-3.5" />
+                  </span>
+                  <span className="truncate">Compartir Draft</span>
+                </div>
+                <span className="text-[10px] bg-blue-500/20 px-1.5 py-0.5 rounded text-blue-300 font-semibold">
+                  Live
+                </span>
+              </button>
+            </div>
+
+            {/* Feature 1 & 2: Real-time Draft Winrate Gauge & Lane Spawn Assistant */}
+            <LiveWinrateAndLanes
+              map={selectedMap}
+              allyPicks={allyPicks}
+              enemyPicks={enemyPicks}
+              countersData={counters}
+            />
 
             {/* 6-Slot Draft Board (Picks and Bans) */}
             <DraftSlots
@@ -495,8 +535,23 @@ export function App() {
             />
           </main>
         </>
+      ) : activeTab === 'practice' ? (
+        /* Tab 2: Ranked Practice Mode (Draft Simulator vs AI) */
+        <main className="w-full max-w-lg mx-auto px-2.5 pt-2 pb-1 flex-1 flex flex-col">
+          <PracticeDraftSimulator
+            allMaps={typedMaps}
+            allBrawlers={brawlers}
+            countersData={counters}
+            onApplyToMainDraft={(map, allies, enemies) => {
+              setSelectedMap(map);
+              setAllyPicks([allies[0] || null, allies[1] || null, allies[2] || null]);
+              setEnemyPicks([enemies[0] || null, enemies[1] || null, enemies[2] || null]);
+              setActiveTab('draft');
+            }}
+          />
+        </main>
       ) : activeTab === 'chat' ? (
-        /* Tab 2: Coach Chat */
+        /* Tab 3: Coach Chat */
         <main className="w-full max-w-lg mx-auto px-2.5 pt-1 pb-1 flex-1 flex flex-col">
           <BrawlChat
             currentMap={selectedMap}
@@ -510,7 +565,7 @@ export function App() {
           />
         </main>
       ) : activeTab === 'friends' ? (
-        /* Tab 3: Friends & Direct Chat */
+        /* Tab 4: Friends & Direct Chat */
         <main className="w-full max-w-lg mx-auto px-2.5 pt-2 pb-1 flex-1 flex flex-col">
           <FriendsScreen
             myProfile={playerProfile}
@@ -518,7 +573,7 @@ export function App() {
           />
         </main>
       ) : (
-        /* Tab 4: Player Profile & Inventory */
+        /* Tab 5: Player Profile & Inventory */
         <main className="w-full max-w-lg mx-auto px-1 py-1">
           <PlayerProfileScreen
             playerProfile={playerProfile}
@@ -530,6 +585,28 @@ export function App() {
           />
         </main>
       )}
+
+      {/* Feature 5: Live Shared Draft Room Modal */}
+      <SharedDraftRoomModal
+        isOpen={isShareRoomOpen}
+        onClose={() => setIsShareRoomOpen(false)}
+        myTag={playerProfile?.tag || 'GGJ2QLJY'}
+        selectedMap={selectedMap}
+        allyPicks={allyPicks}
+        enemyPicks={enemyPicks}
+        allyBans={allyBans}
+        enemyBans={enemyBans}
+        onApplySyncedDraft={(mapId: string, allies: (string | null)[], enemies: (string | null)[], allyB: (string | null)[], enemyB: (string | null)[]) => {
+          const matchedMap = typedMaps.find(
+            (m) => m.id.toLowerCase() === mapId.toLowerCase() || m.name.toLowerCase() === mapId.toLowerCase()
+          );
+          if (matchedMap) setSelectedMap(matchedMap);
+          setAllyPicks(allies);
+          setEnemyPicks(enemies);
+          setAllyBans(allyB);
+          setEnemyBans(enemyB);
+        }}
+      />
 
       {/* Modal for manual Picking/Banning */}
       <BrawlerPickerModal

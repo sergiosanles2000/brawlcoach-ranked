@@ -1144,6 +1144,19 @@ Responde EXCLUSIVAMENTE un JSON válido sin bloques markdown:
 
         tvStatus?.text = "✅ Estadísticas de BrawlPick aplicadas (<10ms)"
         btnScan?.isEnabled = true
+
+        // Haptic feedback vibration on successful scan
+        try {
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as? android.os.Vibrator
+            if (vibrator?.hasVibrator() == true) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(android.os.VibrationEffect.createOneShot(80, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator.vibrate(80)
+                }
+            }
+        } catch (_: Exception) {}
     }
 
     override fun onDestroy() {
