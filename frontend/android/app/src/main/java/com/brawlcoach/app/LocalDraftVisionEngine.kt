@@ -91,46 +91,128 @@ class LocalDraftVisionEngine(private val context: Context) {
 
     private val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
-    // Spanish to English ranked map & mode dictionary
+    // Comprehensive Spanish to English ranked map & mode dictionary
     private val mapTranslations = mapOf(
+        // Hot Zone
         "pista ardiente" to Pair("Ring of Fire", "Hot Zone"),
+        "anillo de fuego" to Pair("Ring of Fire", "Hot Zone"),
         "ring of fire" to Pair("Ring of Fire", "Hot Zone"),
         "escarabajos en duelo" to Pair("Dueling Beetles", "Hot Zone"),
         "dueling beetles" to Pair("Dueling Beetles", "Hot Zone"),
         "estrategias paralelas" to Pair("Parallel Plays", "Hot Zone"),
+        "jugadas paralelas" to Pair("Parallel Plays", "Hot Zone"),
         "parallel plays" to Pair("Parallel Plays", "Hot Zone"),
+        "negocio abierto" to Pair("Open Business", "Hot Zone"),
+        "open business" to Pair("Open Business", "Hot Zone"),
+        "viaje rápido" to Pair("Quick Travel", "Hot Zone"),
+        "viaje rapido" to Pair("Quick Travel", "Hot Zone"),
+        "quick travel" to Pair("Quick Travel", "Hot Zone"),
+        "con cuidado" to Pair("Tread Carefully", "Hot Zone"),
+        "tread carefully" to Pair("Tread Carefully", "Hot Zone"),
+        "bajo presión" to Pair("Under Pressure", "Hot Zone"),
+        "bajo presion" to Pair("Under Pressure", "Hot Zone"),
+        "under pressure" to Pair("Under Pressure", "Hot Zone"),
+
+        // Brawl Ball
         "estadio central" to Pair("Center Stage", "Brawl Ball"),
         "center stage" to Pair("Center Stage", "Brawl Ball"),
         "sueños de pinball" to Pair("Pinball Dreams", "Brawl Ball"),
+        "suenos de pinball" to Pair("Pinball Dreams", "Brawl Ball"),
         "pinball dreams" to Pair("Pinball Dreams", "Brawl Ball"),
         "campos furtivos" to Pair("Sneaky Fields", "Brawl Ball"),
         "sneaky fields" to Pair("Sneaky Fields", "Brawl Ball"),
+        "en espiral" to Pair("Spiraling Out", "Brawl Ball"),
+        "spiraling out" to Pair("Spiraling Out", "Brawl Ball"),
+        "triple regate" to Pair("Triple Dribble", "Brawl Ball"),
+        "triple dribble" to Pair("Triple Dribble", "Brawl Ball"),
+        "estadio furtivo" to Pair("Backyard Bowl", "Brawl Ball"),
+        "backyard bowl" to Pair("Backyard Bowl", "Brawl Ball"),
+        "pelota de playa" to Pair("Beach Ball", "Brawl Ball"),
+        "beach ball" to Pair("Beach Ball", "Brawl Ball"),
+        "nudo de hierba" to Pair("Grass Knot", "Brawl Ball"),
+        "grass knot" to Pair("Grass Knot", "Brawl Ball"),
+        "tiro de esquina" to Pair("Pinhole Punt", "Brawl Ball"),
+        "pinhole punt" to Pair("Pinhole Punt", "Brawl Ball"),
+        "fútbol soleado" to Pair("Sunny Soccer", "Brawl Ball"),
+        "futbol soleado" to Pair("Sunny Soccer", "Brawl Ball"),
+        "sunny soccer" to Pair("Sunny Soccer", "Brawl Ball"),
+        "superplaya" to Pair("Super Beach", "Brawl Ball"),
+        "super beach" to Pair("Super Beach", "Brawl Ball"),
+
+        // Gem Grab
         "mina rocosa" to Pair("Hard Rock Mine", "Gem Grab"),
         "hard rock mine" to Pair("Hard Rock Mine", "Gem Grab"),
+        "doble dilema" to Pair("Double Swoosh", "Gem Grab"),
         "doble curva" to Pair("Double Swoosh", "Gem Grab"),
-        "fuerte de gemas" to Pair("Double Swoosh", "Gem Grab"),
+        "fuerte de gemas" to Pair("Gem Fort", "Gem Grab"),
+        "gem fort" to Pair("Gem Fort", "Gem Grab"),
         "double swoosh" to Pair("Double Swoosh", "Gem Grab"),
+        "cueva subterránea" to Pair("Undermine", "Gem Grab"),
+        "cueva subterranea" to Pair("Undermine", "Gem Grab"),
         "socavón" to Pair("Undermine", "Gem Grab"),
+        "socavon" to Pair("Undermine", "Gem Grab"),
         "undermine" to Pair("Undermine", "Gem Grab"),
+
+        // Heist
         "patata caliente" to Pair("Hot Potato", "Heist"),
         "hot potato" to Pair("Hot Potato", "Heist"),
         "zona segura" to Pair("Safe Zone", "Heist"),
         "safe zone" to Pair("Safe Zone", "Heist"),
         "cañón explosivo" to Pair("Kaboom Canyon", "Heist"),
+        "canon explosivo" to Pair("Kaboom Canyon", "Heist"),
         "kaboom canyon" to Pair("Kaboom Canyon", "Heist"),
         "parada técnica" to Pair("Pit Stop", "Heist"),
+        "parada tecnica" to Pair("Pit Stop", "Heist"),
         "pit stop" to Pair("Pit Stop", "Heist"),
-        "aguas turbulentas" to Pair("Aguas Turbulentas", "Heist"),
+        "aguas turbulentas" to Pair("Bridge Too Far", "Heist"),
+        "un puente demasiado lejos" to Pair("Bridge Too Far", "Heist"),
+        "bridge too far" to Pair("Bridge Too Far", "Heist"),
+
+        // Knockout
+        "fénix resplandeciente" to Pair("Flaring Phoenix", "Knockout"),
+        "fenix resplandeciente" to Pair("Flaring Phoenix", "Knockout"),
         "fénix en llamas" to Pair("Flaring Phoenix", "Knockout"),
+        "fenix en llamas" to Pair("Flaring Phoenix", "Knockout"),
         "flaring phoenix" to Pair("Flaring Phoenix", "Knockout"),
+        "barranco de brazo dorado" to Pair("Goldarm Gulch", "Knockout"),
         "barranco del brazo de oro" to Pair("Goldarm Gulch", "Knockout"),
         "goldarm gulch" to Pair("Goldarm Gulch", "Knockout"),
         "nuevos horizontes" to Pair("New Horizons", "Knockout"),
         "new horizons" to Pair("New Horizons", "Knockout"),
+        "a campo abierto" to Pair("Out in the Open", "Knockout"),
+        "out in the open" to Pair("Out in the Open", "Knockout"),
+        "roca de belle" to Pair("Belle's Rock", "Knockout"),
+        "belle's rock" to Pair("Belle's Rock", "Knockout"),
+        "doble piso" to Pair("Double Decker", "Knockout"),
+        "double decker" to Pair("Double Decker", "Knockout"),
+        "nueva perspectiva" to Pair("New Perspective", "Knockout"),
+        "new perspective" to Pair("New Perspective", "Knockout"),
+        "permanezcan de pie" to Pair("Please Remain Standing", "Knockout"),
+        "please remain standing" to Pair("Please Remain Standing", "Knockout"),
+        "piensa adelante" to Pair("Think Ahead", "Knockout"),
+        "think ahead" to Pair("Think Ahead", "Knockout"),
+
+        // Bounty
+        "tiroteo estelar" to Pair("Shooting Star", "Bounty"),
+        "estrella fugaz" to Pair("Shooting Star", "Bounty"),
+        "shooting star" to Pair("Shooting Star", "Bounty"),
         "gran canal" to Pair("Canal Grande", "Bounty"),
         "canal grande" to Pair("Canal Grande", "Bounty"),
-        "estrella fugaz" to Pair("Shooting Star", "Bounty"),
-        "shooting star" to Pair("Shooting Star", "Bounty")
+        "el escondite" to Pair("Hideout", "Bounty"),
+        "hideout" to Pair("Hideout", "Bounty"),
+        "estación seca" to Pair("Dry Season", "Bounty"),
+        "estacion seca" to Pair("Dry Season", "Bounty"),
+        "dry season" to Pair("Dry Season", "Bounty"),
+        "pastel de capas" to Pair("Layer Cake", "Bounty"),
+        "layer cake" to Pair("Layer Cake", "Bounty"),
+        "sin excusas" to Pair("No Excuses", "Bounty"),
+        "no excuses" to Pair("No Excuses", "Bounty"),
+        "baya sabrosa" to Pair("Tasty Berry", "Bounty"),
+        "tasty berry" to Pair("Tasty Berry", "Bounty"),
+
+        // Wipeout
+        "el tiempo vuela" to Pair("Time Flies", "Wipeout"),
+        "time flies" to Pair("Time Flies", "Wipeout")
     )
 
     init {
@@ -514,11 +596,11 @@ class LocalDraftVisionEngine(private val context: Context) {
         val cardW = clampedRect.width()
         val cardH = clampedRect.height()
 
-        // 1. Portrait area: centers right on the brawler's face (excluding top frame & bottom name label)
+        // 1. Portrait area: centers right on the brawler's face (skipping top "SIGUIENTE" badge, captain crown, level 11 badge, and bottom player name label)
         val faceLeft = clampedRect.left + (cardW * 0.15f).toInt()
         val faceRight = clampedRect.left + (cardW * 0.85f).toInt()
-        val faceTop = clampedRect.top + (cardH * 0.20f).toInt()
-        val faceBottom = clampedRect.top + (cardH * 0.70f).toInt()
+        val faceTop = clampedRect.top + (cardH * 0.30f).toInt()
+        val faceBottom = clampedRect.top + (cardH * 0.75f).toInt()
 
         val portraitW = (faceRight - faceLeft).coerceIn(1, bitmap.width - faceLeft)
         val portraitH = (faceBottom - faceTop).coerceIn(1, bitmap.height - faceTop)

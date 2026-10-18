@@ -1810,13 +1810,16 @@ class FloatingOverlayService : Service() {
                     if (result.isDraftActive) {
                         if (result.hasChanges) {
                             for (i in 0..2) {
-                                if (result.allyPicks[i] != null) allyPicks[i] = result.allyPicks[i]
-                                if (result.enemyPicks[i] != null) enemyPicks[i] = result.enemyPicks[i]
+                                allyPicks[i] = result.allyPicks[i]
+                                enemyPicks[i] = result.enemyPicks[i]
                             }
 
-                            for (ban in result.bans) {
-                                if (!bannedBrawlers.contains(ban)) {
-                                    bannedBrawlers.add(ban)
+                            if (result.bans.isNotEmpty()) {
+                                bannedBrawlers.clear()
+                                for (ban in result.bans) {
+                                    if (!bannedBrawlers.contains(ban)) {
+                                        bannedBrawlers.add(ban)
+                                    }
                                 }
                             }
 
