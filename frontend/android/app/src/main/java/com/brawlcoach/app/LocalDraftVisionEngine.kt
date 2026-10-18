@@ -23,13 +23,15 @@ import kotlin.math.sqrt
  *    - If no "VS" is found with sufficient confidence, the frame is skipped.
  * 2. Dynamic Relative Coordinate System:
  *    - All slots (3 Ally Picks, 3 Enemy Picks, 3 Ally Bans, 3 Enemy Bans) are calculated
- *      as exact offsets from (vs.cx, vs.cy) scaled by the screen height and anchor scale factor.
+ *      as exact offsets from (vs.cx, vs.cy) scaled by the screen height.
  *    - Seamlessly adapts to any phone aspect ratio (16:9, 19.5:9, 20:9, notch margins, black bars).
- * 3. State & Visual Classification:
- *    - Center saturation & luminance check distinguishes empty question-mark slots from locked brawlers.
- *    - Normalized color histogram + RGB distance template matching against 107 brawlers in assets.
+ * 3. State & Dual-Model Visual Classification:
+ *    - Pick slots: evaluated against 107 portrait templates in assets/brawlers/.
+ *      Luminance distribution & dark ratio distinguish empty question-mark slots from locked brawlers.
+ *    - Ban slots: evaluated against 107 neutral pin templates in assets/brawler_pins/.
+ *      Circular mask + team background filter + red badge rejection.
  * 4. Map & Mode Recognition:
- *    - Banner OCR dynamically searches for the information button anchor to crop the map/mode header.
+ *    - Top banner OCR anchored on information button, scaled 2.5x for ML Kit Latin text recognition.
  */
 class LocalDraftVisionEngine(private val context: Context) {
 
@@ -37,7 +39,8 @@ class LocalDraftVisionEngine(private val context: Context) {
         private const val TAG = "LocalDraftVisionEngine"
         private const val SAMPLE_SIZE = 32
         private const val HIST_BINS = 64
-        private const val MATCH_THRESHOLD = 0.58f
+        private const val PICK_MATCH_THRESHOLD = 0.58f
+        private const val BAN_MATCH_THRESHOLD = 0.48f
     }
 
     data class BrawlerTemplate(
@@ -71,7 +74,8 @@ class LocalDraftVisionEngine(private val context: Context) {
         val detectedMode: String? = null
     )
 
-    private val templates = mutableListOf<BrawlerTemplate>()
+    private val pickTemplates = mutableListOf<BrawlerTemplate>()
+    private val banTemplates = mutableListOf<BrawlerTemplate>()
     private var isTemplatesLoaded = false
 
     private var vsAnchorBitmap: Bitmap? = null
@@ -148,43 +152,67 @@ class LocalDraftVisionEngine(private val context: Context) {
                     Log.e(TAG, "Failed to load vs_anchor.png: ${e.message}")
                 }
 
-                // 2. Load 107 Brawler Templates (from brawlers/ or brawler_templates/)
-                val folderName = if ((assetManager.list("brawlers")?.size ?: 0) > 0) "brawlers" else "brawler_templates"
-                val files = assetManager.list(folderName) ?: emptyArray()
-                val loadedList = mutableListOf<BrawlerTemplate>()
-
-                for (filename in files) {
+                // 2. Load 107 Brawler Portrait Templates (for Picks)
+                val pickFiles = assetManager.list("brawlers") ?: emptyArray()
+                val loadedPicks = mutableListOf<BrawlerTemplate>()
+                for (filename in pickFiles) {
                     if (!filename.endsWith(".png", ignoreCase = true)) continue
                     val brawlerName = filename.substringBeforeLast(".png")
                     var inputStream: InputStream? = null
                     try {
-                        inputStream = assetManager.open("$folderName/$filename")
+                        inputStream = assetManager.open("brawlers/$filename")
                         val bitmap = BitmapFactory.decodeStream(inputStream)
                         if (bitmap != null) {
-                            val template = extractTemplate(brawlerName, bitmap)
-                            loadedList.add(template)
+                            val template = extractPickTemplate(brawlerName, bitmap)
+                            loadedPicks.add(template)
                             bitmap.recycle()
                         }
                     } catch (e: Exception) {
-                        Log.w(TAG, "Error loading template $filename: ${e.message}")
+                        Log.w(TAG, "Error loading pick template $filename: ${e.message}")
                     } finally {
                         try { inputStream?.close() } catch (_: Exception) {}
                     }
                 }
 
-                synchronized(templates) {
-                    templates.clear()
-                    templates.addAll(loadedList)
+                // 3. Load 107 Neutral Pin Templates (for Bans)
+                val banFiles = assetManager.list("brawler_pins") ?: emptyArray()
+                val loadedBans = mutableListOf<BrawlerTemplate>()
+                for (filename in banFiles) {
+                    if (!filename.endsWith(".png", ignoreCase = true)) continue
+                    val brawlerName = filename.substringBeforeLast(".png")
+                    var inputStream: InputStream? = null
+                    try {
+                        inputStream = assetManager.open("brawler_pins/$filename")
+                        val bitmap = BitmapFactory.decodeStream(inputStream)
+                        if (bitmap != null) {
+                            val template = extractBanPinTemplate(brawlerName, bitmap)
+                            if (template != null) {
+                                loadedBans.add(template)
+                            }
+                            bitmap.recycle()
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Error loading ban pin template $filename: ${e.message}")
+                    } finally {
+                        try { inputStream?.close() } catch (_: Exception) {}
+                    }
+                }
+
+                synchronized(this) {
+                    pickTemplates.clear()
+                    pickTemplates.addAll(loadedPicks)
+                    banTemplates.clear()
+                    banTemplates.addAll(loadedBans)
                     isTemplatesLoaded = true
                 }
-                Log.i(TAG, "Successfully loaded ${loadedList.size} local brawler templates from $folderName.")
+                Log.i(TAG, "Successfully loaded ${loadedPicks.size} pick templates and ${loadedBans.size} ban templates.")
             } catch (e: Exception) {
                 Log.e(TAG, "Failed loading templates: ${e.message}")
             }
         }.start()
     }
 
-    private fun extractTemplate(name: String, bitmap: Bitmap): BrawlerTemplate {
+    private fun extractPickTemplate(name: String, bitmap: Bitmap): BrawlerTemplate {
         val scaled = Bitmap.createScaledBitmap(bitmap, SAMPLE_SIZE, SAMPLE_SIZE, true)
         val pixels = IntArray(SAMPLE_SIZE * SAMPLE_SIZE)
         scaled.getPixels(pixels, 0, SAMPLE_SIZE, 0, 0, SAMPLE_SIZE, SAMPLE_SIZE)
@@ -218,18 +246,57 @@ class LocalDraftVisionEngine(private val context: Context) {
         )
     }
 
+    private fun extractBanPinTemplate(name: String, bitmap: Bitmap): BrawlerTemplate? {
+        val scaled = Bitmap.createScaledBitmap(bitmap, SAMPLE_SIZE, SAMPLE_SIZE, true)
+        val pixels = IntArray(SAMPLE_SIZE * SAMPLE_SIZE)
+        scaled.getPixels(pixels, 0, SAMPLE_SIZE, 0, 0, SAMPLE_SIZE, SAMPLE_SIZE)
+        if (scaled != bitmap) scaled.recycle()
+
+        var sumR = 0f
+        var sumG = 0f
+        var sumB = 0f
+        var validCount = 0
+        val hist = FloatArray(HIST_BINS)
+
+        for (c in pixels) {
+            val a = (c ushr 24) and 0xFF
+            if (a < 50) continue // Skip transparent margins
+
+            val r = (c shr 16) and 0xFF
+            val g = (c shr 8) and 0xFF
+            val b = c and 0xFF
+            sumR += r
+            sumG += g
+            sumB += b
+            val bin = (r / 64) * 16 + (g / 64) * 4 + (b / 64)
+            hist[bin] += 1f
+            validCount++
+        }
+
+        if (validCount == 0) return null
+
+        val total = validCount.toFloat()
+        for (i in hist.indices) hist[i] /= total
+
+        return BrawlerTemplate(
+            name = name,
+            avgR = sumR / total,
+            avgG = sumG / total,
+            avgB = sumB / total,
+            colorHist = hist
+        )
+    }
+
     /**
      * Finds the central "VS" emblem on the draft screen.
      * Uses template matching with normalized sum of absolute differences.
-     * If not found with confidence > 0.65, returns null (not in draft phase).
+     * If not found with confidence > 0.55, returns null (not in draft phase).
      */
     fun findVsAnchor(frameBitmap: Bitmap): AnchorMatchResult? {
         val anchor = vsAnchorBitmap ?: return null
         val w = frameBitmap.width
         val h = frameBitmap.height
 
-        // The VS logo is always centered between Blue & Red teams in the bottom draft zone
-        // In landscape, expected VS height is ~0.088f * h
         val targetTh = (h * 0.088f).toInt().coerceAtLeast(16)
         val scale = targetTh.toFloat() / anchor.height.toFloat()
         val targetTw = (anchor.width * scale).toInt().coerceAtLeast(16)
@@ -239,7 +306,6 @@ class LocalDraftVisionEngine(private val context: Context) {
         scaledAnchor.getPixels(anchorPixels, 0, targetTw, 0, 0, targetTw, targetTh)
         if (scaledAnchor != anchor) scaledAnchor.recycle()
 
-        // Subsample anchor pixels (step 2) for ultra-fast matching
         val sampledAnchorVals = mutableListOf<Int>()
         for (y in 0 until targetTh step 2) {
             for (x in 0 until targetTw step 2) {
@@ -251,11 +317,11 @@ class LocalDraftVisionEngine(private val context: Context) {
         val sampleLen = sampledAnchorVals.size
         if (sampleLen == 0) return null
 
-        // Search Region: y in [0.78 * h, 0.94 * h], x in [0.42 * w, 0.58 * w]
-        val yMin = (h * 0.78f).toInt().coerceIn(0, h - targetTh)
-        val yMax = (h * 0.94f).toInt().coerceIn(yMin, h - targetTh)
-        val xMin = (w * 0.42f).toInt().coerceIn(0, w - targetTw)
-        val xMax = (w * 0.58f).toInt().coerceIn(xMin, w - targetTw)
+        // Search Region: y in [0.75 * h, 0.95 * h], x in [0.40 * w, 0.60 * w]
+        val yMin = (h * 0.75f).toInt().coerceIn(0, h - targetTh)
+        val yMax = (h * 0.95f).toInt().coerceIn(yMin, h - targetTh)
+        val xMin = (w * 0.40f).toInt().coerceIn(0, w - targetTw)
+        val xMax = (w * 0.60f).toInt().coerceIn(xMin, w - targetTw)
 
         var bestDiff = 999999
         var bestX = -1
@@ -284,7 +350,6 @@ class LocalDraftVisionEngine(private val context: Context) {
         if (bestX == -1 || bestY == -1) return null
 
         val avgPixelDiff = bestDiff.toFloat() / sampleLen.toFloat()
-        // avgPixelDiff: 0 is perfect match, < 45 is solid match
         val confidence = max(0f, 1f - (avgPixelDiff / 100f))
 
         return if (confidence >= 0.55f) {
@@ -334,7 +399,7 @@ class LocalDraftVisionEngine(private val context: Context) {
         val vsCx = vsAnchor.cx
         val vsCy = vsAnchor.cy
 
-        // Relative metrics scaled strictly by screen height (consistent in landscape)
+        // Relative metrics scaled strictly by screen height (consistent across aspect ratios)
         val cardW = (0.140f * height).toInt()
         val cardH = (0.200f * height).toInt()
         val cardTop = (vsCy - 0.100f * height).toInt()
@@ -343,14 +408,14 @@ class LocalDraftVisionEngine(private val context: Context) {
         val cardStep = 0.173f * height
         val innerOffset = 0.156f * height
 
-        // 3 Ally Picks (to the left of VS: Ally 3, Ally 2, Ally 1)
+        // 3 Ally Picks (to the left of VS: Ally 1 (leftmost), Ally 2 (mid), Ally 3 (rightmost))
         val allyCoords = listOf(
             Rect((vsCx - (innerOffset + 2 * cardStep) - cardW / 2).toInt(), cardTop, (vsCx - (innerOffset + 2 * cardStep) + cardW / 2).toInt(), cardBottom),
             Rect((vsCx - (innerOffset + 1 * cardStep) - cardW / 2).toInt(), cardTop, (vsCx - (innerOffset + 1 * cardStep) + cardW / 2).toInt(), cardBottom),
             Rect((vsCx - (innerOffset) - cardW / 2).toInt(), cardTop, (vsCx - (innerOffset) + cardW / 2).toInt(), cardBottom)
         )
 
-        // 3 Enemy Picks (to the right of VS: Enemy 1, Enemy 2, Enemy 3)
+        // 3 Enemy Picks (to the right of VS: Enemy 1 (leftmost), Enemy 2 (mid), Enemy 3 (rightmost))
         val enemyCoords = listOf(
             Rect((vsCx + (innerOffset) - cardW / 2).toInt(), cardTop, (vsCx + (innerOffset) + cardW / 2).toInt(), cardBottom),
             Rect((vsCx + (innerOffset + 1 * cardStep) - cardW / 2).toInt(), cardTop, (vsCx + (innerOffset + 1 * cardStep) + cardW / 2).toInt(), cardBottom),
@@ -382,27 +447,19 @@ class LocalDraftVisionEngine(private val context: Context) {
         // ==========================================
         // 3. MONITOR BANS (Vertical Columns)
         // ==========================================
-        val banRadius = (0.038f * height).toInt()
-        val allyBanCx = (vsCx - 0.590f * height).toInt()
-        val enemyBanCx = (vsCx + 0.590f * height).toInt()
-        val banStepY = (0.075f * height).toInt()
+        val allyBanCx = (vsCx - 0.659f * height).toInt()
+        val enemyBanCx = (vsCx + 0.604f * height).toInt()
+        val banRadius = (0.034f * height).toInt()
 
-        val allyBanCoords = listOf(
-            Rect(allyBanCx - banRadius, vsCy - banStepY - banRadius, allyBanCx + banRadius, vsCy - banStepY + banRadius),
-            Rect(allyBanCx - banRadius, vsCy - banRadius, allyBanCx + banRadius, vsCy + banRadius),
-            Rect(allyBanCx - banRadius, vsCy + banStepY - banRadius, allyBanCx + banRadius, vsCy + banStepY + banRadius)
-        )
-
-        val enemyBanCoords = listOf(
-            Rect(enemyBanCx - banRadius, vsCy - banStepY - banRadius, enemyBanCx + banRadius, vsCy - banStepY + banRadius),
-            Rect(enemyBanCx - banRadius, vsCy - banRadius, enemyBanCx + banRadius, vsCy + banRadius),
-            Rect(enemyBanCx - banRadius, vsCy + banStepY - banRadius, enemyBanCx + banRadius, vsCy + banStepY + banRadius)
-        )
+        val banTopY = (vsCy - 0.081f * height).toInt()
+        val banMidY = vsCy
+        val banBottomY = (vsCy + 0.074f * height).toInt()
+        val banYs = listOf(banTopY, banMidY, banBottomY)
 
         val detectedBans = mutableListOf<String>()
 
         for (i in 0..2) {
-            val banResult = evaluateBanSlot(frameBitmap, allyBanCoords[i], allyBanStates[i])
+            val banResult = evaluateBanSlot(frameBitmap, allyBanCx, banYs[i], banRadius, isAlly = true, state = allyBanStates[i])
             if (banResult != allyBanStates[i].brawler) {
                 allyBanStates[i].brawler = banResult
                 changesDetected = true
@@ -413,7 +470,7 @@ class LocalDraftVisionEngine(private val context: Context) {
         }
 
         for (i in 0..2) {
-            val banResult = evaluateBanSlot(frameBitmap, enemyBanCoords[i], enemyBanStates[i])
+            val banResult = evaluateBanSlot(frameBitmap, enemyBanCx, banYs[i], banRadius, isAlly = false, state = enemyBanStates[i])
             if (banResult != enemyBanStates[i].brawler) {
                 enemyBanStates[i].brawler = banResult
                 changesDetected = true
@@ -457,96 +514,71 @@ class LocalDraftVisionEngine(private val context: Context) {
         val cardW = clampedRect.width()
         val cardH = clampedRect.height()
 
-        // 1. Check center 30% of card for empty question-mark silhouette
-        val cx1 = clampedRect.left + (cardW * 0.35f).toInt()
-        val cx2 = clampedRect.left + (cardW * 0.65f).toInt()
-        val cy1 = clampedRect.top + (cardH * 0.35f).toInt()
-        val cy2 = clampedRect.top + (cardH * 0.65f).toInt()
-
-        var sumCR = 0
-        var sumCG = 0
-        var sumCB = 0
-        var countC = 0
-
-        for (y in cy1..cy2 step 2) {
-            for (x in cx1..cx2 step 2) {
-                if (x in 0 until bitmap.width && y in 0 until bitmap.height) {
-                    val p = bitmap.getPixel(x, y)
-                    sumCR += (p shr 16) and 0xFF
-                    sumCG += (p shr 8) and 0xFF
-                    sumCB += p and 0xFF
-                    countC++
-                }
-            }
-        }
-
-        if (countC > 0) {
-            val avgCR = sumCR / countC
-            val avgCG = sumCG / countC
-            val avgCB = sumCB / countC
-            val centerLum = 0.299f * avgCR + 0.587f * avgCG + 0.114f * avgCB
-
-            // Empty slot question-mark background is dark gray/blue with low luminance (< 75)
-            if (avgCR in 15..70 && avgCG in 20..75 && avgCB in 45..110 && centerLum < 75) {
-                return null
-            }
-        }
-
-        // 2. Slot is occupied: crop brawler face
+        // 1. Portrait area: centers right on the brawler's face (excluding top frame & bottom name label)
         val faceLeft = clampedRect.left + (cardW * 0.15f).toInt()
         val faceRight = clampedRect.left + (cardW * 0.85f).toInt()
-        val faceTop = clampedRect.top + (cardH * 0.08f).toInt()
-        val faceBottom = clampedRect.top + (cardH * 0.65f).toInt()
+        val faceTop = clampedRect.top + (cardH * 0.20f).toInt()
+        val faceBottom = clampedRect.top + (cardH * 0.70f).toInt()
 
         val portraitW = (faceRight - faceLeft).coerceIn(1, bitmap.width - faceLeft)
         val portraitH = (faceBottom - faceTop).coerceIn(1, bitmap.height - faceTop)
 
+        // 2. Luminance distribution check for empty question-mark card
+        var darkCount = 0
+        var totalCount = 0
+        var sumLum = 0f
+
+        for (y in faceTop until faceBottom step 2) {
+            for (x in faceLeft until faceRight step 2) {
+                if (x in 0 until bitmap.width && y in 0 until bitmap.height) {
+                    val p = bitmap.getPixel(x, y)
+                    val r = (p shr 16) and 0xFF
+                    val g = (p shr 8) and 0xFF
+                    val b = p and 0xFF
+                    val lum = 0.299f * r + 0.587f * g + 0.114f * b
+                    if (lum < 85f) {
+                        darkCount++
+                    }
+                    sumLum += lum
+                    totalCount++
+                }
+            }
+        }
+
+        if (totalCount > 0) {
+            val darkRatio = darkCount.toFloat() / totalCount.toFloat()
+            val meanLum = sumLum / totalCount.toFloat()
+
+            // Empty question-mark slots have > 82% dark pixels (< 85 lum) and mean luminance < 75
+            if (darkRatio > 0.82f && meanLum < 75f) {
+                return null
+            }
+        }
+
+        // 3. Slot is occupied: crop brawler face and match against 107 pick templates
         val portraitCrop = Bitmap.createBitmap(bitmap, faceLeft, faceTop, portraitW, portraitH)
-        val matched = matchBrawlerFromBitmap(portraitCrop)
+        val matched = matchPickFromBitmap(portraitCrop)
         portraitCrop.recycle()
 
         return matched
     }
 
-    private fun evaluateBanSlot(bitmap: Bitmap, rect: Rect, state: SlotState): String? {
-        val clampedRect = Rect(
-            rect.left.coerceIn(0, bitmap.width),
-            rect.top.coerceIn(0, bitmap.height),
-            rect.right.coerceIn(0, bitmap.width),
-            rect.bottom.coerceIn(0, bitmap.height)
-        )
-        if (clampedRect.width() <= 8 || clampedRect.height() <= 8) return state.brawler
+    private fun evaluateBanSlot(bitmap: Bitmap, bcx: Int, bcy: Int, radius: Int, isAlly: Boolean, state: SlotState): String? {
+        val left = (bcx - radius).coerceIn(0, bitmap.width)
+        val right = (bcx + radius).coerceIn(0, bitmap.width)
+        val top = (bcy - radius).coerceIn(0, bitmap.height)
+        val bottom = (bcy + radius).coerceIn(0, bitmap.height)
 
-        // Check if slot has color saturation (a banned brawler has hair/face colors)
-        var sumSat = 0f
-        var count = 0
-        for (y in clampedRect.top until clampedRect.bottom step 2) {
-            for (x in clampedRect.left until clampedRect.right step 2) {
-                val p = bitmap.getPixel(x, y)
-                val r = (p shr 16) and 0xFF
-                val g = (p shr 8) and 0xFF
-                val b = p and 0xFF
-                val mx = max(r, max(g, b))
-                val mn = min(r, min(g, b))
-                if (mx > 25) {
-                    sumSat += (mx - mn).toFloat() / mx.toFloat()
-                    count++
-                }
-            }
-        }
+        if (right - left <= 8 || bottom - top <= 8) return state.brawler
 
-        val avgSat = if (count > 0) sumSat / count.toFloat() else 0f
-        // Empty slot is very low saturation or purely dark
-        if (avgSat < 0.20f) return null
-
-        val crop = Bitmap.createBitmap(bitmap, clampedRect.left, clampedRect.top, clampedRect.width(), clampedRect.height())
-        val matched = matchBanFromBitmap(crop)
+        val crop = Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top)
+        val matched = matchBanFromBitmap(crop, isAlly)
         crop.recycle()
 
         return matched
     }
 
-    private fun matchBrawlerFromBitmap(bitmap: Bitmap): String? {
+    private fun matchPickFromBitmap(bitmap: Bitmap): String? {
         val scaled = Bitmap.createScaledBitmap(bitmap, SAMPLE_SIZE, SAMPLE_SIZE, true)
         val pixels = IntArray(SAMPLE_SIZE * SAMPLE_SIZE)
         scaled.getPixels(pixels, 0, SAMPLE_SIZE, 0, 0, SAMPLE_SIZE, SAMPLE_SIZE)
@@ -577,8 +609,8 @@ class LocalDraftVisionEngine(private val context: Context) {
         var bestScore = -1f
         var bestName: String? = null
 
-        synchronized(templates) {
-            for (t in templates) {
+        synchronized(this) {
+            for (t in pickTemplates) {
                 var histSim = 0f
                 for (k in 0 until HIST_BINS) {
                     histSim += min(hist[k], t.colorHist[k])
@@ -599,14 +631,15 @@ class LocalDraftVisionEngine(private val context: Context) {
             }
         }
 
-        return if (bestScore >= MATCH_THRESHOLD) bestName else null
+        return if (bestScore >= PICK_MATCH_THRESHOLD) bestName else null
     }
 
-    private fun matchBanFromBitmap(bitmap: Bitmap): String? {
-        val scaled = Bitmap.createScaledBitmap(bitmap, SAMPLE_SIZE, SAMPLE_SIZE, true)
-        val pixels = IntArray(SAMPLE_SIZE * SAMPLE_SIZE)
-        scaled.getPixels(pixels, 0, SAMPLE_SIZE, 0, 0, SAMPLE_SIZE, SAMPLE_SIZE)
-        if (scaled != bitmap) scaled.recycle()
+    private fun matchBanFromBitmap(bitmap: Bitmap, isAlly: Boolean): String? {
+        val cw = bitmap.width
+        val ch = bitmap.height
+        val ccx = cw / 2.0f
+        val ccy = ch / 2.0f
+        val rad = (min(cw, ch) / 2.0f) - 1f
 
         var sumR = 0f
         var sumG = 0f
@@ -614,26 +647,38 @@ class LocalDraftVisionEngine(private val context: Context) {
         val hist = FloatArray(HIST_BINS)
         var validCount = 0
 
-        for (c in pixels) {
-            val r = (c shr 16) and 0xFF
-            val g = (c shr 8) and 0xFF
-            val b = c and 0xFF
+        for (y in 0 until ch) {
+            for (x in 0 until cw) {
+                val dx = x - ccx
+                val dy = y - ccy
+                if (dx * dx + dy * dy > rad * rad) continue
 
-            // Filter out team red/blue background
-            if (r > 150 && g < 65 && b < 85) continue
-            if (b > 150 && r < 65 && g < 150) continue
-            // Filter out red prohibition slash
-            if (r > 175 && g < 40 && b < 40) continue
+                // Exclude red prohibition slash / badge located at bottom-right
+                if (dx > 1 && dy > 1) continue
 
-            sumR += r
-            sumG += g
-            sumB += b
-            val bin = (r / 64) * 16 + (g / 64) * 4 + (b / 64)
-            hist[bin] += 1f
-            validCount++
+                val p = bitmap.getPixel(x, y)
+                val r = (p shr 16) and 0xFF
+                val g = (p shr 8) and 0xFF
+                val b = p and 0xFF
+
+                // Exclude team background
+                if (isAlly) {
+                    if (b > 135 && r < 80 && g < 155) continue
+                } else {
+                    if (r > 135 && g < 50 && b < 80) continue
+                }
+
+                sumR += r
+                sumG += g
+                sumB += b
+                val bin = (r / 64) * 16 + (g / 64) * 4 + (b / 64)
+                hist[bin] += 1f
+                validCount++
+            }
         }
 
-        if (validCount == 0) return null
+        // Empty ban slot has very few valid non-background pixels
+        if (validCount < 15) return null
 
         val total = validCount.toFloat()
         for (i in hist.indices) hist[i] /= total
@@ -644,8 +689,8 @@ class LocalDraftVisionEngine(private val context: Context) {
         var bestScore = -1f
         var bestName: String? = null
 
-        synchronized(templates) {
-            for (t in templates) {
+        synchronized(this) {
+            for (t in banTemplates) {
                 var histSim = 0f
                 for (k in 0 until HIST_BINS) {
                     histSim += min(hist[k], t.colorHist[k])
@@ -666,7 +711,7 @@ class LocalDraftVisionEngine(private val context: Context) {
             }
         }
 
-        return if (bestScore >= 0.50f) bestName else null
+        return if (bestScore >= BAN_MATCH_THRESHOLD) bestName else null
     }
 
     /**
@@ -674,7 +719,7 @@ class LocalDraftVisionEngine(private val context: Context) {
      */
     private fun detectMapAndModeFromBanner(bitmap: Bitmap, width: Int, height: Int): Boolean {
         val now = System.currentTimeMillis()
-        if (now - lastOcrTimestamp < 3000L && cachedDetectedMap != null) return false
+        if (now - lastOcrTimestamp < 2500L && cachedDetectedMap != null) return false
         lastOcrTimestamp = now
 
         // Find the blue 'i' info circle button (r < 40, g in [100, 180], b >= 200)
@@ -685,8 +730,8 @@ class LocalDraftVisionEngine(private val context: Context) {
         var pSumY = 0
 
         val scanH = (height * 0.18f).toInt()
-        val scanXStart = (width * 0.12f).toInt()
-        val scanXEnd = (width * 0.42f).toInt()
+        val scanXStart = (width * 0.10f).toInt()
+        val scanXEnd = (width * 0.45f).toInt()
 
         for (y in 2 until scanH step 2) {
             for (x in scanXStart until scanXEnd step 2) {
@@ -723,7 +768,13 @@ class LocalDraftVisionEngine(private val context: Context) {
 
         val bannerW = (cropRight - cropLeft).coerceIn(10, width)
         val bannerH = (cropBottom - cropTop).coerceIn(10, height)
-        val bannerCrop = Bitmap.createBitmap(bitmap, cropLeft, cropTop, bannerW, bannerH)
+        val rawBanner = Bitmap.createBitmap(bitmap, cropLeft, cropTop, bannerW, bannerH)
+
+        // Scale 2.5x with bilinear filter so small text like "Pista ardiente" is large enough for ML Kit
+        val scaledBannerW = (bannerW * 2.5f).toInt()
+        val scaledBannerH = (bannerH * 2.5f).toInt()
+        val bannerCrop = Bitmap.createScaledBitmap(rawBanner, scaledBannerW, scaledBannerH, true)
+        if (scaledBannerW != bannerW) rawBanner.recycle()
 
         return try {
             val image = InputImage.fromBitmap(bannerCrop, 0)
