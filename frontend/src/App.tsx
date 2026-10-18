@@ -485,7 +485,7 @@ export function App() {
       </div>
 
       {/* Tab 1: Draft Board */}
-      {activeTab === 'draft' ? (
+      {activeTab === 'draft' && (
         <>
           {/* Main Content Area */}
           <main className="w-full max-w-lg mx-auto px-3 py-2.5 flex flex-col gap-3">
@@ -554,23 +554,25 @@ export function App() {
             />
           </main>
         </>
-      ) : activeTab === 'practice' ? (
-        /* Tab 2: Ranked Practice Mode (Draft Simulator vs AI) */
-        <main className="w-full max-w-lg mx-auto px-2.5 pt-2 pb-1 flex-1 flex flex-col">
-          <PracticeDraftSimulator
-            allMaps={typedMaps}
-            allBrawlers={brawlers}
-            countersData={counters}
-            onApplyToMainDraft={(map, allies, enemies) => {
-              setSelectedMap(map);
-              setAllyPicks([allies[0] || null, allies[1] || null, allies[2] || null]);
-              setEnemyPicks([enemies[0] || null, enemies[1] || null, enemies[2] || null]);
-              setActiveTab('draft');
-            }}
-          />
-        </main>
-      ) : activeTab === 'chat' ? (
-        /* Tab 3: Coach Chat */
+      )}
+
+      {/* Tab 2: Ranked Practice Mode (Draft Simulator vs AI) - Kept mounted to preserve state across tabs */}
+      <main className={`w-full max-w-lg mx-auto px-2.5 pt-2 pb-1 flex-1 flex flex-col ${activeTab === 'practice' ? '' : 'hidden'}`}>
+        <PracticeDraftSimulator
+          allMaps={typedMaps}
+          allBrawlers={brawlers}
+          countersData={counters}
+          onApplyToMainDraft={(map, allies, enemies) => {
+            setSelectedMap(map);
+            setAllyPicks([allies[0] || null, allies[1] || null, allies[2] || null]);
+            setEnemyPicks([enemies[0] || null, enemies[1] || null, enemies[2] || null]);
+            setActiveTab('draft');
+          }}
+        />
+      </main>
+
+      {/* Tab 3: Coach Chat */}
+      {activeTab === 'chat' && (
         <main className="w-full max-w-lg mx-auto px-2.5 pt-1 pb-1 flex-1 flex flex-col">
           <BrawlChat
             currentMap={selectedMap}
@@ -583,16 +585,20 @@ export function App() {
             playerProfile={playerProfile}
           />
         </main>
-      ) : activeTab === 'friends' ? (
-        /* Tab 4: Friends & Direct Chat */
+      )}
+
+      {/* Tab 4: Friends & Direct Chat */}
+      {activeTab === 'friends' && (
         <main className="w-full max-w-lg mx-auto px-2.5 pt-2 pb-1 flex-1 flex flex-col">
           <FriendsScreen
             myProfile={playerProfile}
             onNavigateProfile={() => setActiveTab('profile')}
           />
         </main>
-      ) : (
-        /* Tab 5: Player Profile & Inventory */
+      )}
+
+      {/* Tab 5: Player Profile & Inventory */}
+      {activeTab === 'profile' && (
         <main className="w-full max-w-lg mx-auto px-1 py-1">
           <PlayerProfileScreen
             playerProfile={playerProfile}
