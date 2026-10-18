@@ -177,7 +177,7 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
                     }`}
                   >
                     {brawler ? (
-                      <div className="relative w-full h-full rounded-lg overflow-hidden">
+                      <div className="relative w-full h-full rounded-lg overflow-hidden group">
                         <img
                           src={brawler.iconUrl}
                           alt={brawler.displayName}
@@ -186,6 +186,16 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
                         <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                           <Ban className="w-4 h-4 text-red-500 font-bold" />
                         </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onClearSlot('ally', 'ban', idx);
+                          }}
+                          className="absolute top-0.5 right-0.5 z-20 w-4 h-4 rounded-full bg-slate-900/95 border border-slate-700 text-slate-300 hover:text-red-400 flex items-center justify-center transition-colors shadow"
+                          title="Quitar baneo"
+                        >
+                          <X className="w-2.5 h-2.5" />
+                        </button>
                       </div>
                     ) : (
                       <Ban className="w-3.5 h-3.5 text-slate-600" />
@@ -305,7 +315,7 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
                     }`}
                   >
                     {brawler ? (
-                      <div className="relative w-full h-full rounded-lg overflow-hidden">
+                      <div className="relative w-full h-full rounded-lg overflow-hidden group">
                         <img
                           src={brawler.iconUrl}
                           alt={brawler.displayName}
@@ -314,6 +324,16 @@ export const DraftSlots: React.FC<DraftSlotsProps> = ({
                         <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                           <Ban className="w-4 h-4 text-red-500 font-bold" />
                         </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onClearSlot('enemy', 'ban', idx);
+                          }}
+                          className="absolute top-0.5 right-0.5 z-20 w-4 h-4 rounded-full bg-slate-900/95 border border-slate-700 text-slate-300 hover:text-red-400 flex items-center justify-center transition-colors shadow"
+                          title="Quitar baneo"
+                        >
+                          <X className="w-2.5 h-2.5" />
+                        </button>
                       </div>
                     ) : (
                       <Ban className="w-3.5 h-3.5 text-slate-600" />

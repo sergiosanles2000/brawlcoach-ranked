@@ -55,7 +55,6 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
     isRanked,
     totalBattles,
     updatedAt,
-    draftPhase,
     optimalTeam,
   } = brawlPickStats;
 
@@ -172,29 +171,6 @@ export const Recommendations: React.FC<RecommendationsProps> = ({
         </div>
       )}
 
-      {/* ========================================================= */}
-      {/* B. CONSEJO ESTRATÉGICO DE LA FASE DE DRAFT                */}
-      {/* ========================================================= */}
-      {draftPhase && (
-        <div className="p-3 rounded-2xl bg-gradient-to-r from-indigo-950/60 via-slate-900 to-slate-900 border border-indigo-500/30 flex items-start gap-2.5 shadow-md">
-          <div className="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 shrink-0 mt-0.5">
-            <Info className="w-4 h-4" />
-          </div>
-          <div className="flex flex-col gap-0.5 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[11px] font-black uppercase tracking-wider text-indigo-300">
-                Fase de Draft: {draftPhase.isLastPick ? '🔥 Last Pick' : draftPhase.isAllyFirstPick ? '🛡️ First Pick' : '⚔️ Contra-Pick Dinámico'}
-              </span>
-              <span className="text-[10px] font-mono text-slate-400">
-                (Quedan {draftPhase.enemyPicksRemaining} {draftPhase.enemyPicksRemaining === 1 ? 'rival' : 'rivales'} por elegir)
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-300 leading-snug">
-              {draftPhase.advice}
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* ========================================================= */}
       {/* C. TRÍO IDEAL RECOMENDADO CONTRA COMPOSICIÓN ENEMIGA      */}

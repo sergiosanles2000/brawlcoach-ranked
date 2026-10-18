@@ -243,17 +243,23 @@ class FloatingOverlayService : Service() {
         // 2. Card Layout Params (Ultra-compact: 245dp, always clamped within screen)
         val metrics = resources.displayMetrics
         val screenW = metrics.widthPixels
+        val screenH = metrics.heightPixels
         val cardWidth = (245 * density).toInt().coerceAtMost((screenW * 0.70f).toInt())
+        val cardHeight = if (screenW > screenH) {
+            (screenH * 0.65f).toInt()
+        } else {
+            WindowManager.LayoutParams.WRAP_CONTENT
+        }
         cardParams = WindowManager.LayoutParams(
             cardWidth,
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            cardHeight,
             overlayType,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
             x = (12 * density).toInt()
-            y = (12 * density).toInt()
+            y = (6 * density).toInt()
         }
 
         buildBubbleView()
@@ -671,17 +677,6 @@ class FloatingOverlayService : Service() {
             bottomMargin = (4 * density).toInt()
         }
         scrollContent.addView(draftBoardContainer, boardParams)
-
-        // Turn & Phase indicator
-        tvDraftPhaseInfo = TextView(this).apply {
-            text = currentTurnText
-            textSize = 9f
-            typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#38bdf8"))
-            gravity = Gravity.CENTER
-            setPadding(0, 0, 0, (3 * density).toInt())
-        }
-        scrollContent.addView(tvDraftPhaseInfo)
 
         // --- Section Header: Recomendaciones Tácticas ---
         val tvSection = TextView(this).apply {
@@ -1346,7 +1341,6 @@ class FloatingOverlayService : Service() {
             5 -> "⚡ Último Pick (Counter Directo)"
             else -> "✅ Draft Completo"
         }
-        tvDraftPhaseInfo?.text = currentTurnText
 
         // 1. Gather Map Tiers
         val mapsArr = try { JSONArray(mapsJsonStr) } catch (_: Exception) { JSONArray() }
@@ -1606,9 +1600,9 @@ class FloatingOverlayService : Service() {
                 val screenW = metrics.widthPixels
                 val density = metrics.density
 
-                // In landscape mode (gaming), cap card height to ~75% of screen height
+                // In landscape mode (gaming), cap card height to ~65% of screen height
                 val maxCardH = if (screenW > screenH) {
-                    (screenH * 0.75f).toInt()
+                    (screenH * 0.65f).toInt()
                 } else {
                     (440 * density).toInt().coerceAtMost((screenH * 0.75f).toInt())
                 }
@@ -1641,7 +1635,7 @@ class FloatingOverlayService : Service() {
 
             val cardWidth = (240 * density).toInt().coerceAtMost((screenW * 0.65f).toInt())
             val maxCardH = if (screenW > screenH) {
-                (screenH * 0.75f).toInt()
+                (screenH * 0.65f).toInt()
             } else {
                 (440 * density).toInt().coerceAtMost((screenH * 0.75f).toInt())
             }

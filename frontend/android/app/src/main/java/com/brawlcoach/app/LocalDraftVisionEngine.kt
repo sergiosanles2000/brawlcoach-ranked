@@ -204,13 +204,21 @@ class LocalDraftVisionEngine(private val context: Context) {
 
         var changesDetected = false
 
+        // Geometry: UI is centered horizontally and scaled by screen height
+        val cx = width / 2.0f
+        val slotStep = 0.174f * height
+        val slotW = 0.145f * height
+        val slotH = 0.220f * height
+        val slotY0 = (height * 0.745f).toInt()
+        val slotY1 = (slotY0 + slotH).toInt()
+
         // ==========================================
         // 1. MONITOR ALLY PICKS (Bottom Left Row)
         // ==========================================
         val allyCoords = listOf(
-            Rect((width * 0.120f).toInt(), (height * 0.740f).toInt(), (width * 0.235f).toInt(), (height * 0.980f).toInt()),
-            Rect((width * 0.240f).toInt(), (height * 0.740f).toInt(), (width * 0.355f).toInt(), (height * 0.980f).toInt()),
-            Rect((width * 0.360f).toInt(), (height * 0.740f).toInt(), (width * 0.475f).toInt(), (height * 0.980f).toInt())
+            Rect((cx - 3.0f * slotStep - slotW / 2).toInt(), slotY0, (cx - 3.0f * slotStep + slotW / 2).toInt(), slotY1),
+            Rect((cx - 2.0f * slotStep - slotW / 2).toInt(), slotY0, (cx - 2.0f * slotStep + slotW / 2).toInt(), slotY1),
+            Rect((cx - 1.0f * slotStep - slotW / 2).toInt(), slotY0, (cx - 1.0f * slotStep + slotW / 2).toInt(), slotY1)
         )
 
         val allyResult = arrayOfNulls<String>(3)
@@ -227,9 +235,9 @@ class LocalDraftVisionEngine(private val context: Context) {
         // 2. MONITOR ENEMY PICKS (Bottom Right Row)
         // ==========================================
         val enemyCoords = listOf(
-            Rect((width * 0.530f).toInt(), (height * 0.740f).toInt(), (width * 0.645f).toInt(), (height * 0.980f).toInt()),
-            Rect((width * 0.650f).toInt(), (height * 0.740f).toInt(), (width * 0.765f).toInt(), (height * 0.980f).toInt()),
-            Rect((width * 0.770f).toInt(), (height * 0.740f).toInt(), (width * 0.885f).toInt(), (height * 0.980f).toInt())
+            Rect((cx + 1.0f * slotStep - slotW / 2).toInt(), slotY0, (cx + 1.0f * slotStep + slotW / 2).toInt(), slotY1),
+            Rect((cx + 2.0f * slotStep - slotW / 2).toInt(), slotY0, (cx + 2.0f * slotStep + slotW / 2).toInt(), slotY1),
+            Rect((cx + 3.0f * slotStep - slotW / 2).toInt(), slotY0, (cx + 3.0f * slotStep + slotW / 2).toInt(), slotY1)
         )
 
         val enemyResult = arrayOfNulls<String>(3)
@@ -245,16 +253,23 @@ class LocalDraftVisionEngine(private val context: Context) {
         // ==========================================
         // 3. MONITOR BANS (Vertical Columns)
         // ==========================================
+        val banRadiusX = 0.055f * height
+        val allyBanCx = cx - 3.65f * slotStep
+        val enemyBanCx = cx + 3.65f * slotStep
+        val banStepY = 0.080f * height
+        val banYBase = 0.755f * height
+        val banH = 0.075f * height
+
         val allyBanCoords = listOf(
-            Rect((width * 0.040f).toInt(), (height * 0.760f).toInt(), (width * 0.095f).toInt(), (height * 0.835f).toInt()),
-            Rect((width * 0.040f).toInt(), (height * 0.840f).toInt(), (width * 0.095f).toInt(), (height * 0.915f).toInt()),
-            Rect((width * 0.040f).toInt(), (height * 0.920f).toInt(), (width * 0.095f).toInt(), (height * 0.995f).toInt())
+            Rect((allyBanCx - banRadiusX).toInt(), (banYBase).toInt(), (allyBanCx + banRadiusX).toInt(), (banYBase + banH).toInt()),
+            Rect((allyBanCx - banRadiusX).toInt(), (banYBase + banStepY).toInt(), (allyBanCx + banRadiusX).toInt(), (banYBase + banStepY + banH).toInt()),
+            Rect((allyBanCx - banRadiusX).toInt(), (banYBase + 2 * banStepY).toInt(), (allyBanCx + banRadiusX).toInt(), (banYBase + 2 * banStepY + banH).toInt())
         )
 
         val enemyBanCoords = listOf(
-            Rect((width * 0.910f).toInt(), (height * 0.760f).toInt(), (width * 0.965f).toInt(), (height * 0.835f).toInt()),
-            Rect((width * 0.910f).toInt(), (height * 0.840f).toInt(), (width * 0.965f).toInt(), (height * 0.915f).toInt()),
-            Rect((width * 0.910f).toInt(), (height * 0.920f).toInt(), (width * 0.965f).toInt(), (height * 0.995f).toInt())
+            Rect((enemyBanCx - banRadiusX).toInt(), (banYBase).toInt(), (enemyBanCx + banRadiusX).toInt(), (banYBase + banH).toInt()),
+            Rect((enemyBanCx - banRadiusX).toInt(), (banYBase + banStepY).toInt(), (enemyBanCx + banRadiusX).toInt(), (banYBase + banStepY + banH).toInt()),
+            Rect((enemyBanCx - banRadiusX).toInt(), (banYBase + 2 * banStepY).toInt(), (enemyBanCx + banRadiusX).toInt(), (banYBase + 2 * banStepY + banH).toInt())
         )
 
         val detectedBans = mutableListOf<String>()
@@ -468,8 +483,13 @@ class LocalDraftVisionEngine(private val context: Context) {
             val g = (c shr 8) and 0xFF
             val b = c and 0xFF
 
-            // Filter out bright red slash pixels
-            if (r > 155 && g < 70 && b < 70) continue
+            // Filter out team card background (red background for enemy, blue for ally)
+            if (r > 150 && g < 70 && b < 90) continue
+            if (b > 150 && r < 70 && g < 150) continue
+            // Filter out bright red prohibition slash pixels
+            if (r > 175 && g < 40 && b < 40) continue
+            // Filter out white header text pixels
+            if (r > 210 && g > 210 && b > 210) continue
 
             sumR += r
             sumG += g
@@ -512,7 +532,7 @@ class LocalDraftVisionEngine(private val context: Context) {
             }
         }
 
-        return if (bestScore >= 0.58f) bestName else null
+        return if (bestScore >= 0.50f) bestName else null
     }
 
     /**
@@ -523,8 +543,8 @@ class LocalDraftVisionEngine(private val context: Context) {
         if (now - lastOcrTimestamp < 3000L && cachedDetectedMap != null) return false
         lastOcrTimestamp = now
 
-        val bannerW = (width * 0.35f).toInt().coerceAtMost(bitmap.width)
-        val bannerH = (height * 0.15f).toInt().coerceAtMost(bitmap.height)
+        val bannerW = (width * 0.50f).toInt().coerceAtMost(bitmap.width)
+        val bannerH = (height * 0.22f).toInt().coerceAtMost(bitmap.height)
         val bannerCrop = Bitmap.createBitmap(bitmap, 0, 0, bannerW, bannerH)
 
         return try {
