@@ -205,6 +205,7 @@ export async function syncMetaFromApi(): Promise<{
         b.imageUrl2 ||
         b.imageUrl ||
         `https://cdn.brawlify.com/brawlers/borderless/${b.id}.png`,
+      modelUrl: `https://cdn.brawlify.com/brawlers/model/${b.id}.png`,
       gadgets: (b.gadgets || []).map((g: any) => ({
         id: g.id,
         name: g.name,
@@ -296,6 +297,15 @@ export async function syncMetaFromApi(): Promise<{
   return { brawlers, counters, lastUpdated: now };
 }
 
+/**
+ * Ensures every Brawler has a `modelUrl` (full-body render from the Fan Kit CDN)
+ * regardless of where the data came from (localStorage, default JSON, API).
+ */
+const ensureModelUrls = (brawlers: Brawler[]): Brawler[] =>
+  brawlers.map((b) =>
+    b.modelUrl ? b : { ...b, modelUrl: `https://cdn.brawlify.com/brawlers/model/${b.id}.png` }
+  );
+
 export function getStoredBrawlers(defaultBrawlers: Brawler[]): Brawler[] {
   try {
     const raw = localStorage.getItem(STORAGE_META_BRAWLERS);
@@ -305,16 +315,18 @@ export function getStoredBrawlers(defaultBrawlers: Brawler[]): Brawler[] {
         // If cached brawlers don't have gadgets yet, populate them from defaultBrawlers
         if (!parsed[0].gadgets || parsed[0].gadgets.length === 0) {
           const map = new Map(defaultBrawlers.map((b) => [b.name.toUpperCase(), b]));
-          return parsed.map((b) => {
-            const def = map.get(b.name.toUpperCase());
-            return def ? { ...b, gadgets: def.gadgets, starPowers: def.starPowers } : b;
-          });
+          return ensureModelUrls(
+            parsed.map((b) => {
+              const def = map.get(b.name.toUpperCase());
+              return def ? { ...b, gadgets: def.gadgets, starPowers: def.starPowers } : b;
+            })
+          );
         }
-        return parsed;
+        return ensureModelUrls(parsed);
       }
     }
   } catch {}
-  return defaultBrawlers;
+  return ensureModelUrls(defaultBrawlers);
 }
 
 export function getStoredCounters(defaultCounters: CountersMap): CountersMap {

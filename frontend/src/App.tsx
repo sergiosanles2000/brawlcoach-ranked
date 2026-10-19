@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Zap, Shield, MessageSquare, User, Users, Gamepad2, Share2 } from 'lucide-react';
+import { Zap, Shield, MessageSquare, User, Users, Gamepad2, Share2, Layers } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import brawlersData from './data/brawlers.json';
 import countersData from './data/counters.json';
@@ -26,6 +26,7 @@ import { SplashScreen } from './components/SplashScreen';
 import { PlayerProfileScreen } from './components/PlayerProfileScreen';
 import { FriendsScreen } from './components/FriendsScreen';
 import { BrawlerDetailModal } from './components/BrawlerDetailModal';
+import { BrawlerRosterScreen } from './components/BrawlerRosterScreen';
 import {
   InteractiveGuide,
   getSeenGuides,
@@ -83,7 +84,7 @@ export function App() {
   const [isCaptureOpen, setIsCaptureOpen] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isLogsOpen, setIsLogsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'draft' | 'practice' | 'chat' | 'friends' | 'profile'>('draft');
+  const [activeTab, setActiveTab] = useState<'draft' | 'practice' | 'chat' | 'friends' | 'profile' | 'brawlers'>('draft');
   const [showSplash, setShowSplash] = useState(true);
   const [isShareRoomOpen, setIsShareRoomOpen] = useState(false);
 
@@ -425,7 +426,7 @@ export function App() {
 
       {/* Navigation Tabs (Draft Board vs Practice vs Coach Chat vs Friends vs Player Profile) */}
       <div className="w-full max-w-lg mx-auto px-3 pt-2.5">
-        <div className="grid grid-cols-5 p-1 bg-slate-900 rounded-xl border border-slate-800 text-[11px] font-semibold gap-1">
+        <div className="grid grid-cols-6 p-1 bg-slate-900 rounded-xl border border-slate-800 text-[10px] font-semibold gap-1">
           <button
             onClick={() => setActiveTab('draft')}
             className={`py-2 px-0.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
@@ -471,6 +472,17 @@ export function App() {
             <span className="truncate">Amigos</span>
           </button>
           <button
+            onClick={() => setActiveTab('brawlers')}
+            className={`py-2 px-0.5 rounded-lg flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer ${
+              activeTab === 'brawlers'
+                ? 'bg-slate-800 text-white font-bold border border-slate-700'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 text-amber-400" />
+            <span className="truncate">Brawlers</span>
+          </button>
+          <button
             onClick={() => setActiveTab('profile')}
             className={`py-2 px-0.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer ${
               activeTab === 'profile'
@@ -479,7 +491,7 @@ export function App() {
             }`}
           >
             <User className="w-3.5 h-3.5 text-amber-400" />
-            <span className="truncate">Mi Perfil</span>
+            <span className="truncate">Perfil</span>
           </button>
         </div>
       </div>
@@ -593,6 +605,16 @@ export function App() {
           <FriendsScreen
             myProfile={playerProfile}
             onNavigateProfile={() => setActiveTab('profile')}
+          />
+        </main>
+      )}
+
+      {/* Tab 4: Brawlers Roster (full brawler catalog) */}
+      {activeTab === 'brawlers' && (
+        <main className="w-full max-w-lg mx-auto px-2.5 pt-2 pb-1 flex-1 flex flex-col">
+          <BrawlerRosterScreen
+            allBrawlers={brawlers}
+            onInspectBrawler={(b) => setInspectedBrawler(b)}
           />
         </main>
       )}

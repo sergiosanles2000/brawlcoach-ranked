@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preview Brawler — Fan Kit Brawl Stars</title>
+  <style>
+    :root {
+      --bs-blue: #1a202c;
+      --bs-amber: #ffb020;
+      --bs-cyan: #38e0ff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      background: radial-gradient(ellipse at 50% 30%, #2b3e5c 0%, #0f1620 70%, #060a10 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Suelo / arena con perspectiva */
+    .stage {
+      position: relative;
+      width: min(420px, 80vw);
+      height: min(560px, 86vh);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Plataforma elíptica bajo el brawler */
+    .platform {
+      position: absolute;
+      bottom: 12%;
+      width: 70%;
+      height: 18%;
+      background: radial-gradient(ellipse at center, rgba(56,224,255,0.35) 0%, rgba(56,224,255,0.05) 60%, transparent 75%);
+      border-radius: 50%;
+      filter: blur(2px);
+      animation: platformPulse 3s ease-in-out infinite;
+    }
+    @keyframes platformPulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+
+    /* Sombra debajo */
+    .shadow {
+      position: absolute;
+      bottom: 10%;
+      width: 55%;
+      height: 5%;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.65) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: shadowPulse 3s ease-in-out infinite;
+    }
+    @keyframes shadowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(0.82); opacity: 0.4; }
+    }
+
+    /* Brawler: levitación + balanceo suave (idle de menú) */
+    .brawler {
+      position: relative;
+      z-index: 2;
+      width: min(300px, 62vw);
+      animation: hoverIdle 3s ease-in-out infinite;
+      filter: drop-shadow(0 18px 18px rgba(0,0,0,0.55));
+    }
+    .brawler > img {
+      width: 100%;
+      image-rendering: auto;
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+    @keyframes hoverIdle {
+      0%   { transform: translateY(0px)   rotate(-1.5deg) scale(1); }
+      25%  { transform: translateY(-14px) rotate(0deg)   scale(1.015); }
+      50%  { transform: translateY(-22px) rotate(1.5deg) scale(1.03); }
+      75%  { transform: translateY(-12px) rotate(0deg)   scale(1.015); }
+      100% { transform: translateY(0px)   rotate(-1.5deg) scale(1); }
+    }
+
+    /* Brilla (glow) detrás del brawler */
+    .glow {
+      position: absolute;
+      width: 85%;
+      height: 85%;
+      background: radial-gradient(circle at 50% 45%, rgba(255,176,32,0.55), rgba(255,140,0,0.15) 55%, transparent 75%);
+      filter: blur(8px);
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+
+    /* Nombre */
+    .name {
+      position: absolute;
+      bottom: 2%;
+      font-size: clamp(28px, 7vw, 44px);
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #ffd75e;
+      text-shadow: 0 3px 0 #6b4a00, 0 0 18px rgba(255,200,80,0.6);
+      text-transform: uppercase;
+    }
+
+    /* Encabezado */
+    .header {
+      position: absolute;
+      top: 8px;
+      text-align: center;
+      z-index: 5;
+    }
+    .header .tag {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: #38e0ff;
+      background: rgba(56,224,255,0.12);
+      border: 1px solid rgba(56,224,255,0.4);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .header h1 {
+      margin-top: 6px;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      color: #cfe3ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="tag">FAN KIT OFICIAL · 100% LEGAL</span>
+    <h1>Brawler de cuerpo completo con animación idle flotante</h1>
+  </div>
+
+  <div class="stage">
+    <div class="glow"></div>
+    <div class="platform"></div>
+    <div class="shadow"></div>
+    <div class="brawler">
+      <!-- Modelo cuerpo completo (render 2D del skin por defecto, vía Brawlify/Fan Kit) -->
+      <img
+        src="https://cdn.brawlify.com/brawlers/model/16000000.png"
+        alt="Shelly"
+        draggable="false"
+      />
+    </div>
+    <div class="name">Shelly</div>
+  </div>
+</body>
+</html>

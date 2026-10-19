@@ -24,6 +24,8 @@ export interface Brawler {
   description?: string;
   hasHypercharge: boolean;
   iconUrl: string;
+  // Full-body render (Fan Kit / Brawlify) — usado para animaciones idle en la pestaña Brawlers
+  modelUrl?: string;
   gadgets?: BrawlerAbility[];
   starPowers?: BrawlerAbility[];
 }

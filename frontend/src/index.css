@@ -1,41 +1,153 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-ink: #0a0a0a;
+  --color-paper: #ffffff;
+  --color-mint: #c8facc;
+  --color-coral: #ff6b6b;
+
+  --font-display: "Orbitron", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Rajdhani", ui-sans-serif, system-ui, sans-serif;
+
+  --animate-fade-in: fade-in 0.2s ease-out;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  --animate-fade-in-up: fade-in-up 0.2s ease-out;
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
 
 @layer base {
-  :root {
-    color-scheme: dark;
+  html, body, #root {
+    height: 100%;
   }
-
+  html {
+    font-family: "Roboto", ui-sans-serif, system-ui, sans-serif;
+    font-size: 14px;
+  }
   body {
-    background-color: #0b0f19;
-    color: #f1f5f9;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    overflow-x: hidden;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    padding-left: env(safe-area-inset-left, 0px);
-    padding-right: env(safe-area-inset-right, 0px);
+    @apply bg-slate-950 text-slate-100 antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #main-content {
+    min-height: calc(100dvh - 72px);
+    padding-top: 72px;
+  }
+
+  /* Scrollbar thin */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.5) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.4);
+    border-radius: 3px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Hide native scrollbar on horizontal filter rows */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(71, 85, 105, 0.7);
+    border-radius: 8px;
+  }
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.9);
+  }
+
+  .custom-scrollbar {
+    scrollbar-color: rgba(71, 85, 105, 0.7) rgba(15, 23, 42, 0.5);
+    scrollbar-width: thin;
+  }
+
+  /* Brawler hover-idle animation (used in showcase cards & preview) */
+  .brawler-hover {
+    animation: brawlerHover 3s ease-in-out infinite;
+    will-change: transform;
+  }
+  @keyframes brawlerHover {
+    0%   { transform: translateY(0px)   rotate(-1.5deg) scale(1); }
+    25%  { transform: translateY(-10px) rotate(0deg)    scale(1.015); }
+    50%  { transform: translateY(-16px) rotate(1.5deg)  scale(1.03); }
+    75%  { transform: translateY(-8px)  rotate(0deg)    scale(1.015); }
+    100% { transform: translateY(0px)   rotate(-1.5deg) scale(1); }
+  }
+
+  /* Softer idle for small thumbnails (grid cards): keeps the sprite
+     inside its little square and prevents clipping against the card edge. */
+  .brawler-hover-sm {
+    animation: brawlerHoverSm 3s ease-in-out infinite;
+    will-change: transform;
+    transform-origin: center;
+  }
+  @keyframes brawlerHoverSm {
+    0%   { transform: translateY(0px)  rotate(-0.8deg); }
+    50%  { transform: translateY(-3px) rotate(0.8deg); }
+    100% { transform: translateY(0px)  rotate(-0.8deg); }
+  }
+
+  /* Respect prefers-reduced-motion: disable the idle animation */
+  @media (prefers-reduced-motion: reduce) {
+    .brawler-hover,
+    .brawler-hover-sm {
+      animation: none;
+    }
   }
 }
 
-.safe-top {
-  padding-top: max(0.5rem, env(safe-area-inset-top, 0.5rem));
-}
-
-/* Custom scrollbars */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #0f172a;
-}
-::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+@layer utilities {
+  .bg-gradient-brawl {
+    background: linear-gradient(135deg, #0a1628 0%, #1a202c 40%, #1e293b 100%);
+  }
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #fde047 0%, #f59e0b 50%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .glow-amber {
+    box-shadow: 0 0 24px rgba(251, 191, 36, 0.3);
+  }
 }
