@@ -63,7 +63,7 @@ const AnimatedCornerModel: React.FC<{
           <img
             src={modelUrl}
             alt={brawler.displayName}
-            className="brawler-hover-sm w-auto h-full max-w-[88%] object-contain select-none drop-shadow-[0_14px_14px_rgba(0,0,0,0.65)]"
+            className="brawler-hover-sm w-auto h-[88%] max-w-[88%] object-contain select-none drop-shadow-[0_14px_14px_rgba(0,0,0,0.65)]"
             loading="eager"
             decoding="async"
             draggable={false}
@@ -112,7 +112,7 @@ export const BrawlerDetailModal: React.FC<BrawlerDetailModalProps> = ({ brawler,
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-end p-3 sm:p-6 bg-black/80 backdrop-blur-sm animate-fade-in">
       <div
-        className="relative w-full max-w-sm bg-slate-900 border border-slate-700/80 rounded-3xl p-4 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto scrollbar-thin my-auto"
+        className="relative w-full max-w-sm bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ═══════════════════════════════════════════════════════
@@ -121,6 +121,11 @@ export const BrawlerDetailModal: React.FC<BrawlerDetailModalProps> = ({ brawler,
             animation (levitation + rotation) of the Brawl Stars menu.
             ═══════════════════════════════════════════════════════ */}
         {(hasModel || brawler.iconUrl) && <AnimatedCornerModel brawler={brawler} />}
+
+        {/* Scrollable content. The card itself clips with `overflow-hidden`
+            (which respects the rounded corners), so the corner model above
+            stays pinned and can never spill out of the popup. */}
+        <div className="flex flex-col gap-3 p-4 overflow-y-auto scrollbar-thin min-h-0">
 
         {/* Header: icon (left), name, class, rarity, close (right).
             We add padding-right so the right-side animated model never
@@ -239,6 +244,7 @@ export const BrawlerDetailModal: React.FC<BrawlerDetailModalProps> = ({ brawler,
         >
           Cerrar
         </button>
+        </div>
       </div>
     </div>
   );
