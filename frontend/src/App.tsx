@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Zap, Shield, MessageSquare, User, Users, Gamepad2, Share2, Layers } from 'lucide-react';
+import { Zap, Shield, MessageSquare, User, Users, Gamepad2, Share2, Layers, Home, Swords } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import brawlersData from './data/brawlers.json';
 import countersData from './data/counters.json';
@@ -27,6 +27,7 @@ import { PlayerProfileScreen } from './components/PlayerProfileScreen';
 import { FriendsScreen } from './components/FriendsScreen';
 import { BrawlerDetailModal } from './components/BrawlerDetailModal';
 import { BrawlerRosterScreen } from './components/BrawlerRosterScreen';
+import { ArenaGame } from './components/ArenaGame';
 import {
   InteractiveGuide,
   getSeenGuides,
@@ -85,6 +86,8 @@ export function App() {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isLogsOpen, setIsLogsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'draft' | 'practice' | 'chat' | 'friends' | 'profile' | 'brawlers'>('draft');
+  // Bottom bar sections (Clash Royale style): 1 = app normal, 2 = minijuego Arena
+  const [appSection, setAppSection] = useState<'app' | 'game'>('app');
   const [showSplash, setShowSplash] = useState(true);
   const [isShareRoomOpen, setIsShareRoomOpen] = useState(false);
 
@@ -154,14 +157,14 @@ export function App() {
     showBottomBanner();
   }, []);
 
-  // Ensure bottom banner hides in chat tab to not cover the keyboard/input, and shows elsewhere
+  // Bottom ad banner: hidden in chat (keyboard) and while the minigame is open
   useEffect(() => {
-    if (activeTab === 'chat') {
+    if (activeTab === 'chat' || appSection === 'game') {
       hideBottomBanner();
     } else {
       showBottomBanner();
     }
-  }, [activeTab]);
+  }, [activeTab, appSection]);
 
   // Persist LM Studio settings
   useEffect(() => {
@@ -398,11 +401,21 @@ export function App() {
     }
   };
 
+  // Bottom bar + ad banner coexistence.
+  // The native banner sits at the very bottom, so the bar floats just above it.
+  const adBannerVisible = appSection === 'app' && activeTab !== 'chat';
+  const bottomBarBottom = adBannerVisible ? 64 : 0;
+
   return (
-    <div className={`min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans ${activeTab === 'chat' ? 'pb-2' : 'pb-16'}`}>
+    <div
+      className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans"
+      style={{ paddingBottom: `${bottomBarBottom + 76}px` }}
+    >
       {/* Animated App Splash Screen */}
       {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
 
+      {/* ═══════════════ PESTAÑA 1: APP NORMAL ═══════════════ */}
+      <div className={`flex flex-col flex-1 min-h-0 ${appSection === 'game' ? 'hidden' : ''}`}>
       {/* Sticky Top Header */}
       <Header
         maps={typedMaps}
@@ -632,6 +645,47 @@ export function App() {
           />
         </main>
       )}
+      </div>
+
+      {/* ═══════════════ PESTAÑA 2: MINIJUEGO ARENA ═══════════════ */}
+      {appSection === 'game' && (
+        <main className="w-full flex-1 min-h-0 flex flex-col">
+          <ArenaGame allBrawlers={brawlers} onExit={() => setAppSection('app')} />
+        </main>
+      )}
+
+      {/* ═══════════════ BARRA INFERIOR (estilo Clash Royale) ═══════════════ */}
+      <nav
+        className="fixed inset-x-0 z-40 bg-slate-950/95 backdrop-blur border-t border-slate-800"
+        style={{ bottom: `${bottomBarBottom}px`, paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
+        <div className="mx-auto max-w-lg grid grid-cols-2">
+          <button
+            onClick={() => setAppSection('app')}
+            className={`relative py-2.5 flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer ${
+              appSection === 'app' ? 'text-amber-400' : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            {appSection === 'app' && (
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 rounded-full bg-amber-400" />
+            )}
+            <Home className="w-5 h-5" />
+            <span className="text-[10px] font-bold uppercase tracking-wide">App</span>
+          </button>
+          <button
+            onClick={() => setAppSection('game')}
+            className={`relative py-2.5 flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer ${
+              appSection === 'game' ? 'text-amber-400' : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            {appSection === 'game' && (
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 rounded-full bg-amber-400" />
+            )}
+            <Swords className="w-5 h-5" />
+            <span className="text-[10px] font-bold uppercase tracking-wide">Arena</span>
+          </button>
+        </div>
+      </nav>
 
       {/* Feature 5: Live Shared Draft Room Modal */}
       <SharedDraftRoomModal
@@ -671,18 +725,20 @@ export function App() {
         onClose={() => setInspectedBrawler(null)}
       />
 
-      {/* Interactive Contextual Onboarding Guide (Shown once per feature) */}
-      <InteractiveGuide
-        currentStep={activeGuide}
-        onDismiss={() => {
-          if (activeGuide) markGuideAsSeen(activeGuide.id);
-          setActiveGuide(null);
-        }}
-        onComplete={() => {
-          if (activeGuide) markGuideAsSeen(activeGuide.id);
-          setActiveGuide(null);
-        }}
-      />
+      {/* Interactive Contextual Onboarding Guide (never over the minigame) */}
+      {appSection === 'app' && (
+        <InteractiveGuide
+          currentStep={activeGuide}
+          onDismiss={() => {
+            if (activeGuide) markGuideAsSeen(activeGuide.id);
+            setActiveGuide(null);
+          }}
+          onComplete={() => {
+            if (activeGuide) markGuideAsSeen(activeGuide.id);
+            setActiveGuide(null);
+          }}
+        />
+      )}
 
       {/* Capture Overlay Modal */}
       <CaptureOverlay
