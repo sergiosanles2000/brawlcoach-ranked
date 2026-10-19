@@ -1,4 +1,38 @@
 import type { Brawler, CountersMap } from '../types/brawl';
+import defaultBrawlersData from '../data/brawlers.json';
+
+const bundledBrawlers = defaultBrawlersData as Brawler[];
+const bundledBrawlersByName = new Map(bundledBrawlers.map((b) => [b.displayName.toUpperCase(), b]));
+
+/**
+ * Keeps the Spanish (Spain) descriptions and ability names from the bundled
+ * dataset even after syncing with the API (the API only serves English text
+ * and "x" placeholders).
+ */
+function withLocalizedText(brawler: Brawler): Brawler {
+  const local = bundledBrawlersByName.get((brawler.displayName || '').toUpperCase());
+  if (!local) return brawler;
+
+  const localGadgets = new Map((local.gadgets || []).map((g) => [g.id, g]));
+  const localStarPowers = new Map((local.starPowers || []).map((s) => [s.id, s]));
+
+  return {
+    ...brawler,
+    description: local.description || brawler.description,
+    gadgets: (brawler.gadgets || []).map((g) => {
+      const localized = localGadgets.get(g.id);
+      return localized
+        ? { ...g, name: localized.name, description: localized.description }
+        : g;
+    }),
+    starPowers: (brawler.starPowers || []).map((s) => {
+      const localized = localStarPowers.get(s.id);
+      return localized
+        ? { ...s, name: localized.name, description: localized.description }
+        : s;
+    }),
+  };
+}
 
 export const STORAGE_META_BRAWLERS = 'brawl_meta_brawlers';
 export const STORAGE_META_COUNTERS = 'brawl_meta_counters';
@@ -219,7 +253,7 @@ export async function syncMetaFromApi(): Promise<{
         description: s.description,
       })),
     };
-  });
+  }).map(withLocalizedText);
 
   // Group by class for archetypal resolution
   const brawlersByClass: Record<string, string[]> = {};
@@ -318,15 +352,17 @@ export function getStoredBrawlers(defaultBrawlers: Brawler[]): Brawler[] {
           return ensureModelUrls(
             parsed.map((b) => {
               const def = map.get(b.name.toUpperCase());
-              return def ? { ...b, gadgets: def.gadgets, starPowers: def.starPowers } : b;
+              return withLocalizedText(
+                def ? { ...b, gadgets: def.gadgets, starPowers: def.starPowers } : b
+              );
             })
           );
         }
-        return ensureModelUrls(parsed);
+        return ensureModelUrls(parsed.map(withLocalizedText));
       }
     }
   } catch {}
-  return ensureModelUrls(defaultBrawlers);
+  return ensureModelUrls(defaultBrawlers.map(withLocalizedText));
 }
 
 export function getStoredCounters(defaultCounters: CountersMap): CountersMap {

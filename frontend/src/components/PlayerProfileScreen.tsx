@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { User, Trophy, Zap, Search, CheckCircle2, Heart, Play, RefreshCw } from 'lucide-react';
+import { User, Trophy, Zap, Search, CheckCircle2, RefreshCw } from 'lucide-react';
 import type { PlayerProfile } from '../types/brawl';
-import { showRewardedAdSupport } from '../services/adService';
 
 interface PlayerProfileScreenProps {
   playerProfile: PlayerProfile | null;
@@ -24,7 +23,6 @@ export function PlayerProfileScreen({
     return localStorage.getItem('brawl_player_tag') || '';
   });
   const [filterQuery, setFilterQuery] = useState('');
-  const [isWatchingAd, setIsWatchingAd] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -266,38 +264,8 @@ export function PlayerProfileScreen({
             </div>
           </div>
 
-          {/* Support Creator Voluntary Rewarded Ad Section */}
-          <div className="pt-3 border-t border-slate-800 space-y-2">
-            <div className="p-3 bg-gradient-to-r from-purple-950/40 to-indigo-950/40 rounded-xl border border-purple-500/30 flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-purple-300 flex items-center gap-1.5">
-                  <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400" />
-                  Apoyar al Creador de la App
-                </span>
-                <span className="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full font-bold">
-                  100% Voluntario
-                </span>
-              </div>
-              <p className="text-[10.5px] text-slate-400 leading-tight">
-                Esta app es gratuita y sin anuncios molestos. Si te resulta útil para tus partidas de Ranked, puedes apoyarme viendo un breve anuncio de 15 segundos.
-              </p>
-              <button
-                type="button"
-                onClick={async () => {
-                  setIsWatchingAd(true);
-                  const res = await showRewardedAdSupport();
-                  alert(res.message);
-                  setIsWatchingAd(false);
-                }}
-                disabled={isWatchingAd}
-                className="w-full py-2 px-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 active:scale-98 transition-all cursor-pointer disabled:opacity-50 shadow-md shadow-purple-950/50"
-              >
-                <Play className="w-3.5 h-3.5 fill-white" />
-                <span>{isWatchingAd ? 'Cargando video...' : 'Ver un anuncio de apoyo'}</span>
-              </button>
-            </div>
-
-            {/* Official Supercell Fan Content Policy Notice (Required for Google Play Store) */}
+          {/* Official Supercell Fan Content Policy Notice (Required for Google Play Store) */}
+          <div className="pt-3 border-t border-slate-800">
             <p className="text-[9.5px] text-slate-500 text-center leading-relaxed px-1">
               Este contenido no está afiliado, respaldado, patrocinado ni aprobado específicamente por Supercell y Supercell no es responsable de ello. Para más información, consulta la <a href="https://supercell.com/en/fan-content-policy/es/" target="_blank" rel="noreferrer" className="text-slate-400 underline hover:text-slate-200">Política de contenido de fans de Supercell</a>.
             </p>

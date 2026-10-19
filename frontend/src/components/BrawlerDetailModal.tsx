@@ -173,7 +173,7 @@ export const BrawlerDetailModal: React.FC<BrawlerDetailModalProps> = ({ brawler,
         <div className="space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Habilidades Estelares (Star Powers)</span>
+            <span>Habilidades Estelares</span>
           </div>
 
           {brawler.starPowers && brawler.starPowers.length > 0 ? (
@@ -207,7 +207,7 @@ export const BrawlerDetailModal: React.FC<BrawlerDetailModalProps> = ({ brawler,
         <div className="space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wider">
             <Zap className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Gadgets (Accesorios)</span>
+            <span>Gadgets</span>
           </div>
 
           {brawler.gadgets && brawler.gadgets.length > 0 ? (

@@ -42,7 +42,6 @@ import type { VisionDetectionResult } from './services/visionAi';
 import { fetchPlayerProfile } from './services/api';
 import { launchFloatingModMenu } from './services/floatingOverlay';
 import { getStoredBrawlers, getStoredCounters } from './services/metaSync';
-import { showBottomBanner, hideBottomBanner } from './services/adService';
 
 const typedBrawlers = brawlersData as Brawler[];
 const typedCounters = countersData as CountersMap;
@@ -153,18 +152,7 @@ export function App() {
       }
     });
 
-    // Initialize bottom banner on startup
-    showBottomBanner();
   }, []);
-
-  // Bottom ad banner: hidden in chat (keyboard) and while the minigame is open
-  useEffect(() => {
-    if (activeTab === 'chat' || appSection === 'game') {
-      hideBottomBanner();
-    } else {
-      showBottomBanner();
-    }
-  }, [activeTab, appSection]);
 
   // Persist LM Studio settings
   useEffect(() => {
@@ -401,15 +389,10 @@ export function App() {
     }
   };
 
-  // Bottom bar + ad banner coexistence.
-  // The native banner sits at the very bottom, so the bar floats just above it.
-  const adBannerVisible = appSection === 'app' && activeTab !== 'chat';
-  const bottomBarBottom = adBannerVisible ? 64 : 0;
-
   return (
     <div
       className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans"
-      style={{ paddingBottom: `${bottomBarBottom + 76}px` }}
+      style={{ paddingBottom: 'calc(76px + env(safe-area-inset-bottom))' }}
     >
       {/* Animated App Splash Screen */}
       {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
@@ -657,7 +640,7 @@ export function App() {
       {/* ═══════════════ BARRA INFERIOR (estilo Clash Royale) ═══════════════ */}
       <nav
         className="fixed inset-x-0 z-40 bg-slate-950/95 backdrop-blur border-t border-slate-800"
-        style={{ bottom: `${bottomBarBottom}px`, paddingBottom: 'env(safe-area-inset-bottom)' }}
+        style={{ bottom: 0, paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <div className="mx-auto max-w-lg grid grid-cols-2">
           <button
