@@ -69,7 +69,8 @@ interface Fighter {
   hurtT: number;
   bob: number;
   dmg: number;
-  img: HTMLImageElement | null;
+  model: HTMLImageElement | null; // render 3D de cuerpo completo
+  icon: HTMLImageElement | null;  // respaldo (carita)
   name: string;
 }
 
@@ -107,6 +108,30 @@ interface Game {
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const dist = (a: Vec, b: Vec) => Math.hypot(a.x - b.x, a.y - b.y);
+
+// Render 3D real del brawler (CDN público con CORS habilitado)
+const MODEL_URL = (id: number) => `https://cdn.brawlify.com/brawlers/model/${id}.png`;
+const SPRITE_H = (radius: number) => radius * 3.3;
+
+// Tinte rojo para los enemigos (cacheado por imagen)
+const tintCache = new WeakMap<HTMLImageElement, HTMLCanvasElement>();
+function getTintedModel(img: HTMLImageElement): HTMLCanvasElement {
+  const cached = tintCache.get(img);
+  if (cached) return cached;
+  const c = document.createElement('canvas');
+  c.width = img.naturalWidth;
+  c.height = img.naturalHeight;
+  const cx = c.getContext('2d');
+  if (cx) {
+    cx.drawImage(img, 0, 0);
+    cx.globalCompositeOperation = 'source-atop';
+    cx.fillStyle = 'rgba(220,38,38,0.5)';
+    cx.fillRect(0, 0, c.width, c.height);
+    cx.globalCompositeOperation = 'source-over';
+  }
+  tintCache.set(img, c);
+  return c;
+}
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   const rr = Math.min(r, w / 2, h / 2);
@@ -258,9 +283,16 @@ export const ArenaGame: React.FC<ArenaGameProps> = ({ allBrawlers, onExit }) => 
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const gameRef = useRef<Game | null>(null);
   const arenaRef = useRef<Arena | null>(null);
+  const modelRef = useRef<HTMLImageElement | null>(null);
+  const iconRef = useRef<HTMLImageElement | null>(null);
 
   const [phase, setPhase] = useState<Phase>('menu');
-  const [playerIdx, setPlayerIdx] = useState(0);
+  const [playerIdx, setPlayerIdx] = useState(() => {
+    // Por defecto, un brawler clásico (los muy nuevos aún no tienen render en el CDN)
+    const preferred = ['Shelly', 'Colt', 'El Primo', 'Nita', 'Bull', 'Jessie', 'Poco'];
+    const i = allBrawlers.findIndex((b) => preferred.includes(b.displayName));
+    return i >= 0 ? i : 0;
+  });
   const [mapReady, setMapReady] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
   const [best, setBest] = useState(0);
@@ -290,16 +322,29 @@ export const ArenaGame: React.FC<ArenaGameProps> = ({ allBrawlers, onExit }) => 
     if (stored > 0) setBest(stored);
   }, []);
 
+  /* ------------------- Precargar modelo 3D + carita ----------------------- */
+  useEffect(() => {
+    if (!brawler) return;
+    const m = new Image();
+    m.crossOrigin = 'anonymous';
+    m.src = MODEL_URL(brawler.id);
+    modelRef.current = m;
+
+    const i = new Image();
+    i.crossOrigin = 'anonymous';
+    i.src = brawler.iconUrl;
+    iconRef.current = i;
+  }, [brawler]);
+
   /* --------------------------- Crear luchadores --------------------------- */
   const makePlayer = useCallback((arena: Arena): Fighter => {
     const start = findWalkable(arena, Math.floor(arena.cols / 2), Math.floor(arena.rows * 0.62));
-    const img = new Image();
-    if (brawler?.iconUrl) img.src = brawler.iconUrl;
     return {
       id: 0, isPlayer: true, pos: { ...start }, vel: { x: 0, y: 0 },
       radius: PLAYER_RADIUS, hp: PLAYER_MAX_HP, maxHp: PLAYER_MAX_HP,
       aim: -Math.PI / 2, fireCd: 0, ammo: AMMO_MAX, reload: 0,
-      alive: true, hurtT: 99, bob: 0, dmg: PLAYER_DMG, img,
+      alive: true, hurtT: 99, bob: 0, dmg: PLAYER_DMG,
+      model: modelRef.current, icon: iconRef.current,
       name: brawler?.displayName || 'Tú',
     };
   }, [brawler]);
@@ -307,13 +352,12 @@ export const ArenaGame: React.FC<ArenaGameProps> = ({ allBrawlers, onExit }) => 
   const makeEnemy = useCallback((arena: Arena, g: Game, id: number): Fighter => {
     const spawn = randomSpawnFar(arena, g.player.pos, 7);
     const mult = 1 + (g.wave - 1) * 0.13;
-    const img = new Image();
-    if (brawler?.iconUrl) img.src = brawler.iconUrl;
     return {
       id, isPlayer: false, pos: { ...spawn }, vel: { x: 0, y: 0 },
       radius: ENEMY_RADIUS, hp: ENEMY_MAX_HP * mult, maxHp: ENEMY_MAX_HP * mult,
       aim: 0, fireCd: rand(0.5, 1.2), ammo: AMMO_MAX, reload: 0,
-      alive: true, hurtT: 99, bob: rand(0, Math.PI * 2), dmg: ENEMY_DMG, img,
+      alive: true, hurtT: 99, bob: rand(0, Math.PI * 2), dmg: ENEMY_DMG,
+      model: modelRef.current, icon: iconRef.current,
       name: brawler?.displayName || 'Bot',
     };
   }, [brawler]);
@@ -667,21 +711,31 @@ export const ArenaGame: React.FC<ArenaGameProps> = ({ allBrawlers, onExit }) => 
       )}
 
       {phase === 'menu' && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-5 text-center">
-          <div className="flex items-center gap-2">
-            <Swords className="w-7 h-7 text-amber-400" />
-            <h2 className="text-2xl font-black text-white tracking-wide">ARENA</h2>
-          </div>
-          <p className="text-xs text-slate-400 max-w-xs">
-            Supervivencia en <span className="text-amber-400 font-bold">Hard Rock Mine</span> (mapa real).
-            Aguanta las oleadas y mata a todos los bots que puedas.
-          </p>
-
-          {best > 0 && (
-            <div className="text-[11px] font-bold text-slate-300 flex items-center gap-1">
-              <Trophy className="w-3.5 h-3.5 text-amber-400" /> Récord: {best}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-5 text-center overflow-y-auto">
+          <div className="flex items-center gap-3">
+            {brawler && (
+              <img
+                src={MODEL_URL(brawler.id)}
+                alt={brawler.displayName}
+                className="h-32 object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.7)]"
+              />
+            )}
+            <div className="text-left">
+              <div className="flex items-center gap-2">
+                <Swords className="w-6 h-6 text-amber-400" />
+                <h2 className="text-2xl font-black text-white tracking-wide">ARENA</h2>
+              </div>
+              <p className="text-[11px] text-slate-400 max-w-[220px] mt-1">
+                Supervivencia en <span className="text-amber-400 font-bold">Hard Rock Mine</span> (mapa real).
+                Aguanta las oleadas.
+              </p>
+              {best > 0 && (
+                <div className="text-[11px] font-bold text-slate-300 flex items-center gap-1 mt-1">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" /> Récord: {best}
+                </div>
+              )}
             </div>
-          )}
+          </div>
 
           {roster.length > 0 && (
             <div className="w-full max-w-sm">
@@ -786,15 +840,19 @@ function nearestEnemy(g: Game, from: Fighter): Fighter | null {
 
 function spawnBullet(g: Game, owner: Fighter, ax: number, ay: number, speed: number) {
   const off = owner.radius + BULLET_RADIUS + 2;
+  // Los disparos salen del pecho (no de los pies)
+  const originY = owner.pos.y - SPRITE_H(owner.radius) * 0.45;
+  const ox = owner.pos.x + ax * off;
+  const oy = originY + ay * off;
   g.bullets.push({
-    pos: { x: owner.pos.x + ax * off, y: owner.pos.y + ay * off },
+    pos: { x: ox, y: oy },
     vel: { x: ax * speed, y: ay * speed },
     fromPlayer: owner.isPlayer,
     life: 1.6,
   });
   for (let i = 0; i < 4; i++) {
     g.particles.push({
-      pos: { x: owner.pos.x + ax * off, y: owner.pos.y + ay * off },
+      pos: { x: ox, y: oy },
       vel: { x: ax * rand(40, 120) + rand(-40, 40), y: ay * rand(40, 120) + rand(-40, 40) },
       life: 0.25, max: 0.25,
       color: owner.isPlayer ? '#fde047' : '#fb7185',
@@ -834,63 +892,94 @@ function endGame(g: Game) {
 function drawFighter(ctx: CanvasRenderingContext2D, f: Fighter, g: Game) {
   const a = g.arena;
   const inBush = tileTypeAt(a, f.pos.x, f.pos.y) === 2;
-  const bobY = Math.sin(f.bob) * (f.isPlayer ? 2.2 : 1.6);
+  const bobY = Math.sin(f.bob) * (f.isPlayer ? 1.8 : 1.2);
   const x = f.pos.x;
-  const y = f.pos.y + bobY;
+  const groundY = f.pos.y;
 
-  ctx.globalAlpha = inBush ? 0.55 : 1;
+  const model = f.model && f.model.complete && f.model.naturalWidth > 0 ? f.model : null;
+  const icon = f.icon && f.icon.complete && f.icon.naturalWidth > 0 ? f.icon : null;
 
-  // Sombra
+  // Alto visual del modelo (los pies quedan en groundY)
+  const h = SPRITE_H(f.radius);
+  const w = model ? h * (model.naturalWidth / model.naturalHeight) : h * 0.55;
+  const chestY = groundY - h * 0.45;
+
+  ctx.globalAlpha = inBush ? 0.6 : 1;
+
+  // Sombra en los pies
   ctx.beginPath();
-  ctx.ellipse(f.pos.x, f.pos.y + f.radius * 0.85, f.radius * 0.95, f.radius * 0.38, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.ellipse(x, groundY + 2, f.radius * 0.95, f.radius * 0.34, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.4)';
   ctx.fill();
+
+  // Aro de equipo en el piso
+  ctx.beginPath();
+  ctx.ellipse(x, groundY + 2, f.radius * 0.82, f.radius * 0.3, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = f.isPlayer ? 'rgba(253,224,71,0.85)' : 'rgba(248,113,113,0.9)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
 
   // Indicador de apuntado (jugador)
   if (f.isPlayer) {
     ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + Math.cos(f.aim) * (f.radius + 20), y + Math.sin(f.aim) * (f.radius + 20));
-    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.moveTo(x, chestY);
+    ctx.lineTo(x + Math.cos(f.aim) * (f.radius + 22), chestY + Math.sin(f.aim) * (f.radius + 22));
+    ctx.strokeStyle = 'rgba(255,255,255,0.45)';
     ctx.lineWidth = 2;
     ctx.stroke();
   }
 
-  // Cuerpo (token con la carita del brawler)
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(x, y, f.radius, 0, Math.PI * 2);
-  ctx.closePath();
-  ctx.fillStyle = f.isPlayer ? '#f59e0b' : '#7f1d1d';
-  ctx.shadowColor = f.isPlayer ? '#fbbf24' : '#ef4444';
-  ctx.shadowBlur = f.isPlayer ? 14 : 10;
-  ctx.fill();
-  ctx.shadowBlur = 0;
-  ctx.clip();
-  if (f.img && f.img.complete && f.img.naturalWidth > 0) {
-    ctx.drawImage(f.img, x - f.radius, y - f.radius, f.radius * 2, f.radius * 2);
+  const drawY = groundY - h + bobY;
+
+  if (model) {
+    // Modelo 3D real del brawler. Se voltea según hacia dónde apunta.
+    const flip = Math.cos(f.aim) < -0.15;
+    ctx.save();
+    if (flip) {
+      ctx.translate(x, 0);
+      ctx.scale(-1, 1);
+      ctx.translate(-x, 0);
+    }
+    const src = f.isPlayer ? model : getTintedModel(model);
+    ctx.drawImage(src, x - w / 2, drawY, w, h);
+    ctx.restore();
+  } else if (icon) {
+    // Respaldo 1: carita circular
+    const cy = groundY - f.radius;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, cy, f.radius, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fillStyle = f.isPlayer ? '#f59e0b' : '#7f1d1d';
+    ctx.fill();
+    ctx.clip();
+    ctx.drawImage(icon, x - f.radius, cy - f.radius, f.radius * 2, f.radius * 2);
+    ctx.restore();
+    ctx.beginPath();
+    ctx.arc(x, cy, f.radius, 0, Math.PI * 2);
+    ctx.strokeStyle = f.isPlayer ? '#fde047' : '#f87171';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
   } else {
-    // Respaldo: inicial del brawler si el icono no carga
-    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    // Respaldo 2: inicial del brawler
+    const cy = groundY - f.radius;
+    ctx.beginPath();
+    ctx.arc(x, cy, f.radius, 0, Math.PI * 2);
+    ctx.fillStyle = f.isPlayer ? '#f59e0b' : '#7f1d1d';
+    ctx.fill();
+    ctx.fillStyle = '#0b0f19';
     ctx.font = `bold ${f.radius}px sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(f.name.charAt(0).toUpperCase(), x, y + 1);
+    ctx.fillText(f.name.charAt(0).toUpperCase(), x, cy + 1);
   }
-  ctx.restore();
 
-  // Aro (jugador dorado / enemigo rojo)
-  ctx.beginPath();
-  ctx.arc(x, y, f.radius, 0, Math.PI * 2);
-  ctx.strokeStyle = f.isPlayer ? '#fde047' : '#f87171';
-  ctx.lineWidth = f.isPlayer ? 3 : 2.5;
-  ctx.stroke();
-
-  // Barra de vida
-  const bw = f.radius * 2.4;
-  const bx = f.pos.x - bw / 2;
-  const by = f.pos.y - f.radius - 13;
-  ctx.fillStyle = 'rgba(0,0,0,0.6)';
+  // Barra de vida (sobre la cabeza)
+  const topY = model ? drawY : groundY - f.radius * 2;
+  const bw = Math.max(f.radius * 2.4, 34);
+  const bx = x - bw / 2;
+  const by = topY - 10;
+  ctx.fillStyle = 'rgba(0,0,0,0.65)';
   roundRect(ctx, bx, by, bw, 6, 3);
   ctx.fill();
   const ratio = clamp(f.hp / f.maxHp, 0, 1);
@@ -898,13 +987,13 @@ function drawFighter(ctx: CanvasRenderingContext2D, f: Fighter, g: Game) {
   roundRect(ctx, bx, by, bw * ratio, 6, 3);
   ctx.fill();
 
-  // Munición (solo jugador)
+  // Munición (solo jugador), debajo de los pies
   if (f.isPlayer) {
     const seg = 7, gap = 3, total = AMMO_MAX * seg + (AMMO_MAX - 1) * gap;
-    let ax2 = f.pos.x - total / 2;
+    let ax2 = x - total / 2;
     for (let i = 0; i < AMMO_MAX; i++) {
       ctx.fillStyle = i < f.ammo ? '#38bdf8' : 'rgba(148,163,184,0.35)';
-      roundRect(ctx, ax2, by + 9, seg, 4, 2);
+      roundRect(ctx, ax2, groundY + 10, seg, 4, 2);
       ctx.fill();
       ax2 += seg + gap;
     }
