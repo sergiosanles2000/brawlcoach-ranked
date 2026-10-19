@@ -58,12 +58,12 @@ const AnimatedCornerModel: React.FC<{
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-2.5 rounded-full bg-cyan-400/25 blur-sm pointer-events-none" />
 
       {/* The model area (one of: full-body / icon / placeholder) */}
-      <div className="relative flex-1 w-full flex items-end justify-center">
+      <div className="relative flex-1 min-h-0 w-full flex items-end justify-center">
         {level === 'model' && modelUrl && (
           <img
             src={modelUrl}
             alt={brawler.displayName}
-            className="brawler-hover-sm w-auto h-[88%] max-w-[88%] object-contain select-none drop-shadow-[0_14px_14px_rgba(0,0,0,0.65)]"
+            className="brawler-hover-sm w-auto h-16 max-w-[80%] object-contain select-none drop-shadow-[0_14px_14px_rgba(0,0,0,0.65)]"
             loading="eager"
             decoding="async"
             draggable={false}
@@ -76,7 +76,7 @@ const AnimatedCornerModel: React.FC<{
           <img
             src={iconUrl}
             alt={brawler.displayName}
-            className="brawler-hover-sm w-20 h-20 rounded-2xl object-contain select-none mb-1 drop-shadow-[0_12px_12px_rgba(0,0,0,0.65)]"
+            className="brawler-hover-sm w-16 h-16 rounded-2xl object-contain select-none mb-1 drop-shadow-[0_12px_12px_rgba(0,0,0,0.65)]"
             draggable={false}
             onError={handleIconError}
           />
@@ -84,7 +84,7 @@ const AnimatedCornerModel: React.FC<{
 
         {/* Placeholder: initials + class (always works) */}
         {level === 'none' && (
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 border-2 border-amber-500/40 flex flex-col items-center justify-center gap-0.5">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 border-2 border-amber-500/40 flex flex-col items-center justify-center gap-0.5">
             <span
               className="text-3xl font-black"
               style={{
